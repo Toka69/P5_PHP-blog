@@ -8,5 +8,13 @@
         }
     ],
     "minimum-stability": "stable",
+    "autoload":
+    {
+        "psr-4":
+        {
+            "Lib\\": "lib/",
+            "App\\": "src/"
+        }
+    },
     "require": {}
 }
