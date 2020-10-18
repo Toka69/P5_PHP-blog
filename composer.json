@@ -1,0 +1,12 @@
+{
+    "name": "mleroux/p5_php_blog",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Matthias LEROUX",
+            "email": "matthiasleroux@laposte.net"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
