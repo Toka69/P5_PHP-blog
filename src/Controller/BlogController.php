@@ -7,5 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BlogController extends AbstractController
 {
-    
+    public function test(Request $request): Response
+    {
+        return $this->redirect("home");
+    }
 }

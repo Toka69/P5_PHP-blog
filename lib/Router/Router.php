@@ -24,5 +24,16 @@ class Router
 
         return null;
     }
+
+    public function generate(string $name): string
+    {
+        foreach($this->_routes as $route)
+        {
+            if ($route->getName() === $name)
+            {
+                return $route->getPath();
+            }
+        }
+    }
     
 }
