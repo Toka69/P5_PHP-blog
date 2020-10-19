@@ -5,23 +5,19 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Router
 {
-    /**
-     * @var array<Route>
-     */
-    private array $outes;
+    private array $_routes;
 
-    /**
-     *  @param Route $route
-     */
     public function add(Route $route): void 
     {
-        $this->routes[] = $route;
+        $this->_routes[] = $route;
     }
 
     public function match(Request $request): ?Route
     {
-        foreach ($this->routes as $route) {
-            if ($request->getPathInfo() === $route->getPath()) {
+        foreach ($this->_routes as $route) 
+        {
+            if ($request->getPathInfo() === $route->getPath())  //getPathInfo() provides the url without query param
+            {
                 return $route;
             }
         }
