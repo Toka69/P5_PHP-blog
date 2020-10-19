@@ -17,7 +17,8 @@
         }
     },
     "require": {
-        "symfony/http-foundation": "^5.1"
+        "symfony/http-foundation": "^5.1",
+        "twig/twig": "^3.0"
     },
     "require-dev": {
         "symfony/var-dumper": "^5.1"
