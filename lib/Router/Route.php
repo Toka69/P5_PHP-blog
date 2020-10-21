@@ -3,80 +3,109 @@ namespace Lib\Router;
 
 class Route
 {
-    private string $_name;
-    private string $_path;
-    private string $_controller;
-    private string $_action;
-
+    private string $name;
+    private string $path;
+    private string $controller;
+    private string $action;
+    
+    /**
+     * __construct
+     *
+     * @param  mixed $name
+     * @param  mixed $path
+     * @param  mixed $controller
+     * @param  mixed $action
+     * @return void
+     */
     public function __construct(string $name, string $path, string $controller, string $action)
     {
-        $this->_name = $name;
-        $this->_path = $path;
-        $this->_controller = $controller;
-        $this->_action = $action;
+        $this->name = $name;
+        $this->path = $path;
+        $this->controller = $controller;
+        $this->action = $action;
     }
-
+   
     /**
+     * getName
+     *
      * @return string
      */
     public function getName(): string
     {
-        return $this->_name;
+        return $this->name;
     }
-
+    
     /**
-     * @param string $name
+     * setName
+     *
+     * @param  mixed $name
+     * @return void
      */
     public function setName(string $name): void
     {
-        $this->_name = $name;
+        $this->name = $name;
     }
-
+    
     /**
+     * getPath
+     *
      * @return string
      */
     public function getPath(): string
     {
-        return $this->_path;
+        return $this->path;
     }
 
     /**
-     * @param string $path
+     * setPath
+     *
+     * @param  mixed $path
+     * @return void
      */
     public function setPath(string $path): void
     {
-        $this->_path = $path;
+        $this->path = $path;
     }
-
+    
     /**
+     * getController
+     *
      * @return string
      */
     public function getController(): string
     {
-        return $this->_controller;
+        return $this->controller;
     }
-
+    
     /**
-     * @param string $controller
+     * setController
+     *
+     * @param  mixed $controller
+     * @return void
      */
     public function setController(string $controller): void
     {
-        $this->_controller = $controller;
+        $this->controller = $controller;
     }
-
+    
     /**
+     * getAction
+     *
      * @return string
      */
     public function getAction(): string
     {
-        return $this->_action;
+        return $this->action;
     }
-
+    
     /**
-     * @param string $action
+     * setAction
+     *
+     * @param  mixed $action
+     * @return void
      */
     public function setAction(string $action): void
     {
-        $this->_action = $action;
+        $this->action = $action;
     }
 }

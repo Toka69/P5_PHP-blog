@@ -5,16 +5,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Router
 {
-    private array $_routes;
-
+    private array $routes;
+    
+    /**
+     * add
+     *
+     * @param  mixed $route
+     * @return void
+     */
     public function add(Route $route): void 
     {
-        $this->_routes[] = $route;
+        $this->routes[] = $route;
     }
-
+    
+    /**
+     * match
+     *
+     * @param  mixed $request
+     * @return Route
+     */
     public function match(Request $request): ?Route
     {
-        foreach ($this->_routes as $route) 
+        foreach ($this->routes as $route) 
         {
             if ($request->getPathInfo() === $route->getPath())  //getPathInfo() provides the url without query param
             {
@@ -24,10 +36,16 @@ class Router
 
         return null;
     }
-
+    
+    /**
+     * generate
+     *
+     * @param  mixed $name
+     * @return string
+     */
     public function generate(string $name): string
     {
-        foreach($this->_routes as $route)
+        foreach($this->routes as $route)
         {
             if ($route->getName() === $name)
             {
