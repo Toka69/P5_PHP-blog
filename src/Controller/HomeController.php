@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 
  class HomeController extends AbstractController
  {
-       public function home(Request $request): Response
+       public function home(): Response
        {
             return $this->render("home.html.twig", [
                   "prenom" => "Matthias"
