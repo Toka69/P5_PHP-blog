@@ -1,8 +1,12 @@
 <?php
+
 namespace Lib\Router;
 
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Router
+ */
 class Router
 {
     private array $routes;
@@ -52,6 +56,5 @@ class Router
                 return $route->getPath();
             }
         }
-    }
-    
+    }    
 }

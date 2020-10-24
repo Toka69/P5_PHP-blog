@@ -1,4 +1,5 @@
 <?php
+
 namespace Lib;
 
 use Twig\Environment;
@@ -7,6 +8,9 @@ use Twig\Loader\FilesystemLoader;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+/**
+ * AbstractController
+ */
 abstract class AbstractController
 {
     private Router $router;

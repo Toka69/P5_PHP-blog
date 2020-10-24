@@ -1,10 +1,14 @@
 <?php
+
 namespace Lib;
 
 use Lib\Router\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Kernel
+ */
 class Kernel
 {
     public function run(): Response

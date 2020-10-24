@@ -1,6 +1,10 @@
-<?php 
+<?php
+
 namespace Lib\Router;
 
+/**
+ * Route
+ */
 class Route
 {
     private string $name;
