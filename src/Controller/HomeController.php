@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
         * @param  mixed $request
         * @return Response
         */
-       public function home(Request $request): Response
+       public function home(): Response
        {
             return $this->render("home.html.twig", [
                   "prenom" => "Matthias"
