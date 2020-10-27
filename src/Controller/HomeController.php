@@ -3,25 +3,23 @@
 namespace App\Controller;
 
 use Lib\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
- 
- /**
-  * HomeController
-  */
+
+/**
+ * Class HomeController
+ * @package App\Controller
+ */
  class HomeController extends AbstractController
- {       
-       /**
-        * home
-        *
-        * @param  mixed $request
-        * @return Response
-        */
+ {
+     /**
+      * @return Response
+      * @throws \Twig\Error\LoaderError
+      * @throws \Twig\Error\RuntimeError
+      * @throws \Twig\Error\SyntaxError
+      */
        public function home(): Response
        {
-            return $this->render("home.html.twig", [
-                  "prenom" => "Matthias"
-            ]);
+            return $this->render("home.html.twig");
        }
  }
  

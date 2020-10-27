@@ -5,19 +5,19 @@ namespace App\Controller;
 use Lib\AbstractController;
 use App\Model\DBFactory;
 use App\Model\PostsManagerPDO;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * BlogController
+ * Class BlogController
+ * @package App\Controller
  */
 class BlogController extends AbstractController
-{    
+{
     /**
-     * test
-     *
-     * @param  mixed $request
      * @return Response
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function posts(): Response
     {
@@ -26,7 +26,7 @@ class BlogController extends AbstractController
         $test = $manager->count();
 
         return $this->render("posts.html.twig", [
-            'nbre_posts' => $test
+            'number_posts' => $test
         ]);
     }
 }
