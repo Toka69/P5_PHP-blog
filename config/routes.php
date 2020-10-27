@@ -7,6 +7,6 @@ use App\Controller\{
 use Lib\Router\Route;
 
 return [
-    new Route("home", "/", HomeController::class, "home"),  //(name, path, controllerClass, methode)
-    new Route("post", "/posts", BlogController::class, "posts")  //need update
+    new Route("home", "/", HomeController::class, "home"),
+    new Route("post", "/posts", BlogController::class, "posts")
 ];
