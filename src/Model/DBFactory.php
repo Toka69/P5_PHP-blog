@@ -8,13 +8,11 @@ use PDO;
  * DBFactory
  */
 class DBFactory
-{    
+{
     /**
-     * getMySQLConnexionWithPDO
-     *
-     * @return void
+     * @return PDO
      */
-    public function getMySQLConnexionWithPDO()
+    public static function getMySQLConnexionWithPDO(): PDO
     {
         $db = new PDO('mysql:host='.$_ENV['DATABASE_HOST'].';dbname='.$_ENV['DATABASE_NAME'].'', $_ENV['DATABASE_USER'],$_ENV['DATABASE_PASSWORD']);
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
