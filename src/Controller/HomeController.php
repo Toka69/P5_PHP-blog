@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
  {
      /**
       * @return Response
+      *
       * @throws \Twig\Error\LoaderError
       * @throws \Twig\Error\RuntimeError
       * @throws \Twig\Error\SyntaxError
