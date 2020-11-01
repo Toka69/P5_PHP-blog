@@ -22,9 +22,18 @@ class BlogController extends AbstractController
     public function posts(): Response
     {
         $manager = new PostsManager();
-        $count = $manager->count();
+
+        $postsList = $manager->getList($begin=0, $end=4);
+        $i=0;
+        foreach ($postsList as $posts){
+            ${'title'.$i} = $posts['title'];
+            $i++;
+        }
+
         return $this->render("posts.html.twig",[
-            "posts_number" => $count
+            "posts_number" => $manager->count(),
+            "title0" => $title0,
+            "title1" => $title1
         ]);
     }
 }
