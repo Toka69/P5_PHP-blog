@@ -5,10 +5,10 @@ namespace App;
 use PDO;
 
 /**
- * Class Manager
+ * Class PDOSingleton
  * @package App
  */
-class Manager
+class PDOSingleton
 {
     /**
      * @var PDO
@@ -23,13 +23,13 @@ class Manager
     }
 
     /**
-     * @return Manager
+     * @return PDOSingleton
      */
     public static function getInstance()
     {
         if (is_null(self::$instance))
         {
-            self::$instance = new Manager();
+            self::$instance = new PDOSingleton();
         }
         return self::$instance;
     }

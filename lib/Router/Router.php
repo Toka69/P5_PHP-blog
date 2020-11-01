@@ -48,8 +48,9 @@ class Router
         {
             if ($route->getName() === $name)
             {
-                return $route->getPath();
+                $this->path = $route->getPath();
             }
         }
+        return $this->path;
     }    
 }

@@ -13,6 +13,6 @@ class PostsManager
      */
     public function count(): int
     {
-        return Manager::getInstance()->getPDO()->query('SELECT COUNT(*) FROM posts')->fetchColumn();
+        return PDOSingleton::getInstance()->getPDO()->query('SELECT COUNT(*) FROM posts')->fetchColumn();
     }
 }
