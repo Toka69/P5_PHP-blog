@@ -1,5 +1,9 @@
-{{ title0 }} <br>
-{{ title1 }}
-{{ title2 }}
-{{ title3 }}
-{{ title4 }}
+{% for postslist in posts_list %}
+    <p>
+        <div>{{ postslist.title }}</div>
+        <div>{{ postslist.leadParagraph }}</div>
+        <div>{{ postslist.content }}</div>
+        <div>{{ postslist.creatingDate }}</div>
+        <div>{{ postslist.modifiedDate }}</div>
+    </p>
+{% endfor %}
