@@ -22,21 +22,10 @@ class BlogController extends AbstractController
     public function posts(): Response
     {
         $manager = new PostsManager();
-
         $postsList = $manager->getList($begin=0, $end=4);
-        foreach ($postsList as $posts){
-            $array = [
-                    'title' => $posts['title'],
-                    'leadParagraph'  => $posts['lead_paragraph'],
-                    'content' => $posts['content'],
-                    'creatingDate' => $posts['creating_date'],
-                    'modifiedDate' => $posts['modified_date']
-                ];
-            $tab[]= $array;
-        }
 
         return $this->render("posts.html.twig",[
-            "posts_list" => $tab
+            "posts_list" => $postsList
         ]);
     }
 }
