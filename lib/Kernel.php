@@ -1,12 +1,20 @@
 <?php
+
 namespace Lib;
 
 use Lib\Router\Router;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class Kernel
+ * @package Lib
+ */
 class Kernel
 {
+    /**
+     * @return Response
+     */
     public function run(): Response
     {
         $request  = Request::createFromGlobals();   //createFromGlobals() will create a request object with globals (post, get, server, ...)

@@ -1,4 +1,5 @@
 <?php
+
 namespace Lib;
 
 use Twig\Environment;
@@ -7,38 +8,39 @@ use Twig\Loader\FilesystemLoader;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+/**
+ * Class AbstractController
+ * @package Lib
+ */
 abstract class AbstractController
 {
     private Router $router;
-    
+
     /**
-     * __construct
-     *
-     * @param  mixed $router
-     * @return void
+     * AbstractController constructor.
+     * @param Router $router
      */
     public function __construct(Router $router)
     {
         $this->router = $router;
     }
-    
+
     /**
-     * redirect
-     *
-     * @param  mixed $name
+     * @param string $name
      * @return RedirectResponse
      */
     public function redirect(string $name): RedirectResponse
     {
         return new RedirectResponse($this->router->generate($name));
     }
-    
+
     /**
-     * render
-     *
-     * @param  mixed $view
-     * @param  mixed $data
+     * @param string $view
+     * @param array $data
      * @return Response
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function render(string $view, array $data = []): Response
     {
