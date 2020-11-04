@@ -28,4 +28,16 @@ class BlogController extends AbstractController
             "posts_list" => $postsList
         ]);
     }
+
+    public function post(): Response
+    {
+        $manager = new PostsManager();
+        $singlePost = $manager->getSinglePost($_GET['id']);
+        $comments = $manager->getCommentsPost($singlePost[0]['id'], 1);
+
+        return $this->render("post.html.twig",[
+            "single_post" => $singlePost,
+            "comments" => $comments
+            ]);
+    }
 }

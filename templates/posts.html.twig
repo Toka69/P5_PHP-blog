@@ -1,9 +1,17 @@
-{% for postslist in posts_list %}
-    <p>
-        <div>{{ postslist.title }}</div>
-        <div>{{ postslist.lead_paragraph }}</div>
-        <div>{{ postslist.content }}</div>
-        <div>{{ postslist.creating_date }}</div>
-        <div>{{ postslist.modified_date }}</div>
-    </p>
-{% endfor %}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <section>
+        <div class="container border col-md-6">
+        {% for post in posts_list %}
+            <p class="border">
+                <div>{{ post.title }}</div>
+                <div>{{ post.lead_paragraph }}</div>
+                <div>{{ post.modified_date }}</div>
+                <a href="/post?id={{ post.id }}">Voir l'article...</a>
+            </p>
+        {% endfor %}
+        </div>
+    </section>
+{% endblock %}
