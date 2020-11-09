@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db
--- Généré le : mer. 04 nov. 2020 à 20:58
+-- Généré le : Dim 08 nov. 2020 à 16:45
 -- Version du serveur :  10.5.6-MariaDB-1:10.5.6+maria~focal
 -- Version de PHP : 7.4.11
 
@@ -97,10 +97,10 @@ INSERT INTO `posts` (`id`, `title`, `lead_paragraph`, `content`, `creating_date`
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Structure de la table `users`
 --
 
-CREATE TABLE `user` (
+CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `admin` tinyint(1) NOT NULL,
   `first_name` varchar(200) NOT NULL,
@@ -111,18 +111,19 @@ CREATE TABLE `user` (
   `street` varchar(200) NOT NULL,
   `address` varchar(200) NOT NULL,
   `postal_code` int(11) NOT NULL,
-  `logo` varchar(200) NOT NULL,
+  `town` varchar(255) DEFAULT NULL,
+  `logo` varchar(200) DEFAULT NULL,
   `description` varchar(400) NOT NULL,
   `gender_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `user`
+-- Déchargement des données de la table `users`
 --
 
-INSERT INTO `user` (`id`, `admin`, `first_name`, `last_name`, `phone`, `email`, `password`, `street`, `address`, `postal_code`, `logo`, `description`, `gender_id`) VALUES
-(3, 1, 'Matthias', 'LEROUX', '0603550664', 'm@m.fr', 'test', 'allée des muriers', '3', 38230, ' ', 'test', 1),
-(4, 0, 'John', 'DOE', '0632548562', 'john.doe@gmail.com', 'test', 'rue des acacias', '12', 75000, ' ', 'test', 1);
+INSERT INTO `users` (`id`, `admin`, `first_name`, `last_name`, `phone`, `email`, `password`, `street`, `address`, `postal_code`, `town`, `logo`, `description`, `gender_id`) VALUES
+(3, 1, 'Matthias', 'LEROUX', '0603550664', 'm@m.fr', 'test', 'allée des muriers', '3', 38230, 'TIGNIEU', ' ', 'test', 1),
+(4, 0, 'John', 'DOE', '0632548562', 'john.doe@gmail.com', 'test', 'rue des acacias', '12', 75000, 'PARIS', ' ', 'test', 1);
 
 --
 -- Index pour les tables déchargées
@@ -150,9 +151,9 @@ ALTER TABLE `posts`
   ADD KEY `user_posts_fk` (`user_id`);
 
 --
--- Index pour la table `user`
+-- Index pour la table `users`
 --
-ALTER TABLE `user`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `gender_user_fk` (`gender_id`);
 
@@ -179,9 +180,9 @@ ALTER TABLE `posts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `user`
+-- AUTO_INCREMENT pour la table `users`
 --
-ALTER TABLE `user`
+ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
@@ -193,18 +194,18 @@ ALTER TABLE `user`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `posts_comments_fk` FOREIGN KEY (`posts_id`) REFERENCES `posts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `user_comments_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `user_comments_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `posts`
 --
 ALTER TABLE `posts`
-  ADD CONSTRAINT `user_posts_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `user_posts_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `user`
+-- Contraintes pour la table `users`
 --
-ALTER TABLE `user`
+ALTER TABLE `users`
   ADD CONSTRAINT `gender_user_fk` FOREIGN KEY (`gender_id`) REFERENCES `gender` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
