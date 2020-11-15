@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use Lib\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class HomeController
@@ -14,9 +17,9 @@ use Symfony\Component\HttpFoundation\Response;
      /**
       * @return Response
       *
-      * @throws \Twig\Error\LoaderError
-      * @throws \Twig\Error\RuntimeError
-      * @throws \Twig\Error\SyntaxError
+      * @throws LoaderError
+      * @throws RuntimeError
+      * @throws SyntaxError
       */
        public function home(): Response
        {

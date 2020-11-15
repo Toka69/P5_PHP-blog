@@ -1,1 +1,17 @@
-Posts number : {{ posts_number }}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+    <section>
+        <div class="container border col-md-6">
+        {% for post in posts_list %}
+            <p class="border">
+                <div>{{ post.title }}</div>
+                <div>{{ post.lead_paragraph }}</div>
+                <div>{{ post.modified_date }}</div>
+                <a href="/post?id={{ post.id }}">Voir l'article...</a>
+            </p>
+        {% endfor %}
+        </div>
+    </section>
+{% endblock %}

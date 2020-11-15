@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section>
+        <div class="container col-md-8 border">
+            {% for post in single_post %}
+                <p>
+                    <div class="h1">{{ post.title }}</div>
+                    <div class="h3">{{ post.lead_paragraph }}</div>
+                    <div class="border">{{ post.content }}</div>
+                </p>
+                <p>
+                    <div align="right">Auteur : {{ post.first_name }} {{ post.last_name }}</div>
+                    <div align="right">Date de modification : {{ post.modified_date }}</div>
+                </p>
+            {% endfor %}
+        </div>
+        <div class="container col-md-8">
+            Commentaires :
+            {% for comment in comments %}
+                <div class="border p-2">
+                    <p>
+                        <div>{{ comment.message }}</div>
+                    </p>
+                    <p>
+                        <div align="right">Auteur : {{ comment.first_name }} {{ comment.last_name }}</div>
+                        <div align="right">Date: {{ comment.creating_date }}</div>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+
+    </section>
+{% endblock %}
