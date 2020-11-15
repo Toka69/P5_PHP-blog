@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\CommentsManager;
-use App\PostsManager;
+use App\Manager\CommentsManager;
+use App\Manager\PostsManager;
 use Lib\AbstractController;
 use Lib\PDOSingleton;
 use Symfony\Component\HttpFoundation\Response;
