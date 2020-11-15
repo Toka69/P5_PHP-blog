@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App;
+namespace App\Manager;
 
 use App\Entity\Users;
 use PDO;
