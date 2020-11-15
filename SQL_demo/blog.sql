@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db
--- Généré le : Dim 08 nov. 2020 à 16:45
+-- Généré le : Dim 15 nov. 2020 à 09:15
 -- Version du serveur :  10.5.6-MariaDB-1:10.5.6+maria~focal
 -- Version de PHP : 7.4.11
 
@@ -33,7 +33,7 @@ CREATE TABLE `comments` (
   `valid` tinyint(1) NOT NULL,
   `posts_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `creating_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `modified_date` timestamp NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -41,7 +41,7 @@ CREATE TABLE `comments` (
 -- Déchargement des données de la table `comments`
 --
 
-INSERT INTO `comments` (`id`, `message`, `valid`, `posts_id`, `user_id`, `creating_date`, `modified_date`) VALUES
+INSERT INTO `comments` (`id`, `message`, `valid`, `posts_id`, `user_id`, `created_date`, `modified_date`) VALUES
 (1, 'Trop bien ce post', 1, 1, 3, '2020-11-04 17:55:21', '0000-00-00 00:00:00'),
 (2, 'Mais moi aussi je le trouve trop bien', 1, 1, 4, '2020-11-04 17:55:21', '0000-00-00 00:00:00'),
 (3, 'Interressant...', 1, 2, 3, '2020-11-04 17:55:21', '0000-00-00 00:00:00'),
@@ -56,19 +56,17 @@ INSERT INTO `comments` (`id`, `message`, `valid`, `posts_id`, `user_id`, `creati
 
 CREATE TABLE `gender` (
   `id` int(11) NOT NULL,
-  `male` tinyint(1) NOT NULL,
-  `female` tinyint(1) NOT NULL,
-  `other` tinyint(1) NOT NULL
+  `name` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `gender`
 --
 
-INSERT INTO `gender` (`id`, `male`, `female`, `other`) VALUES
-(1, 1, 0, 0),
-(2, 0, 1, 0),
-(3, 0, 0, 1);
+INSERT INTO `gender` (`id`, `name`) VALUES
+(1, 'female'),
+(2, 'male'),
+(3, 'other');
 
 -- --------------------------------------------------------
 
@@ -81,7 +79,7 @@ CREATE TABLE `posts` (
   `title` varchar(200) NOT NULL,
   `lead_paragraph` varchar(200) NOT NULL,
   `content` varchar(400) NOT NULL,
-  `creating_date` datetime NOT NULL,
+  `created_date` datetime NOT NULL,
   `modified_date` datetime DEFAULT NULL,
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -90,7 +88,7 @@ CREATE TABLE `posts` (
 -- Déchargement des données de la table `posts`
 --
 
-INSERT INTO `posts` (`id`, `title`, `lead_paragraph`, `content`, `creating_date`, `modified_date`, `user_id`) VALUES
+INSERT INTO `posts` (`id`, `title`, `lead_paragraph`, `content`, `created_date`, `modified_date`, `user_id`) VALUES
 (1, 'Mon premier post', 'Il était une fois...', 'Et voilà! Il s\'agit de mon premier article. Il serait impensable de ne pas insérer un loremipsum! Q\'en pensez-vous?', '2020-11-01 18:13:13', '2020-11-03 18:13:13', 3),
 (2, 'Deuxième post', 'bla bla...', 'test', '2020-11-02 18:13:13', '2020-11-04 18:13:13', 3);
 
