@@ -8,6 +8,8 @@ use Symfony\Component\ErrorHandler\Debug;
 use Symfony\Component\ErrorHandler\ErrorHandler;
 use Symfony\Component\ErrorHandler\DebugClassLoader;
 
+session_start();
+
 $dotenv = new Dotenv();
 $dotenv->load(__DIR__.'/../.env');
 $dotenv->load(__DIR__.'/../.env', __DIR__.'/../.env.local');
