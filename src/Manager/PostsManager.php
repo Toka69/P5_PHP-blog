@@ -38,17 +38,23 @@ class PostsManager
     }
 
     /**
-     * @param $begin
-     * @param $end
-     *
      * @return array
      */
-    public function getList($begin, $end): array
+    public function getList(): array
     {
-        return $this->db->query(
+        $getList = [];
+
+        $request = $this->db->query(
             'SELECT u.first_name, u.last_name, p.id, p.title, p.lead_paragraph, p.content, p.created_date, p.modified_date, p.user_id 
-            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC LIMIT ' .$begin.', '.$end.''
-        )->fetchAll();
+            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC'
+        );
+
+        while($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $getList[] = new Posts($data);
+        }
+
+        return $getList;
     }
 
     /**
@@ -58,10 +64,18 @@ class PostsManager
      */
     public function getSinglePost($id): array
     {
-        return $this->db->query(
+        $singlePost = [];
+        $request = $this->db->query(
             'SELECT u.first_name, u.last_name, p.id, p.title, p.lead_paragraph, p.content, p.created_date, p.modified_date, p.user_id 
             FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.''
-        )->fetchAll();
+        );
+
+        while($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $singlePost[] = new Posts($data);
+        }
+
+        return $singlePost;
     }
 
     /**

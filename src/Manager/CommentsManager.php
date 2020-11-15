@@ -43,24 +43,39 @@ class CommentsManager
      */
     public function getList(): array
     {
-        return $this->db->query(
+        $getList = [];
+        $request =  $this->db->query(
             'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.created_date, c.modified_date 
             FROM comments c INNER JOIN users u ON u.id = c.user_id'
-        )->fetchAll();
+        );
+
+        while($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $getList[] = new Comments($data);
+        }
+
+        return $getList;
     }
 
     /**
      * @param $id
      * @param $valid
-     *
      * @return array
      */
-    public function getCommentsPost($id, $valid): array
+    public function getComments($id, $valid): array
     {
-        return $this->db->query(
+        $getComments = [];
+        $request = $this->db->query(
             'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.created_date, c.modified_date 
             FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND valid = '.$valid.''
-        )->fetchAll();
+        );
+
+        while ($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $getComments[] = new Comments($data);
+        }
+
+        return $getComments;
     }
 
     public function add(Comments $comments)

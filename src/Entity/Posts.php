@@ -13,7 +13,7 @@ class Posts
     protected $title;
     protected $lead_paragraph;
     protected $content;
-    protected $creating_date;
+    protected $created_date;
     protected $modified_date;
     protected $user_id;
 
@@ -108,17 +108,17 @@ class Posts
     /**
      * @return mixed
      */
-    public function getCreatingDate()
+    public function getCreatedDate()
     {
-        return $this->creating_date;
+        return $this->created_date;
     }
 
     /**
      * @param mixed $creating_date
      */
-    public function setCreatingDate($creating_date): void
+    public function setCreatedDate($creating_date): void
     {
-        $this->creating_date = $creating_date;
+        $this->created_date = $creating_date;
     }
 
     /**
