@@ -1,8 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Manager;
 
-use Lib\PDOSingleton;
+use App\Entity\Posts;
+use PDO;
 
 /**
  * Class PostsManager
@@ -10,12 +11,30 @@ use Lib\PDOSingleton;
  */
 class PostsManager
 {
+    protected PDO $db;
+
+    /**
+     * @param $db
+     */
+    public function __construct($db)
+    {
+        $this->setDb($db);
+    }
+
+    /**
+     * @param $db
+     */
+    private function setDb($db)
+    {
+        $this->db = $db;
+    }
+
     /**
      * @return int
      */
     public function count(): int
     {
-        return PDOSingleton::getInstance()->getPDO()->query('SELECT COUNT(*) FROM posts')->fetchColumn();
+        return $this->db->query('SELECT COUNT(*) FROM posts')->fetchColumn();
     }
 
     /**
@@ -26,9 +45,9 @@ class PostsManager
      */
     public function getList($begin, $end): array
     {
-        return PDOSingleton::getInstance()->getPDO()->query(
-            'SELECT u.first_name, u.last_name, p.id, p.title, p.lead_paragraph, p.content, p.creating_date, p.modified_date, p.user_id 
-            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC LIMIT '.$begin.', '.$end.''
+        return $this->db->query(
+            'SELECT u.first_name, u.last_name, p.id, p.title, p.lead_paragraph, p.content, p.created_date, p.modified_date, p.user_id 
+            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC LIMIT ' .$begin.', '.$end.''
         )->fetchAll();
     }
 
@@ -39,9 +58,33 @@ class PostsManager
      */
     public function getSinglePost($id): array
     {
-        return PDOSingleton::getInstance()->getPDO()->query(
-            'SELECT u.first_name, u.last_name, p.id, p.title, p.lead_paragraph, p.content, p.creating_date, p.modified_date, p.user_id 
-            FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id ='.$id.''
+        return $this->db->query(
+            'SELECT u.first_name, u.last_name, p.id, p.title, p.lead_paragraph, p.content, p.created_date, p.modified_date, p.user_id 
+            FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.''
         )->fetchAll();
+    }
+
+    /**
+     * @param Posts $posts
+     */
+    public function add(Posts $posts)
+    {
+
+    }
+
+    /**
+     * @param Posts $posts
+     */
+    public function update(Posts $posts)
+    {
+
+    }
+
+    /**
+     * @param Posts $posts
+     */
+    public function delete(Posts $posts)
+    {
+
     }
 }

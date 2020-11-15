@@ -3,8 +3,8 @@
 
 namespace App;
 
-
-use Lib\PDOSingleton;
+use App\Entity\Comments;
+use PDO;
 
 /**
  * Class CommentsManager
@@ -12,12 +12,30 @@ use Lib\PDOSingleton;
  */
 class CommentsManager
 {
+    protected PDO $db;
+
+    /**
+     * @param $db
+     */
+    public function __construct($db)
+    {
+        $this->setDb($db);
+    }
+
+    /**
+     * @param $db
+     */
+    private function setDb($db)
+    {
+        $this->db = $db;
+    }
+
     /**
      * @return int
      */
     public function count(): int
     {
-        return PDOSingleton::getInstance()->getPDO()->query('SELECT COUNT(*) FROM comments')->fetchColumn();
+        return $this->db->query('SELECT COUNT(*) FROM comments')->fetchColumn();
     }
 
     /**
@@ -25,8 +43,8 @@ class CommentsManager
      */
     public function getList(): array
     {
-        return PDOSingleton::getInstance()->getPDO()->query(
-            'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.creating_date, c.modified_date 
+        return $this->db->query(
+            'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.created_date, c.modified_date 
             FROM comments c INNER JOIN users u ON u.id = c.user_id'
         )->fetchAll();
     }
@@ -39,9 +57,24 @@ class CommentsManager
      */
     public function getCommentsPost($id, $valid): array
     {
-        return PDOSingleton::getInstance()->getPDO()->query(
-            'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.creating_date, c.modified_date 
+        return $this->db->query(
+            'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.created_date, c.modified_date 
             FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND valid = '.$valid.''
         )->fetchAll();
+    }
+
+    public function add(Comments $comments)
+    {
+
+    }
+
+    public function update(Comments $comments)
+    {
+
+    }
+
+    public function delete(Comments $comments)
+    {
+
     }
 }
