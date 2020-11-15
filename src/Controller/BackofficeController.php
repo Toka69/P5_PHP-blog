@@ -1,12 +1,12 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Manager\CommentsManager;
 use App\Manager\PostsManager;
 use App\Manager\UsersManager;
 use Lib\AbstractController;
+use Lib\PDOSingleton;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -25,49 +25,14 @@ class BackofficeController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function login(): Response
-    {
-        return $this->render("login.html.twig");
-    }
-
-    /**
-     * @return Response
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function register(): Response
-    {
-        return $this->render("register.html.twig");
-    }
-
-    /**
-     * @return Response
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function forgotPassword(): Response
-    {
-        return $this->render("forgot-password.html.twig");
-    }
-
-    /**
-     * @return Response
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
     public function backoffice(): Response
     {
-        $postManager = new PostsManager();
+        $db = PDOSingleton::getInstance()->getPDO();
+        $postManager = new PostsManager($db);
         $postsCount = $postManager->count();
-        $usersManager = new UsersManager();
+        $usersManager = new UsersManager($db);
         $usersCount = $usersManager->count();
-        $commentsManager = new CommentsManager();
+        $commentsManager = new CommentsManager($db);
         $commentsCount = $commentsManager->count();
 
         return $this->render("backofficeDashboard.html.twig", [
@@ -86,7 +51,8 @@ class BackofficeController extends AbstractController
      */
     public function backofficeUsers(): Response
     {
-        $manager = new UsersManager();
+        $db = PDOSingleton::getInstance()->getPDO();
+        $manager = new UsersManager($db);
         $usersList = $manager->getList(0, 10);
 
         return $this->render("backofficeUsers.html.twig", [
@@ -103,7 +69,8 @@ class BackofficeController extends AbstractController
      */
     public function backofficePosts(): Response
     {
-        $manager = new PostsManager();
+        $db = PDOSingleton::getInstance()->getPDO();
+        $manager = new PostsManager($db);
         $postsList = $manager->getList(0, 10);
 
         return $this->render("backofficePosts.html.twig", [
@@ -120,7 +87,8 @@ class BackofficeController extends AbstractController
      */
     public function backofficeComments(): Response
     {
-        $manager = new CommentsManager();
+        $db = PDOSingleton::getInstance()->getPDO();
+        $manager = new CommentsManager($db);
         $commentsList = $manager->getList();
 
         return $this->render("backofficeComments.html.twig", [

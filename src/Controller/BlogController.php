@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Manager\CommentsManager;
 use App\Manager\PostsManager;
 use Lib\AbstractController;
+use Lib\PDOSingleton;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -25,7 +26,9 @@ class BlogController extends AbstractController
      */
     public function posts(): Response
     {
-        $manager = new PostsManager();
+        $db = PDOSingleton::getInstance()->getPDO();
+
+        $manager = new PostsManager($db);
         $postsList = $manager->getList(0,10);
 
         return $this->render("posts.html.twig",[
@@ -42,9 +45,10 @@ class BlogController extends AbstractController
      */
     public function post(): Response
     {
-        $postsManager = new PostsManager();
+        $db = PDOSingleton::getInstance()->getPDO();
+        $postsManager = new PostsManager($db);
         $singlePost = $postsManager->getSinglePost($_GET['id']);
-        $commentsManager = new CommentsManager();
+        $commentsManager = new CommentsManager($db);
         $comments = $commentsManager->getCommentsPost($singlePost[0]['id'], 1);
 
         return $this->render("post.html.twig",[
