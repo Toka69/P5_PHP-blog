@@ -2469,7 +2469,7 @@ users-people:
     - users-slash
     - walking
     - wheelchair
-  label: Users & People
+  label: User & People
 vehicles:
   icons:
     - accessible-icon

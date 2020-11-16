@@ -4,10 +4,10 @@
 namespace App\Entity;
 
 /**
- * Class Comments
+ * Class Comment
  * @package App\Entity
  */
-class Comments
+class Comment
 {
     protected $id;
     protected $message;

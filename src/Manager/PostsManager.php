@@ -2,7 +2,7 @@
 
 namespace App\Manager;
 
-use App\Entity\Posts;
+use App\Entity\Post;
 use PDO;
 
 /**
@@ -51,7 +51,7 @@ class PostsManager
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            $getList[] = new Posts($data);
+            $getList[] = new Post($data);
         }
 
         return $getList;
@@ -72,32 +72,32 @@ class PostsManager
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            $singlePost[] = new Posts($data);
+            $singlePost[] = new Post($data);
         }
 
         return $singlePost;
     }
 
     /**
-     * @param Posts $posts
+     * @param Post $posts
      */
-    public function add(Posts $posts)
+    public function add(Post $posts)
     {
 
     }
 
     /**
-     * @param Posts $posts
+     * @param Post $posts
      */
-    public function update(Posts $posts)
+    public function update(Post $posts)
     {
 
     }
 
     /**
-     * @param Posts $posts
+     * @param Post $posts
      */
-    public function delete(Posts $posts)
+    public function delete(Post $posts)
     {
 
     }

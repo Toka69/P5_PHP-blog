@@ -3,7 +3,7 @@
 
 namespace App\Manager;
 
-use App\Entity\Users;
+use App\Entity\User;
 use PDO;
 
 /**
@@ -39,27 +39,40 @@ class UsersManager
     }
 
     /**
-     * @param $begin
-     * @param $end
-     *
      * @return array
      */
-    public function getList($begin, $end): array
+    public function getList(): array
     {
-        return $this->db->query(
+        $getList = [];
+        $request = $this->db->query(
             'SELECT u.id, u.admin, u.first_name, u.last_name, u.phone, u.email, u.password, u.street, u.address, u.postal_code, 
             u.logo, u.description, u.town, g.name 
-            FROM users u INNER JOIN gender g ON g.id = u.gender_id ORDER BY id LIMIT '.$begin.', '.$end.''
-        )->fetchAll();
+            FROM users u INNER JOIN gender g ON g.id = u.gender_id ORDER BY id'
+        );
+
+        while ($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $getList[] = new User($data);
+        }
+
+        return $getList;
     }
 
     public function getUser($id): array
     {
-        return $this->db->query(
+        $getUser = [];
+        $request = $this->db->query(
             'SELECT u.id, u.admin, u.first_name, u.last_name, u.phone, u.email, u.password, u.street, u.address, u.postal_code, 
             u.logo, u.description, u.town, g.name 
             FROM users u INNER JOIN gender g ON g.id = u.gender_id WHERE u.id='.$id.''
-        )->fetchAll();
+        );
+
+        while ($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $getUser[] = new User($data);
+        }
+
+        return $getUser;
     }
 
     /**
@@ -72,25 +85,25 @@ class UsersManager
     }
 
     /**
-     * @param Users $users
+     * @param User $users
      */
-    public function add(Users $users)
+    public function add(User $users)
     {
 
     }
 
     /**
-     * @param Users $users
+     * @param User $users
      */
-    public function update(Users $users)
+    public function update(User $users)
     {
 
     }
 
     /**
-     * @param Users $users
+     * @param User $users
      */
-    public function delete(Users $users)
+    public function delete(User $users)
     {
 
     }

@@ -4,10 +4,10 @@
 namespace App\Entity;
 
 /**
- * Class Users
+ * Class User
  * @package App\Entity
  */
-class Users
+class User
 {
     protected $id;
     protected $admin;

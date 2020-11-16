@@ -4,10 +4,10 @@
 namespace App\Entity;
 
 /**
- * Class Posts
+ * Class Post
  * @package App\Entity
  */
-class Posts
+class Post
 {
     protected $id;
     protected $title;

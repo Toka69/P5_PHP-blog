@@ -3,7 +3,7 @@
 
 namespace App\Manager;
 
-use App\Entity\Comments;
+use App\Entity\Comment;
 use PDO;
 
 /**
@@ -51,7 +51,7 @@ class CommentsManager
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            $getList[] = new Comments($data);
+            $getList[] = new Comment($data);
         }
 
         return $getList;
@@ -72,23 +72,23 @@ class CommentsManager
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            $getComments[] = new Comments($data);
+            $getComments[] = new Comment($data);
         }
 
         return $getComments;
     }
 
-    public function add(Comments $comments)
+    public function add(Comment $comments)
     {
 
     }
 
-    public function update(Comments $comments)
+    public function update(Comment $comments)
     {
 
     }
 
-    public function delete(Comments $comments)
+    public function delete(Comment $comments)
     {
 
     }
