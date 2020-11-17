@@ -14,8 +14,8 @@ class Comment
     protected $valid;
     protected $posts_id;
     protected $user_id;
-    protected $created_date;
-    protected $modified_date;
+    protected $createdDate;
+    protected $modifiedDate;
 
     /**
      * @param array $data
@@ -126,15 +126,15 @@ class Comment
      */
     public function getCreatedDate()
     {
-        return $this->created_date;
+        return $this->createdDate;
     }
 
     /**
-     * @param mixed $created_date
+     * @param mixed $createdDate
      */
-    public function setCreatedDate($created_date): void
+    public function setCreatedDate($createdDate): void
     {
-        $this->created_date = $created_date;
+        $this->createdDate = $createdDate;
     }
 
     /**
@@ -142,14 +142,14 @@ class Comment
      */
     public function getModifiedDate()
     {
-        return $this->modified_date;
+        return $this->modifiedDate;
     }
 
     /**
-     * @param mixed $modified_date
+     * @param mixed $modifiedDate
      */
-    public function setModifiedDate($modified_date): void
+    public function setModifiedDate($modifiedDate): void
     {
-        $this->modified_date = $modified_date;
+        $this->modifiedDate = $modifiedDate;
     }
 }

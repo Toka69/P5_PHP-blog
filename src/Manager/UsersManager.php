@@ -45,7 +45,7 @@ class UsersManager
     {
         $getList = [];
         $request = $this->db->query(
-            'SELECT u.id, u.admin, u.first_name, u.last_name, u.phone, u.email, u.password, u.street, u.address, u.postal_code, 
+            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
             u.logo, u.description, u.town, g.name 
             FROM users u INNER JOIN gender g ON g.id = u.gender_id ORDER BY id'
         );
@@ -62,7 +62,7 @@ class UsersManager
     {
         $getUser = [];
         $request = $this->db->query(
-            'SELECT u.id, u.admin, u.first_name, u.last_name, u.phone, u.email, u.password, u.street, u.address, u.postal_code, 
+            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
             u.logo, u.description, u.town, g.name 
             FROM users u INNER JOIN gender g ON g.id = u.gender_id WHERE u.id='.$id.''
         );

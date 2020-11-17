@@ -11,14 +11,14 @@ class User
 {
     protected $id;
     protected $admin;
-    protected $first_name;
-    protected $last_name;
+    protected $firstName;
+    protected $lastName;
     protected $phone;
     protected $email;
     protected $password;
     protected $street;
     protected $address;
-    protected $postal_code;
+    protected $postalCode;
     protected $town;
     protected $logo;
     protected $description;
@@ -85,15 +85,15 @@ class User
      */
     public function getFirstName()
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
-     * @param mixed $first_name
+     * @param mixed $firstName
      */
-    public function setFirstName($first_name): void
+    public function setFirstName($firstName): void
     {
-        $this->first_name = $first_name;
+        $this->firstName = $firstName;
     }
 
     /**
@@ -101,15 +101,15 @@ class User
      */
     public function getLastName()
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
     /**
-     * @param mixed $last_name
+     * @param mixed $lastName
      */
-    public function setLastName($last_name): void
+    public function setLastName($lastName): void
     {
-        $this->last_name = $last_name;
+        $this->lastName = $lastName;
     }
 
     /**
@@ -197,15 +197,15 @@ class User
      */
     public function getPostalCode()
     {
-        return $this->postal_code;
+        return $this->postalCode;
     }
 
     /**
-     * @param mixed $postal_code
+     * @param mixed $postalCode
      */
-    public function setPostalCode($postal_code): void
+    public function setPostalCode($postalCode): void
     {
-        $this->postal_code = $postal_code;
+        $this->postalCode = $postalCode;
     }
 
     /**

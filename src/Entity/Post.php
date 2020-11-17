@@ -11,10 +11,10 @@ class Post
 {
     protected $id;
     protected $title;
-    protected $lead_paragraph;
+    protected $leadParagraph;
     protected $content;
-    protected $created_date;
-    protected $modified_date;
+    protected $createdDate;
+    protected $modifiedDate;
     protected $user_id;
 
     /**
@@ -78,15 +78,15 @@ class Post
      */
     public function getLeadParagraph()
     {
-        return $this->lead_paragraph;
+        return $this->leadParagraph;
     }
 
     /**
-     * @param mixed $lead_paragraph
+     * @param mixed $leadParagraph
      */
-    public function setLeadParagraph($lead_paragraph): void
+    public function setLeadParagraph($leadParagraph): void
     {
-        $this->lead_paragraph = $lead_paragraph;
+        $this->leadParagraph = $leadParagraph;
     }
 
     /**
@@ -110,15 +110,15 @@ class Post
      */
     public function getCreatedDate()
     {
-        return $this->created_date;
+        return $this->createdDate;
     }
 
     /**
-     * @param mixed $creating_date
+     * @param mixed $createdDate
      */
-    public function setCreatedDate($creating_date): void
+    public function setCreatedDate($createdDate): void
     {
-        $this->created_date = $creating_date;
+        $this->createdDate = $createdDate;
     }
 
     /**
@@ -126,15 +126,15 @@ class Post
      */
     public function getModifiedDate()
     {
-        return $this->modified_date;
+        return $this->modifiedDate;
     }
 
     /**
-     * @param mixed $modified_date
+     * @param mixed $modifiedDate
      */
-    public function setModifiedDate($modified_date): void
+    public function setModifiedDate($modifiedDate): void
     {
-        $this->modified_date = $modified_date;
+        $this->modifiedDate = $modifiedDate;
     }
 
     /**

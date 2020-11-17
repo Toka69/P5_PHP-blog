@@ -29,8 +29,8 @@
                         {% for user in usersList %}
                             <tr>
                                 <td>{{ user.logo }}</td>
-                                <td>{{ user.first_name }}</td>
-                                <td>{{ user.last_name }}</td>
+                                <td>{{ user.firstName }}</td>
+                                <td>{{ user.lastName }}</td>
                                 <td><a href="tel:{{ user.phone }}">{{ user.phone }}</a></td>
                                 <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
                                 <td><a target="_blank" href="https://google.fr/maps/place/{{ user.postal_code }}+{{ user.town }}+{{ user.address }} {{ user.street }}">{{ user.address }} {{ user.street }} {{ user.postal_code }} {{ user.town }}</a></td>

@@ -4,6 +4,7 @@
 namespace App\Manager;
 
 use App\Entity\Comment;
+use App\Entity\User;
 use PDO;
 
 /**
@@ -44,14 +45,19 @@ class CommentsManager
     public function getList(): array
     {
         $getList = [];
+        $i = 0;
+
         $request =  $this->db->query(
-            'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.created_date, c.modified_date 
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id'
         );
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            $getList[] = new Comment($data);
+            ${"comment$i"}[] = new Comment($data);
+            ${"user$i"}[] = new User($data);
+            $getList[] = (object) array_merge((array)${"comment$i"}, (array)${"user$i"});
+            $i++;
         }
 
         return $getList;
@@ -66,7 +72,7 @@ class CommentsManager
     {
         $getComments = [];
         $request = $this->db->query(
-            'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.created_date, c.modified_date 
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND valid = '.$valid.''
         );
 

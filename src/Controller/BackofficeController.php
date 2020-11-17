@@ -53,7 +53,7 @@ class BackofficeController extends AbstractController
     {
         $db = PDOSingleton::getInstance()->getPDO();
         $manager = new UsersManager($db);
-        $usersList = $manager->getList(0, 10);
+        $usersList = $manager->getList();
 
         return $this->render("backofficeUsers.html.twig", [
             "usersList" => $usersList

@@ -27,12 +27,11 @@ class BlogController extends AbstractController
     public function posts(): Response
     {
         $db = PDOSingleton::getInstance()->getPDO();
-
         $manager = new PostsManager($db);
         $postsList = $manager->getList();
 
         return $this->render("posts.html.twig",[
-            "posts_list" => $postsList
+            "postsList" => $postsList
         ]);
     }
 
@@ -52,7 +51,7 @@ class BlogController extends AbstractController
         $comments = $commentsManager->getComments($_GET['id'], 1);
 
         return $this->render("post.html.twig",[
-            "single_post" => $singlePost,
+            "singlePost" => $singlePost,
             "comments" => $comments
             ]);
     }

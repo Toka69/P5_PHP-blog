@@ -27,12 +27,12 @@
                         <tbody>
                         {% for post in postsList %}
                         <tr>
-                            <td>{{ post.title }}</td>
-                            <td>{{ post.lead_paragraph }}</td>
-                            <td>{{ post.content }}</td>
-                            <td>{{ post.creating_date }}</td>
-                            <td>{{ post.modified_date }}</td>
-                            <td>{{ post.first_name }} {{ post.last_name }}</td>
+                                <td>{{ post.0.title }}</td>
+                                <td>{{ post.0.leadParagraph }}</td>
+                                <td>{{ post.0.content }}</td>
+                                <td>{{ post.0.createdDate }}</td>
+                                <td>{{ post.0.modifiedDate }}</td>
+                                <td>{{ post.1.firstName }} {{ post.1.lastName }}</td>
                         </tr>
                         {%  endfor %}
                         </tbody>
