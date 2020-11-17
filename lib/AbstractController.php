@@ -4,6 +4,10 @@ namespace Lib;
 
 use Twig\Environment;
 use Lib\Router\Router;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Extension\DebugExtension;
 use Twig\Loader\FilesystemLoader;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -17,7 +21,6 @@ abstract class AbstractController
     private Router $router;
 
     /**
-     * AbstractController constructor.
      * @param Router $router
      */
     public function __construct(Router $router)
@@ -27,6 +30,7 @@ abstract class AbstractController
 
     /**
      * @param string $name
+     *
      * @return RedirectResponse
      */
     public function redirect(string $name): RedirectResponse
@@ -37,17 +41,21 @@ abstract class AbstractController
     /**
      * @param string $view
      * @param array $data
+     *
      * @return Response
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     *
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function render(string $view, array $data = []): Response
     {
         $loader = new FilesystemLoader(__DIR__ . '/../templates');
         $twig = new Environment($loader, [
             'cache' => false,
+            'debug' => true
         ]);
+        $twig->addExtension(new DebugExtension());
 
         return new Response($twig->render($view, $data));
     }
