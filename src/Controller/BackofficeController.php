@@ -6,7 +6,6 @@ use App\Manager\CommentsManager;
 use App\Manager\PostsManager;
 use App\Manager\UsersManager;
 use Lib\AbstractController;
-use Lib\PDOSingleton;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -27,12 +26,11 @@ class BackofficeController extends AbstractController
      */
     public function backoffice(): Response
     {
-        $db = PDOSingleton::getInstance()->getPDO();
-        $postManager = new PostsManager($db);
+        $postManager = new PostsManager(self::PDOConnection());
         $postsCount = $postManager->count();
-        $usersManager = new UsersManager($db);
+        $usersManager = new UsersManager(self::PDOConnection());
         $usersCount = $usersManager->count();
-        $commentsManager = new CommentsManager($db);
+        $commentsManager = new CommentsManager(self::PDOConnection());
         $commentsCount = $commentsManager->count();
 
         return $this->render("backofficeDashboard.html.twig", [
@@ -51,8 +49,7 @@ class BackofficeController extends AbstractController
      */
     public function backofficeUsers(): Response
     {
-        $db = PDOSingleton::getInstance()->getPDO();
-        $manager = new UsersManager($db);
+        $manager = new UsersManager(self::PDOConnection());
         $usersList = $manager->getList();
 
         return $this->render("backofficeUsers.html.twig", [
@@ -69,8 +66,7 @@ class BackofficeController extends AbstractController
      */
     public function backofficePosts(): Response
     {
-        $db = PDOSingleton::getInstance()->getPDO();
-        $manager = new PostsManager($db);
+        $manager = new PostsManager(self::PDOConnection());
         $postsList = $manager->getList();
 
         return $this->render("backofficePosts.html.twig", [
@@ -87,8 +83,7 @@ class BackofficeController extends AbstractController
      */
     public function backofficeComments(): Response
     {
-        $db = PDOSingleton::getInstance()->getPDO();
-        $manager = new CommentsManager($db);
+        $manager = new CommentsManager(self::PDOConnection());
         $commentsList = $manager->getList();
 
         return $this->render("backofficeComments.html.twig", [

@@ -56,8 +56,7 @@ class SecurityController extends AbstractController
     {
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
-            $db = PDOSingleton::getInstance()->getPDO();
-            $manager = new UsersManager($db);
+            $manager = new UsersManager(self::PDOConnection());
 
             $request = $manager->checkCredentials($_POST['email']);
             if (!$request){

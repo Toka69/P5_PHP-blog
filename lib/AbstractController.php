@@ -59,4 +59,9 @@ abstract class AbstractController
 
         return new Response($twig->render($view, $data));
     }
+
+    public function PDOConnection()
+    {
+        return PDOSingleton::getInstance()->getPDO();
+    }
 }
