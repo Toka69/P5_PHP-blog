@@ -12,10 +12,11 @@ class Comment
     protected $id;
     protected $message;
     protected $valid;
-    protected $posts_id;
-    protected $user_id;
+    protected $postsId;
+    protected $userId;
     protected $createdDate;
     protected $modifiedDate;
+    protected User $user;
 
     /**
      * @param array $data
@@ -30,12 +31,10 @@ class Comment
      */
     public function hydrate(array $data)
     {
-        foreach ($data as $key => $value)
-        {
-            $method = 'set'.ucfirst($key);
+        foreach ($data as $key => $value) {
+            $method = 'set' . ucfirst($key);
 
-            if (method_exists($this, $method))
-            {
+            if (method_exists($this, $method)) {
                 $this->$method($value);
             }
         }
@@ -94,15 +93,15 @@ class Comment
      */
     public function getPostsId()
     {
-        return $this->posts_id;
+        return $this->postsId;
     }
 
     /**
-     * @param mixed $posts_id
+     * @param mixed $postsId
      */
-    public function setPostsId($posts_id): void
+    public function setPostsId($postsId): void
     {
-        $this->posts_id = $posts_id;
+        $this->postsId = $postsId;
     }
 
     /**
@@ -110,15 +109,15 @@ class Comment
      */
     public function getUserId()
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     /**
-     * @param mixed $user_id
+     * @param mixed $userId
      */
-    public function setUserId($user_id): void
+    public function setUserId($userId): void
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
     }
 
     /**
@@ -151,5 +150,21 @@ class Comment
     public function setModifiedDate($modifiedDate): void
     {
         $this->modifiedDate = $modifiedDate;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
     }
 }

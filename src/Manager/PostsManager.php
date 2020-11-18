@@ -44,19 +44,24 @@ class PostsManager
     public function getList(): array
     {
         $getList = [];
-        $i = 0;
-
         $request = $this->db->query(
-            'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id 
+            'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
             FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC'
         );
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            ${"post$i"}[] = new Post($data);
-            ${"user$i"}[] = new User($data);
-            $getList[] = (object) array_merge((array)${"post$i"}, (array)${"user$i"});
-            $i++;
+            $array = [
+                'id' => $data['id'],
+                'title' => $data['title'],
+                'leadParagraph' => $data['leadParagraph'],
+                'content' => $data['content'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'userId' => $data['userId'],
+                'user' => new User ($data)
+            ];
+            $getList[] = new Post($array);
         }
 
         return $getList;
@@ -65,23 +70,29 @@ class PostsManager
     /**
      * @param $id
      *
-     * @return array
+     * @return object
      */
     public function getSinglePost($id): array
     {
         $singlePost = [];
-        $i = 0;
         $request = $this->db->query(
-            'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id 
+            'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
             FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.''
         );
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            ${"singlePost$i"}[] = new Post($data);
-            ${"user$i"}[] = new User($data);
-            $singlePost[] = (object) array_merge((array)${"singlePost$i"}, (array)${"user$i"});
-            $i++;
+            $array = [
+                'id' => $data['id'],
+                'title' => $data['title'],
+                'leadParagraph' => $data['leadParagraph'],
+                'content' => $data['content'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'userId' => $data['userId'],
+                'user' => new User ($data)
+            ];
+            $singlePost[] = new Post($array);
         }
 
         return $singlePost;

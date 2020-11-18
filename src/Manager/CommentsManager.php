@@ -54,10 +54,16 @@ class CommentsManager
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            ${"comment$i"}[] = new Comment($data);
-            ${"user$i"}[] = new User($data);
-            $getList[] = (object) array_merge((array)${"comment$i"}, (array)${"user$i"});
-            $i++;
+            $array = [
+                'message' => $data['message'],
+                'valid' => $data['valid'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'user' => new User($data)
+            ];
+            $getList[] = new Comment($array);
         }
 
         return $getList;
@@ -66,19 +72,29 @@ class CommentsManager
     /**
      * @param $id
      * @param $valid
+     *
      * @return array
      */
     public function getComments($id, $valid): array
     {
         $getComments = [];
         $request = $this->db->query(
-            'SELECT u.first_name as firstName, u.last_name as lastName, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND valid = '.$valid.''
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            $getComments[] = new Comment($data);
+            $array = [
+                'message' => $data['message'],
+                'valid' => $data['valid'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'user' => new User($data)
+            ];
+            $getComments[] = new Comment($array);
         }
 
         return $getComments;

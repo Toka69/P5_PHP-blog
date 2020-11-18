@@ -15,7 +15,8 @@ class Post
     protected $content;
     protected $createdDate;
     protected $modifiedDate;
-    protected $user_id;
+    protected $userId;
+    protected User $user;
 
     /**
      * @param array $data
@@ -142,16 +143,30 @@ class Post
      */
     public function getUserId()
     {
-        return $this->user_id;
+        return $this->userId;
     }
 
     /**
-     * @param mixed $user_id
+     * @param mixed $userId
      */
-    public function setUserId($user_id): void
+    public function setUserId($userId): void
     {
-        $this->user_id = $user_id;
+        $this->userId = $userId;
     }
 
+    /**
+     * @return User
+     */
+    public function getUser(): User
+    {
+        return $this->user;
+    }
 
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user): void
+    {
+        $this->user = $user;
+    }
 }

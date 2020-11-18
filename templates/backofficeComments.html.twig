@@ -26,11 +26,11 @@
                         <tbody>
                         {% for comment in commentsList %}
                             <tr>
-                                <td>{{ comment.0.message }}</td>
-                                <td>{{ comment.0.createdDate }}</td>
-                                <td>{{ comment.0.modifiedDate }}</td>
-                                <td>{{ comment.0.valid }}</td>
-                                <td>{{ comment.1.firstName }} {{ comment.1.lastName }}</td>
+                                <td>{{ comment.message }}</td>
+                                <td>{{ comment.createdDate }}</td>
+                                <td>{{ comment.modifiedDate }}</td>
+                                <td>{{ comment.valid }}</td>
+                                <td>{{ comment.user.firstName }} {{ comment.user.lastName }}</td>
                             </tr>
                         {%  endfor %}
                         </tbody>
