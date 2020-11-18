@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Entity\User;
 use App\Manager\UsersManager;
 use Lib\AbstractController;
 use Lib\PDOSingleton;
@@ -23,7 +24,8 @@ class SecurityController extends AbstractController
      */
     public function login(): Response
     {
-        if($_SERVER["REQUEST_METHOD"] === "POST") {
+        if($_SERVER["REQUEST_METHOD"] === "POST")
+        {
             $db = PDOSingleton::getInstance()->getPDO();
             $manager = new UsersManager($db);
 
@@ -32,8 +34,6 @@ class SecurityController extends AbstractController
             if($request['password'] === $_POST['password'])
             {
                 $_SESSION['id'] = $request['id'];
-                //$manager = new UsersManager();
-                //$user = $manager->getUser($userId);
                 return $this->redirect('backoffice');
             }
 
@@ -54,6 +54,35 @@ class SecurityController extends AbstractController
      */
     public function register(): Response
     {
+        if($_SERVER["REQUEST_METHOD"] === "POST")
+        {
+            $db = PDOSingleton::getInstance()->getPDO();
+            $manager = new UsersManager($db);
+
+            $request = $manager->checkCredentials($_POST['email']);
+            if (!$request){
+                if($_POST['password'] === $_POST['repeatPassword'])
+                {
+                    $user = new User([
+                        'firstName' => $_POST['firstName'],
+                        'lastName' => $_POST['lastName'],
+                        'email' => $_POST['email'],
+                        'password' => $_POST['password'],
+                        ]);
+                    $manager->add($user);
+
+                    return $this->redirect('backoffice');
+                }
+                return $this->render("register.html.twig", [
+                    "message" => "Les mots de passe ne correspondent pas!"
+                ]);
+            }
+
+            return $this->render("register.html.twig", [
+                "message" => "Ce compte utilisateur existe déjà! Veuillez réessayer."
+            ]);
+
+        }
         return $this->render("register.html.twig");
     }
 

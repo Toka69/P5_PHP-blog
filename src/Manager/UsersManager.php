@@ -85,9 +85,26 @@ class UsersManager
     }
 
     /**
+     * @param User $user
+     */
+    public function add(User $user)
+    {
+        $request = $this->db->prepare('INSERT INTO users(admin, first_name, last_name, email, password) 
+        VALUES(:admin, :first_name, :last_name, :email, :password)');
+
+        $request->bindValue(':admin', '0');
+        $request->bindValue(':first_name', $user->getFirstName()); //PDO::PARAM ?
+        $request->bindValue(':last_name', $user->getLastName());
+        $request->bindValue(':email', $user->getEmail());
+        $request->bindValue(':password', $user->getPassword());
+
+        $request->execute();
+    }
+
+    /**
      * @param User $users
      */
-    public function add(User $users)
+    public function update(User $user)
     {
 
     }
@@ -95,15 +112,7 @@ class UsersManager
     /**
      * @param User $users
      */
-    public function update(User $users)
-    {
-
-    }
-
-    /**
-     * @param User $users
-     */
-    public function delete(User $users)
+    public function delete(User $user)
     {
 
     }
