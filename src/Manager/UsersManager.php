@@ -58,18 +58,18 @@ class UsersManager
         return $getList;
     }
 
-    public function getUser($id): array
+    public function getUser($id): object
     {
         $getUser = [];
         $request = $this->db->query(
             'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
             u.logo, u.description, u.town, g.name 
-            FROM users u INNER JOIN gender g ON g.id = u.gender_id WHERE u.id='.$id.''
+            FROM users u INNER JOIN gender g ON g.id = u.gender_id WHERE u.id= '.$id.' '
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
         {
-            $getUser[] = new User($data);
+            $getUser = new User($data);
         }
 
         return $getUser;
@@ -89,14 +89,15 @@ class UsersManager
      */
     public function add(User $user)
     {
-        $request = $this->db->prepare('INSERT INTO users(admin, first_name, last_name, email, password) 
-        VALUES(:admin, :first_name, :last_name, :email, :password)');
+        $request = $this->db->prepare('INSERT INTO users(admin, first_name, last_name, email, password, gender_id) 
+        VALUES(:admin, :first_name, :last_name, :email, :password, :gender_id)');
 
         $request->bindValue(':admin', '0');
         $request->bindValue(':first_name', $user->getFirstName()); //PDO::PARAM ?
         $request->bindValue(':last_name', $user->getLastName());
         $request->bindValue(':email', $user->getEmail());
         $request->bindValue(':password', $user->getPassword());
+        $request->bindValue(':gender_id', $user->getGenderId());
 
         $request->execute();
     }

@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 class Router
 {
     private array $routes;
-    private string $path;
 
     /**
      * @param Route $route

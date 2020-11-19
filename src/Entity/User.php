@@ -22,7 +22,7 @@ class User
     protected $town;
     protected $logo;
     protected $description;
-    protected $gender_id;
+    protected $genderId;
 
     /**
      * @param array $data
@@ -261,14 +261,14 @@ class User
      */
     public function getGenderId()
     {
-        return $this->gender_id;
+        return $this->genderId;
     }
 
     /**
-     * @param mixed $gender_id
+     * @param mixed $genderId
      */
-    public function setGenderId($gender_id): void
+    public function setGenderId($genderId): void
     {
-        $this->gender_id = $gender_id;
+        $this->genderId = $genderId;
     }
 }

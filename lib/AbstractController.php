@@ -56,6 +56,7 @@ abstract class AbstractController
             'debug' => true
         ]);
         $twig->addExtension(new DebugExtension());
+        $twig->addGlobal('session', $_SESSION);
 
         return new Response($twig->render($view, $data));
     }

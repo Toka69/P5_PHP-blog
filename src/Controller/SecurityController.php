@@ -22,8 +22,12 @@ class SecurityController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      */
+
     public function login(): Response
     {
+        if(isset($_SESSION['user'])) {
+            return $this->redirect('backoffice');
+        }
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $db = PDOSingleton::getInstance()->getPDO();
@@ -32,7 +36,7 @@ class SecurityController extends AbstractController
             $request = $manager->checkCredentials($_POST['email']);
             if(password_verify($_POST['password'], $request['password']))
             {
-                $_SESSION['id'] = $request['id'];
+                $_SESSION['user'] = $manager->getUser($request['id']);
                 return $this->redirect('backoffice');
             }
 
@@ -53,6 +57,9 @@ class SecurityController extends AbstractController
      */
     public function register(): Response
     {
+        if(isset($_SESSION['user'])) {
+            return $this->redirect('backoffice');
+        }
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager(self::PDOConnection());
@@ -66,10 +73,13 @@ class SecurityController extends AbstractController
                         'lastName' => $_POST['lastName'],
                         'email' => $_POST['email'],
                         'password' => $password = password_hash($_POST['password'], PASSWORD_BCRYPT, ["cost" => 12]),
+                        'genderId' => 4
                         ]);
                     $manager->add($user);
 
-                    return $this->redirect('backoffice');
+                    return $this->render("login.html.twig", [
+                        "message" => "Le compte a bien été créé. Vous pouvez vous connecter."
+                    ]);
                 }
                 return $this->render("register.html.twig", [
                     "message" => "Les mots de passe ne correspondent pas!"
@@ -93,6 +103,15 @@ class SecurityController extends AbstractController
      */
     public function forgotPassword(): Response
     {
+        if(isset($_SESSION['user'])) {
+            return $this->redirect('backoffice');
+        }
         return $this->render("forgot-password.html.twig");
+    }
+
+    public function logout(): Response
+    {
+        session_unset();
+        return $this->redirect("login");
     }
 }

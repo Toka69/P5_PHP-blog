@@ -72,7 +72,7 @@ class PostsManager
      *
      * @return object
      */
-    public function getSinglePost($id): array
+    public function getSinglePost($id): object
     {
         $singlePost = [];
         $request = $this->db->query(
@@ -92,7 +92,7 @@ class PostsManager
                 'userId' => $data['userId'],
                 'user' => new User ($data)
             ];
-            $singlePost[] = new Post($array);
+            $singlePost = new Post($array);
         }
 
         return $singlePost;

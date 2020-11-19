@@ -31,8 +31,12 @@ class Kernel
         $route = $router->match($request);          //verify if route exist return route, else null.
 
         $controller = $route->getController();      //get the name of the class to instantiate
-        
         $controller = new $controller($router);     //exec config/routes.php
+
+        if (is_null($route))
+        {
+            //redirect 404
+        }
 
         return call_user_func_array([$controller, $route->getAction()], [$request]);
     }

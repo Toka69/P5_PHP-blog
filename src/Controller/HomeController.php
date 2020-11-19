@@ -25,5 +25,10 @@ use Twig\Error\SyntaxError;
        {
             return $this->render("home.html.twig");
        }
+
+       public function notExist(): Response
+        {
+            return $this->render("404.html.twig");
+        }
  }
  
