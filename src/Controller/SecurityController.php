@@ -30,8 +30,7 @@ class SecurityController extends AbstractController
             $manager = new UsersManager($db);
 
             $request = $manager->checkCredentials($_POST['email']);
-
-            if($request['password'] === $_POST['password'])
+            if(password_verify($_POST['password'], $request['password']))
             {
                 $_SESSION['id'] = $request['id'];
                 return $this->redirect('backoffice');
