@@ -10,7 +10,7 @@ use Lib\Router\Route;
 
 return [
     new Route("home", "/", HomeController::class, "home"),
-    new Route("notexist", "/notexist", HomeController::class, "notexist"),
+    new Route("urlError", "/url-error", HomeController::class, "urlError"),
     new Route("posts", "/posts", BlogController::class, "posts"),
     new Route("post", "/post", BlogController::class, "post"),
     new Route("backoffice", "/back", BackofficeController::class, "backoffice"),

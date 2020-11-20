@@ -3,6 +3,7 @@
 namespace Lib;
 
 use Lib\Router\Router;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,13 +31,13 @@ class Kernel
 
         $route = $router->match($request);          //verify if route exist return route, else null.
 
-        $controller = $route->getController();      //get the name of the class to instantiate
-        $controller = new $controller($router);     //exec config/routes.php
-
         if (is_null($route))
         {
-            //redirect 404
+            return new RedirectResponse('url-error');
         }
+
+        $controller = $route->getController();      //get the name of the class to instantiate
+        $controller = new $controller($router);     //exec config/routes.php
 
         return call_user_func_array([$controller, $route->getAction()], [$request]);
     }

@@ -26,7 +26,7 @@ use Twig\Error\SyntaxError;
             return $this->render("home.html.twig");
        }
 
-       public function notExist(): Response
+       public function urlError(): Response
         {
             return $this->render("404.html.twig");
         }
