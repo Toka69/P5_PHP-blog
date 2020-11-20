@@ -71,7 +71,7 @@ class SecurityController extends AbstractController
                         'firstName' => $_POST['firstName'],
                         'lastName' => $_POST['lastName'],
                         'email' => $_POST['email'],
-                        'password' => $password = password_hash($_POST['password'], PASSWORD_BCRYPT, ["cost" => 12]),
+                        'password' => password_hash($_POST['password'], PASSWORD_BCRYPT, ["cost" => 12]),
                         'genderId' => 4
                         ]);
                     $manager->add($user);
