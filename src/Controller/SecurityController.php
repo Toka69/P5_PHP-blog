@@ -32,7 +32,6 @@ class SecurityController extends AbstractController
         {
             $db = PDOSingleton::getInstance()->getPDO();
             $manager = new UsersManager($db);
-
             $request = $manager->checkCredentials($_POST['email']);
             if(password_verify($_POST['password'], $request['password']))
             {
