@@ -58,7 +58,7 @@ class UsersManager
         return $getList;
     }
 
-    public function getUser($id): object
+    public function getUser($id): ?object
     {
         $getUser = [];
         $request = $this->db->query(
@@ -72,7 +72,12 @@ class UsersManager
             $getUser = new User($data);
         }
 
-        return $getUser;
+        if(!empty($getUser))
+        {
+            return $getUser;
+        }
+
+        return null;
     }
 
     /**

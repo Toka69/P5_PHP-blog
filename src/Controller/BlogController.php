@@ -45,7 +45,7 @@ class BlogController extends AbstractController
         $postsManager = new PostsManager($this->PDOConnection());
         $singlePost = $postsManager->getSinglePost($_GET['id']);
         $commentsManager = new CommentsManager($this->PDOConnection());
-        $comments = $commentsManager->getComments($_GET['id'], 1);
+        $comments = $commentsManager->getCommentsPost($_GET['id'], 1);
 
         return $this->render("post.html.twig",[
             "singlePost" => $singlePost,

@@ -26,7 +26,7 @@
                         </thead>
                         <tbody>
                         {% for post in postsList %}
-                        <tr>
+                        <tr class="clickable-table-row" onclick="location.href='back-posts?id={{ post.id }}'">
                                 <td>{{ post.title }}</td>
                                 <td>{{ post.leadParagraph }}</td>
                                 <td>{{ post.content }}</td>

@@ -54,13 +54,12 @@ class BackofficeController extends AbstractController
 
         if (isset($_GET['id']))
         {
-            if (preg_match('#^[0-9]+$#', $_GET['id'])) {
-                $securForm = $this->securForm($_GET);
-                if (is_int((int)$securForm['id'])) {
-                    return $this->render("backofficeUser.html.twig", [
-                        "id" => (int)$securForm['id']
-                    ]);
-                }
+            $securForm = $this->securForm($_GET);
+            if (preg_match('#^[0-9]+$#', $securForm['id']) && $manager->getUser($securForm['id']))
+            {
+                return $this->render("backofficeUser.html.twig", [
+                    "id" => (int)$securForm['id']
+                ]);
             }
 
             return $this->redirect('backofficeUsers');
@@ -83,6 +82,18 @@ class BackofficeController extends AbstractController
         $manager = new PostsManager($this->PDOConnection());
         $postsList = $manager->getList();
 
+        if (isset($_GET['id'])) {
+            $securForm = $this->securForm($_GET);
+            if (preg_match('#^[0-9]+$#', $securForm['id']) && $manager->getSinglePost($securForm['id']))
+            {
+                return $this->render("backofficepost.html.twig", [
+                    "id" => (int)$securForm['id']
+                ]);
+            }
+
+            return $this->redirect('backofficePosts');
+        }
+
         return $this->render("backofficePosts.html.twig", [
             "postsList" => $postsList
         ]);
@@ -99,6 +110,18 @@ class BackofficeController extends AbstractController
     {
         $manager = new CommentsManager($this->PDOConnection());
         $commentsList = $manager->getList();
+
+        if (isset($_GET['id'])) {
+            $securForm = $this->securForm($_GET);
+            if (preg_match('#^[0-9]+$#', $securForm['id']) && $manager->getComment($securForm['id'], 0) || $manager->getComment($securForm['id'], 1))
+            {
+                return $this->render("backofficecomment.html.twig", [
+                    "id" => (int)$securForm['id']
+                ]);
+            }
+
+            return $this->redirect('backofficeComments');
+        }
 
         return $this->render("backofficeComments.html.twig", [
             "commentsList" => $commentsList

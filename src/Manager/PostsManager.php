@@ -70,9 +70,9 @@ class PostsManager
     /**
      * @param $id
      *
-     * @return object
+     * @return object|null
      */
-    public function getSinglePost($id): object
+    public function getSinglePost($id): ?object
     {
         $singlePost = [];
         $request = $this->db->query(
@@ -94,8 +94,12 @@ class PostsManager
             ];
             $singlePost = new Post($array);
         }
+        if(!empty($singlePost))
+        {
+            return $singlePost;
+        }
 
-        return $singlePost;
+        return null;
     }
 
     /**

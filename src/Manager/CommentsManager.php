@@ -46,13 +46,14 @@ class CommentsManager
     {
         $getList = [];
         $request =  $this->db->query(
-            'SELECT u.first_name as firstName, u.last_name as lastName, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id'
         );
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
             $array = [
+                'id' => $data['id'],
                 'message' => $data['message'],
                 'valid' => $data['valid'],
                 'createdDate' => $data['createdDate'],
@@ -67,23 +68,50 @@ class CommentsManager
         return $getList;
     }
 
+    public function getComment($id): array
+    {
+        $getComment = [];
+        $request =  $this->db->query(
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
+            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE c.id = '.$id.''
+        );
+
+        while ($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $array = [
+                'id' => $data['id'],
+                'message' => $data['message'],
+                'valid' => $data['valid'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'user' => new User($data)
+            ];
+            $getComment[] = new Comment($array);
+        }
+
+        return $getComment;
+    }
+
     /**
      * @param $id
      * @param $valid
      *
      * @return array
      */
-    public function getComments($id, $valid): array
+    public function getCommentsPost($id, $valid): array
     {
         $getComments = [];
         $request = $this->db->query(
-            'SELECT u.first_name as firstName, u.last_name as lastName, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND valid = '.$valid.''
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
         {
             $array = [
+                'id' => $data['id'],
                 'message' => $data['message'],
                 'valid' => $data['valid'],
                 'createdDate' => $data['createdDate'],
