@@ -65,4 +65,24 @@ abstract class AbstractController
     {
         return PDOSingleton::getInstance()->getPDO();
     }
+
+    public function test_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+
+        return $data;
+    }
+
+    public function securPost($post): array
+    {
+        $data = [];
+        foreach($post as $key => $value)
+        {
+            $data[$key] = $this->test_input($value);
+        }
+
+        return $data;
+    }
 }
