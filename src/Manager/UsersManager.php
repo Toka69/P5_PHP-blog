@@ -80,6 +80,10 @@ class UsersManager
         return null;
     }
 
+    public function getGenders(){
+        return $this->db->query('SELECT name FROM gender');
+    }
+
     /**
      * @param $email
      * @return mixed
