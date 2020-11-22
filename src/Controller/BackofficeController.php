@@ -52,22 +52,30 @@ class BackofficeController extends AbstractController
         $manager = new UsersManager($this->PDOConnection());
         $usersList = $manager->getList();
 
-        if (isset($_GET['id']))
-        {
-            $securForm = $this->securForm($_GET);
-            if (preg_match('#^[0-9]+$#', $securForm['id']) && $manager->getUser($securForm['id']))
-            {
-                return $this->render("backofficeUser.html.twig", [
-                    "id" => (int)$securForm['id']
-                ]);
-            }
-
-            return $this->redirect('backofficeUsers');
-        }
-
         return $this->render("backofficeUsers.html.twig", [
             "usersList" => $usersList
         ]);
+    }
+
+    public function backofficeUser(): Response
+    {
+        $manager = new UsersManager($this->PDOConnection());
+        if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']))
+        {
+            $securForm = $this->securForm($_GET);
+            $user = $manager->getUser($securForm['id']);
+            $genders = $manager->getGenders();
+            if ($user)
+            {
+                return $this->render("backofficeUser.html.twig", [
+                    "user" => $user,
+                    "genders" => $genders,
+                    "disabled" => "disabled"
+                ]);
+            }
+        }
+
+        return $this->redirect('backofficeUsers');
     }
 
     /**
@@ -113,7 +121,7 @@ class BackofficeController extends AbstractController
 
         if (isset($_GET['id'])) {
             $securForm = $this->securForm($_GET);
-            if (preg_match('#^[0-9]+$#', $securForm['id']) && $manager->getComment($securForm['id'], 0) || $manager->getComment($securForm['id'], 1))
+            if (preg_match('#^[0-9]+$#', $securForm['id']) && $manager->getComment($securForm['id']) || $manager->getComment($securForm['id']))
             {
                 return $this->render("backofficecomment.html.twig", [
                     "id" => (int)$securForm['id']
