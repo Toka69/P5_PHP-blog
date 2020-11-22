@@ -59,7 +59,6 @@ class SecurityController extends AbstractController
         if($_SERVER["REQUEST_METHOD"] === "POST") {
             $manager = new UsersManager($this->PDOConnection());
             $securPost = $this->securPost($_POST);
-            var_dump($securPost);
             if (filter_var($securPost['email'], FILTER_VALIDATE_EMAIL)) {
                 $request = $manager->checkCredentials($securPost['email']);
                 if (!$request) {
@@ -74,13 +73,14 @@ class SecurityController extends AbstractController
                             ]);
                             $manager->add($user);
 
-                            return $this->render("login.html.twig", [
-                                "message" => "Le compte a bien été créé. Vous pouvez vous connecter."
+                            return $this->render("register.html.twig", [
+                                "message" => "Le compte a bien été créé. Vous pouvez vous connecter.",
+                                "success" => true
                             ]);
                         }
 
                         return $this->render("register.html.twig", [
-                            "message" => "Les mots de passe ne correspondent pas!"
+                            "message" => "Les mots de passe ne correspondent pas!",
                         ]);
                     }
 
@@ -127,6 +127,10 @@ class SecurityController extends AbstractController
             else
             {
                 //send an email
+                return $this->render("forgot-password.html.twig", [
+                    "message" => "Le mot de passe vient de vous être envoyé par email!",
+                    "success" => true
+                ]);
             }
         }
         return $this->render("forgot-password.html.twig");

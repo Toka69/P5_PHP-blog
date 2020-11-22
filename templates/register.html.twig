@@ -35,45 +35,52 @@
                                 <div class="text-center">
                                     <h1 class="h4 text-gray-900 mb-4">Créer un compte!</h1>
                                 </div>
-                                <div class="text-center text-danger m-5">
+                                {%  if success == true %}
+                                    <div class="text-center text-success m-5">
+                                        {{ message }}
+                                    </div>
+                                    <a class="btn btn-primary btn-user btn-block" href="login" >Se connecter</a>
+                                {% else %}
+                                    <div class="text-center text-danger m-5">
                                     {{ message }}
-                                </div>
-                                <form class="user" action="register" method="post">
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" name="firstName" id="firstName" placeholder="Prénom" required>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control form-control-user" name="lastName" id="lastName" placeholder="Nom" required>
-                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control form-control-user" name ="email" id="inputEmail" placeholder="Adresse email" required>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="password" class="form-control form-control-user" name="password" id="inputPassword" placeholder="Mot de passe" required>
+                                    <form class="user" action="register" method="post">
+                                        <div class="form-group row">
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input type="text" class="form-control form-control-user" name="firstName" id="firstName" placeholder="Prénom" required>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="text" class="form-control form-control-user" name="lastName" id="lastName" placeholder="Nom" required>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <input type="password" class="form-control form-control-user" name="repeatPassword" id="inputRepeatPassword" placeholder="Répétez le mot de passe" required>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user" name ="email" id="inputEmail" placeholder="Adresse email" required>
                                         </div>
-                                        <label class="mt-4" for="inputPassword">Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox small">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck" required>
-                                            <label class="custom-control-label" for="customCheck">J'ai lu et j'accepte les conditions</label>
+                                        <div class="form-group row">
+                                            <div class="col-sm-6 mb-3 mb-sm-0">
+                                                <input type="password" class="form-control form-control-user" name="password" id="inputPassword" placeholder="Mot de passe" required>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input type="password" class="form-control form-control-user" name="repeatPassword" id="inputRepeatPassword" placeholder="Répétez le mot de passe" required>
+                                            </div>
+                                            <label class="mt-4" for="inputPassword">Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!</label>
                                         </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox small">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck" required>
+                                                <label class="custom-control-label" for="customCheck">J'ai lu et j'accepte les conditions</label>
+                                            </div>
+                                        </div>
+                                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Envoyer" />
+                                    </form>
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="forgot-password">Mot de passe oublié?</a>
                                     </div>
-                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="Envoyer" />
-                                </form>
-                                <hr>
-                                <div class="text-center">
-                                    <a class="small" href="forgot-password">Mot de passe oublié?</a>
-                                </div>
-                                <div class="text-center">
-                                    <a class="small" href="login">Déjà un compte? Connectez-vous!</a>
-                                </div>
+                                    <div class="text-center">
+                                        <a class="small" href="login">Déjà un compte? Connectez-vous!</a>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
