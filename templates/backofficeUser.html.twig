@@ -1,5 +1,31 @@
 {% extends 'baseBackoffice.html.twig' %}
 
 {% block content %}
-    id = {{ id }}
+    <div class="container-fluid">
+    <div class="card shadow mb-4">
+    <form>
+        <fieldset {{ disabled }}>
+            <div class="form-group"><label for="inputFirstName">Prénom</label><input class="form-control" id="inputFirstName" type="text" placeholder="{{ user.firstName }}"></div>
+            <div class="form-group"><label for="inputLastName">Nom</label><input class="form-control" id="inputLastName" type="text" placeholder="{{ user.lastName}}"></div>
+            <div class="form-group"><label for="inputEmail">Email</label><input class="form-control" id="inputEmail" type="email" placeholder="{{ user.email }}"></div>
+            <div class="form-group"><label for="inputPhone">Téléphone</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.phone }}"></div>
+            <div class="form-group"><label for="inputPhone">Adresse</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.address }}"></div>
+            <div class="form-group"><label for="inputPhone">Rue</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.street }}"></div>
+            <div class="form-group"><label for="inputPhone">Code Postal</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.postalCode }}"></div>
+            <div class="form-group"><label for="inputPhone">Ville</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.town }}"></div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Genre</label>
+                <select class="form-control" id="exampleFormControlSelect1">
+                    {% for gender in genders %}
+                    <option>{{ gender.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group"><label for="exampleFormControlTextarea1">Désignation</label><textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea></div>
+        </fieldset>
+    </form>
+        <a class="btn btn-primary" href="" role="button" value="edit">Editer</a>
+
+    </div>
+    </div>
 {% endblock %}
