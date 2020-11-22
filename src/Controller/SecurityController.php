@@ -102,6 +102,20 @@ class SecurityController extends AbstractController
         if(isset($_SESSION['user'])) {
             return $this->redirect('backoffice');
         }
+        if($_SERVER["REQUEST_METHOD"] === "POST")
+        {
+            $manager = new UsersManager(self::PDOConnection());
+            $request = $manager->checkCredentials($_POST['email']);
+            if (!$request){
+                return $this->render("forgot-password.html.twig", [
+                    "message" => 'Ce compte email n\'existe pas! Veuillez réesayer.'
+                ]);
+            }
+            else
+            {
+                //send an email
+            }
+        }
         return $this->render("forgot-password.html.twig");
     }
 
