@@ -33,12 +33,10 @@ class SecurityController extends AbstractController
             $db = PDOSingleton::getInstance()->getPDO();
             $manager = new UsersManager($db);
             $request = $manager->checkCredentials($_POST['email']);
-            if(password_verify($_POST['password'], $request['password']))
-            {
-                $_SESSION['user'] = $manager->getUser($request['id']);
-                return $this->redirect('backoffice');
+            if ($request && password_verify($_POST['password'], $request['password'])) {
+                    $_SESSION['user'] = $manager->getUser($request['id']);
+                    return $this->redirect('backoffice');
             }
-
             return $this->render("login.html.twig", [
                 "message" => "Erreur d'identifiants. Veuillez réessayer!"
             ]);
@@ -62,7 +60,6 @@ class SecurityController extends AbstractController
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager(self::PDOConnection());
-
             $request = $manager->checkCredentials($_POST['email']);
             if (!$request){
                 if($_POST['password'] === $_POST['repeatPassword'])
