@@ -26,11 +26,11 @@ class BackofficeController extends AbstractController
      */
     public function backoffice(): Response
     {
-        $postManager = new PostsManager(self::PDOConnection());
+        $postManager = new PostsManager($this->PDOConnection());
         $postsCount = $postManager->count();
-        $usersManager = new UsersManager(self::PDOConnection());
+        $usersManager = new UsersManager($this->PDOConnection());
         $usersCount = $usersManager->count();
-        $commentsManager = new CommentsManager(self::PDOConnection());
+        $commentsManager = new CommentsManager($this->PDOConnection());
         $commentsCount = $commentsManager->count();
 
         return $this->render("backofficeDashboard.html.twig", [
@@ -49,8 +49,22 @@ class BackofficeController extends AbstractController
      */
     public function backofficeUsers(): Response
     {
-        $manager = new UsersManager(self::PDOConnection());
+        $manager = new UsersManager($this->PDOConnection());
         $usersList = $manager->getList();
+
+        if (isset($_GET['id']))
+        {
+            if (preg_match('#^[0-9]+$#', $_GET['id'])) {
+                $securForm = $this->securForm($_GET);
+                if (is_int((int)$securForm['id'])) {
+                    return $this->render("backofficeUser.html.twig", [
+                        "id" => (int)$securForm['id']
+                    ]);
+                }
+            }
+
+            return $this->redirect('backofficeUsers');
+        }
 
         return $this->render("backofficeUsers.html.twig", [
             "usersList" => $usersList
@@ -66,7 +80,7 @@ class BackofficeController extends AbstractController
      */
     public function backofficePosts(): Response
     {
-        $manager = new PostsManager(self::PDOConnection());
+        $manager = new PostsManager($this->PDOConnection());
         $postsList = $manager->getList();
 
         return $this->render("backofficePosts.html.twig", [
@@ -83,7 +97,7 @@ class BackofficeController extends AbstractController
      */
     public function backofficeComments(): Response
     {
-        $manager = new CommentsManager(self::PDOConnection());
+        $manager = new CommentsManager($this->PDOConnection());
         $commentsList = $manager->getList();
 
         return $this->render("backofficeComments.html.twig", [

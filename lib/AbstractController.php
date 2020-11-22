@@ -75,10 +75,10 @@ abstract class AbstractController
         return $data;
     }
 
-    public function securPost($post): array
+    public function securForm($form): array
     {
         $data = [];
-        foreach($post as $key => $value)
+        foreach($form as $key => $value)
         {
             $data[$key] = $this->test_input($value);
         }
