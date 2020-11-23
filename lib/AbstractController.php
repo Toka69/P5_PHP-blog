@@ -2,6 +2,9 @@
 
 namespace Lib;
 
+use App\Manager\CommentsManager;
+use App\Manager\PostsManager;
+use App\Manager\UsersManager;
 use Twig\Environment;
 use Lib\Router\Router;
 use Twig\Error\LoaderError;
@@ -19,6 +22,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 abstract class AbstractController
 {
     private Router $router;
+    protected $commentsManager;
+    protected $usersManager;
+    protected $postsManager;
 
     /**
      * @param Router $router
@@ -26,6 +32,9 @@ abstract class AbstractController
     public function __construct(Router $router)
     {
         $this->router = $router;
+        $this->commentsManager = new CommentsManager();
+        $this->usersManager = new UsersManager();
+        $this->postsManager = new PostsManager();
     }
 
     /**
