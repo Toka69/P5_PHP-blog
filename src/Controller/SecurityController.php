@@ -30,7 +30,7 @@ class SecurityController extends AbstractController
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager($this->PDOConnection());
-            $securForm = $this->securForm($_POST);
+            $securForm = $this->secureForm($_POST);
             $request = $manager->checkCredentials($securForm['email']);
             if ($request && password_verify($securForm['password'], $request['password'])) {
                     $_SESSION['user'] = $manager->getUser($request['id']);
@@ -58,7 +58,7 @@ class SecurityController extends AbstractController
         }
         if($_SERVER["REQUEST_METHOD"] === "POST") {
             $manager = new UsersManager($this->PDOConnection());
-            $securForm = $this->securForm($_POST);
+            $securForm = $this->secureForm($_POST);
             if (filter_var($securForm['email'], FILTER_VALIDATE_EMAIL)) {
                 $request = $manager->checkCredentials($securForm['email']);
                 if (!$request) {
@@ -117,7 +117,7 @@ class SecurityController extends AbstractController
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager($this->PDOConnection());
-            $securForm = $this->securForm($_POST);
+            $securForm = $this->secureForm($_POST);
             $request = $manager->checkCredentials($securForm['email']);
             if (!$request){
                 return $this->render("forgot-password.html.twig", [

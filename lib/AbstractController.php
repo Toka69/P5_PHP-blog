@@ -75,7 +75,7 @@ abstract class AbstractController
         return PDOSingleton::getInstance()->getPDO();
     }
 
-    public function test_input($data)
+    public function testInput($data)
     {
         $data = trim($data);
         $data = stripslashes($data);
@@ -84,12 +84,12 @@ abstract class AbstractController
         return $data;
     }
 
-    public function securForm($form): array
+    public function secureForm($form): array
     {
         $data = [];
         foreach($form as $key => $value)
         {
-            $data[$key] = $this->test_input($value);
+            $data[$key] = $this->testInput($value);
         }
 
         return $data;

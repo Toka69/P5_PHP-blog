@@ -54,7 +54,7 @@ class BackofficeController extends AbstractController
     {
         if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']))
         {
-            $securForm = $this->securForm($_GET);
+            $securForm = $this->secureForm($_GET);
             $user = $this->usersManager->getUser($securForm['id']);
             $genders = $this->usersManager->getGenders();
 
@@ -92,7 +92,7 @@ class BackofficeController extends AbstractController
         $postsList = $this->postsManager->getList();
 
         if (isset($_GET['id'])) {
-            $securForm = $this->securForm($_GET);
+            $securForm = $this->secureForm($_GET);
             if (preg_match('#^[0-9]+$#', $securForm['id']) && $this->postsManager->getSinglePost($securForm['id']))
             {
                 return $this->render("backofficepost.html.twig", [
@@ -120,7 +120,7 @@ class BackofficeController extends AbstractController
         $commentsList = $this->commentsManager->getList();
 
         if (isset($_GET['id'])) {
-            $securForm = $this->securForm($_GET);
+            $securForm = $this->secureForm($_GET);
             if (preg_match('#^[0-9]+$#', $securForm['id']) && $this->commentsManager->getComment($securForm['id']) || $this->commentsManager->getComment($securForm['id']))
             {
                 return $this->render("backofficecomment.html.twig", [
