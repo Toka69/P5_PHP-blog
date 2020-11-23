@@ -65,12 +65,22 @@ class BackofficeController extends AbstractController
             $securForm = $this->securForm($_GET);
             $user = $manager->getUser($securForm['id']);
             $genders = $manager->getGenders();
+
+            if (isset($_GET['edit']))
+            {
+                $disabled = null;
+            }
+            else
+            {
+                $disabled = 'disabled';
+            }
+
             if ($user)
             {
                 return $this->render("backofficeUser.html.twig", [
                     "user" => $user,
                     "genders" => $genders,
-                    "disabled" => "disabled"
+                    "disabled" => $disabled
                 ]);
             }
         }
