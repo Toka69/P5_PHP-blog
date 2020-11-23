@@ -22,9 +22,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 abstract class AbstractController
 {
     private Router $router;
-    protected $commentsManager;
-    protected $usersManager;
-    protected $postsManager;
+    protected CommentsManager $commentsManager;
+    protected UsersManager $usersManager;
+    protected PostsManager $postsManager;
 
     /**
      * @param Router $router
