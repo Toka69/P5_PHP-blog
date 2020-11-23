@@ -3,7 +3,7 @@
 
 namespace App\Manager;
 
-use App\Entity\Users;
+use App\Entity\User;
 use PDO;
 
 /**
@@ -39,27 +39,40 @@ class UsersManager
     }
 
     /**
-     * @param $begin
-     * @param $end
-     *
      * @return array
      */
-    public function getList($begin, $end): array
+    public function getList(): array
     {
-        return $this->db->query(
-            'SELECT u.id, u.admin, u.first_name, u.last_name, u.phone, u.email, u.password, u.street, u.address, u.postal_code, 
+        $getList = [];
+        $request = $this->db->query(
+            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
             u.logo, u.description, u.town, g.name 
-            FROM users u INNER JOIN gender g ON g.id = u.gender_id ORDER BY id LIMIT '.$begin.', '.$end.''
-        )->fetchAll();
+            FROM users u INNER JOIN gender g ON g.id = u.gender_id ORDER BY id'
+        );
+
+        while ($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $getList[] = new User($data);
+        }
+
+        return $getList;
     }
 
-    public function getUser($id): array
+    public function getUser($id): object
     {
-        return $this->db->query(
-            'SELECT u.id, u.admin, u.first_name, u.last_name, u.phone, u.email, u.password, u.street, u.address, u.postal_code, 
+        $getUser = [];
+        $request = $this->db->query(
+            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
             u.logo, u.description, u.town, g.name 
-            FROM users u INNER JOIN gender g ON g.id = u.gender_id WHERE u.id='.$id.''
-        )->fetchAll();
+            FROM users u INNER JOIN gender g ON g.id = u.gender_id WHERE u.id= '.$id.' '
+        );
+
+        while ($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $getUser = new User($data);
+        }
+
+        return $getUser;
     }
 
     /**
@@ -72,25 +85,35 @@ class UsersManager
     }
 
     /**
-     * @param Users $users
+     * @param User $user
      */
-    public function add(Users $users)
+    public function add(User $user)
+    {
+        $request = $this->db->prepare('INSERT INTO users(admin, first_name, last_name, email, password, gender_id) 
+        VALUES(:admin, :first_name, :last_name, :email, :password, :gender_id)');
+
+        $request->bindValue(':admin', '0');
+        $request->bindValue(':first_name', $user->getFirstName()); //PDO::PARAM ?
+        $request->bindValue(':last_name', $user->getLastName());
+        $request->bindValue(':email', $user->getEmail());
+        $request->bindValue(':password', $user->getPassword());
+        $request->bindValue(':gender_id', $user->getGenderId());
+
+        $request->execute();
+    }
+
+    /**
+     * @param User $users
+     */
+    public function update(User $user)
     {
 
     }
 
     /**
-     * @param Users $users
+     * @param User $users
      */
-    public function update(Users $users)
-    {
-
-    }
-
-    /**
-     * @param Users $users
-     */
-    public function delete(Users $users)
+    public function delete(User $user)
     {
 
     }

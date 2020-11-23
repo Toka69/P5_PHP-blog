@@ -1,0 +1,54 @@
+{% extends 'baseBackoffice.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid">
+
+        <h1 class="h3 mb-2 text-gray-800">Utilisateurs</h1>
+
+        <div class="card shadow mb-4">
+
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des utilisateurs</h6>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Logo</th>
+                            <th>Prénom</th>
+                            <th>Nom</th>
+                            <th>Téléphone</th>
+                            <th>email</th>
+                            <th>Adresse</th>
+                            <th>Administrateur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in usersList %}
+                            <tr>
+                                <td>{{ user.logo }}</td>
+                                <td>{{ user.firstName }}</td>
+                                <td>{{ user.lastName }}</td>
+                                <td><a href="tel:{{ user.phone }}">{{ user.phone }}</a></td>
+                                <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                                <td><a target="_blank" href="https://google.fr/maps/place/{{ user.postal_code }}+{{ user.town }}+{{ user.address }} {{ user.street }}">{{ user.address }} {{ user.street }} {{ user.postal_code }} {{ user.town }}</a></td>
+                                <td>
+                                    {% if user.admin == true %}
+                                        oui
+                                    {% else %}
+                                        non
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

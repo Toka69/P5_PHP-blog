@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : db
--- Généré le : Dim 15 nov. 2020 à 09:15
+-- Généré le : ven. 20 nov. 2020 à 20:21
 -- Version du serveur :  10.5.6-MariaDB-1:10.5.6+maria~focal
 -- Version de PHP : 7.4.11
 
@@ -56,7 +56,7 @@ INSERT INTO `comments` (`id`, `message`, `valid`, `posts_id`, `user_id`, `create
 
 CREATE TABLE `gender` (
   `id` int(11) NOT NULL,
-  `name` varchar(10) NOT NULL
+  `name` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -66,7 +66,8 @@ CREATE TABLE `gender` (
 INSERT INTO `gender` (`id`, `name`) VALUES
 (1, 'female'),
 (2, 'male'),
-(3, 'other');
+(3, 'other'),
+(4, NULL);
 
 -- --------------------------------------------------------
 
@@ -95,32 +96,41 @@ INSERT INTO `posts` (`id`, `title`, `lead_paragraph`, `content`, `created_date`,
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user`
+-- Structure de la table `users`
 --
 
-CREATE TABLE `user` (
+CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `admin` tinyint(1) NOT NULL,
   `first_name` varchar(200) NOT NULL,
   `last_name` varchar(200) NOT NULL,
-  `phone` varchar(15) NOT NULL,
+  `phone` varchar(15) DEFAULT NULL,
   `email` varchar(200) NOT NULL,
   `password` varchar(100) NOT NULL,
-  `street` varchar(200) NOT NULL,
-  `address` varchar(200) NOT NULL,
-  `postal_code` int(11) NOT NULL,
-  `logo` varchar(200) NOT NULL,
-  `description` varchar(400) NOT NULL,
-  `gender_id` int(11) NOT NULL
+  `street` varchar(200) DEFAULT NULL,
+  `address` varchar(200) DEFAULT NULL,
+  `postal_code` int(11) DEFAULT NULL,
+  `town` varchar(255) DEFAULT NULL,
+  `logo` varchar(200) DEFAULT NULL,
+  `description` varchar(400) DEFAULT NULL,
+  `gender_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Déchargement des données de la table `user`
+-- Déchargement des données de la table `users`
 --
 
-INSERT INTO `user` (`id`, `admin`, `first_name`, `last_name`, `phone`, `email`, `password`, `street`, `address`, `postal_code`, `logo`, `description`, `gender_id`) VALUES
-(3, 1, 'Matthias', 'LEROUX', '0603550664', 'm@m.fr', 'test', 'allée des muriers', '3', 38230, ' ', 'test', 1),
-(4, 0, 'John', 'DOE', '0632548562', 'john.doe@gmail.com', 'test', 'rue des acacias', '12', 75000, ' ', 'test', 1);
+INSERT INTO `users` (`id`, `admin`, `first_name`, `last_name`, `phone`, `email`, `password`, `street`, `address`, `postal_code`, `town`, `logo`, `description`, `gender_id`) VALUES
+(3, 1, 'Matthias', 'LEROUX', '0603550664', 'm@m.fr', 'test', 'allée des muriers', '3', 38230, 'TIGNIEU', ' ', 'test', 1),
+(4, 0, 'John', 'DOE', '0632548562', 'john.doe@gmail.com', 'test', 'rue des acacias', '12', 75000, 'PARIS', ' ', 'test', 1),
+(5, 0, 'Jean', 'dupont', NULL, 'cendar78@msn.com', 'test', NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(6, 0, 'Louis', 'LEROUX', NULL, 'louis.leroux@laboitemail.fr', 'louis2011', NULL, NULL, NULL, NULL, NULL, NULL, 2),
+(7, 0, 'Marty', 'McFly', NULL, 'marty@futur.com', '$2y$12$E0fWSrgMtDCbcDxwhMvdXuLI7/lIUeUpZWI9UxdidYl/6cP10hzQS', NULL, NULL, NULL, NULL, NULL, NULL, 2),
+(8, 0, 'Jean', 'Rosé', NULL, 'jean.rose@mail.fr', '$2y$12$bOS.z93o7HC37o3XQvWG1.O.qpitGZ23IbF9pJZCKbH1dUUd6wDkO', NULL, NULL, NULL, NULL, NULL, NULL, 3),
+(9, 0, 'Mad', 'Max', '', 'mad@max.fr', '$2y$12$SkAhiI8SnbQ7rpFb8seK6unbICxndabcu68iuge7SM2l7M6d.BWOO', '', '', NULL, '', '', '', 1),
+(10, 0, 'Robo', 'Cop', NULL, 'robocop@corp.fr', '$2y$12$j2acxjRVTygope5qQO7hUeHSce4DcCpfQDV0F7qUi8Rs7hb3zVLzm', NULL, NULL, NULL, NULL, NULL, NULL, 4),
+(11, 0, 'Bat', 'Man', NULL, 'batman@gotham.com', '$2y$12$K8TqgV8xqTbsSIif/mGOc.nnyBsKzn2gtuFnSXyWQA9z.dHtGPzKy', NULL, NULL, NULL, NULL, NULL, NULL, 4),
+(12, 0, 'to', 'to', NULL, 'toto@gmail.from', '$2y$12$EBvGP1B0ADCprT3VqIDmB.uW6Le7hpDdLyeraYsez1XeW8hkPkkru', NULL, NULL, NULL, NULL, NULL, NULL, 4);
 
 --
 -- Index pour les tables déchargées
@@ -148,9 +158,9 @@ ALTER TABLE `posts`
   ADD KEY `user_posts_fk` (`user_id`);
 
 --
--- Index pour la table `user`
+-- Index pour la table `users`
 --
-ALTER TABLE `user`
+ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `gender_user_fk` (`gender_id`);
 
@@ -168,7 +178,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT pour la table `gender`
 --
 ALTER TABLE `gender`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `posts`
@@ -177,10 +187,10 @@ ALTER TABLE `posts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT pour la table `user`
+-- AUTO_INCREMENT pour la table `users`
 --
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Contraintes pour les tables déchargées
@@ -191,18 +201,18 @@ ALTER TABLE `user`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `posts_comments_fk` FOREIGN KEY (`posts_id`) REFERENCES `posts` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `user_comments_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `user_comments_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Contraintes pour la table `posts`
 --
 ALTER TABLE `posts`
-  ADD CONSTRAINT `user_posts_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `user_posts_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Contraintes pour la table `user`
+-- Contraintes pour la table `users`
 --
-ALTER TABLE `user`
+ALTER TABLE `users`
   ADD CONSTRAINT `gender_user_fk` FOREIGN KEY (`gender_id`) REFERENCES `gender` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 

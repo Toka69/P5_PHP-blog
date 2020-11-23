@@ -1,0 +1,46 @@
+{% extends 'baseBackoffice.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid">
+
+        <h1 class="h3 mb-2 text-gray-800">Articles</h1>
+
+        <div class="card shadow mb-4">
+
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des articles</h6>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Titre</th>
+                            <th>Châpo</th>
+                            <th>Contenu</th>
+                            <th>Date de création</th>
+                            <th>Date de modification</th>
+                            <th>Auteur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for post in postsList %}
+                        <tr>
+                                <td>{{ post.title }}</td>
+                                <td>{{ post.leadParagraph }}</td>
+                                <td>{{ post.content }}</td>
+                                <td>{{ post.createdDate }}</td>
+                                <td>{{ post.modifiedDate }}</td>
+                                <td>{{ post.user.firstName }} {{ post.user.lastName }}</td>
+                        </tr>
+                        {%  endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

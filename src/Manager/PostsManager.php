@@ -2,7 +2,8 @@
 
 namespace App\Manager;
 
-use App\Entity\Posts;
+use App\Entity\Post;
+use App\Entity\User;
 use PDO;
 
 /**
@@ -38,52 +39,85 @@ class PostsManager
     }
 
     /**
-     * @param $begin
-     * @param $end
-     *
      * @return array
      */
-    public function getList($begin, $end): array
+    public function getList(): array
     {
-        return $this->db->query(
-            'SELECT u.first_name, u.last_name, p.id, p.title, p.lead_paragraph, p.content, p.created_date, p.modified_date, p.user_id 
-            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC LIMIT ' .$begin.', '.$end.''
-        )->fetchAll();
+        $getList = [];
+        $request = $this->db->query(
+            'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
+            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC'
+        );
+
+        while($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $array = [
+                'id' => $data['id'],
+                'title' => $data['title'],
+                'leadParagraph' => $data['leadParagraph'],
+                'content' => $data['content'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'userId' => $data['userId'],
+                'user' => new User ($data)
+            ];
+            $getList[] = new Post($array);
+        }
+
+        return $getList;
     }
 
     /**
      * @param $id
      *
-     * @return array
+     * @return object
      */
-    public function getSinglePost($id): array
+    public function getSinglePost($id): object
     {
-        return $this->db->query(
-            'SELECT u.first_name, u.last_name, p.id, p.title, p.lead_paragraph, p.content, p.created_date, p.modified_date, p.user_id 
+        $singlePost = [];
+        $request = $this->db->query(
+            'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
             FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.''
-        )->fetchAll();
+        );
+
+        while($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $array = [
+                'id' => $data['id'],
+                'title' => $data['title'],
+                'leadParagraph' => $data['leadParagraph'],
+                'content' => $data['content'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'userId' => $data['userId'],
+                'user' => new User ($data)
+            ];
+            $singlePost = new Post($array);
+        }
+
+        return $singlePost;
     }
 
     /**
-     * @param Posts $posts
+     * @param Post $posts
      */
-    public function add(Posts $posts)
+    public function add(Post $posts)
     {
 
     }
 
     /**
-     * @param Posts $posts
+     * @param Post $posts
      */
-    public function update(Posts $posts)
+    public function update(Post $posts)
     {
 
     }
 
     /**
-     * @param Posts $posts
+     * @param Post $posts
      */
-    public function delete(Posts $posts)
+    public function delete(Post $posts)
     {
 
     }

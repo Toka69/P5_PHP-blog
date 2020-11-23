@@ -3,7 +3,8 @@
 
 namespace App\Manager;
 
-use App\Entity\Comments;
+use App\Entity\Comment;
+use App\Entity\User;
 use PDO;
 
 /**
@@ -43,10 +44,27 @@ class CommentsManager
      */
     public function getList(): array
     {
-        return $this->db->query(
-            'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.created_date, c.modified_date 
+        $getList = [];
+        $request =  $this->db->query(
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id'
-        )->fetchAll();
+        );
+
+        while($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $array = [
+                'message' => $data['message'],
+                'valid' => $data['valid'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'user' => new User($data)
+            ];
+            $getList[] = new Comment($array);
+        }
+
+        return $getList;
     }
 
     /**
@@ -55,25 +73,42 @@ class CommentsManager
      *
      * @return array
      */
-    public function getCommentsPost($id, $valid): array
+    public function getComments($id, $valid): array
     {
-        return $this->db->query(
-            'SELECT u.first_name, u.last_name, c.message, c.valid, c.user_id, c.created_date, c.modified_date 
+        $getComments = [];
+        $request = $this->db->query(
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND valid = '.$valid.''
-        )->fetchAll();
+        );
+
+        while ($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $array = [
+                'message' => $data['message'],
+                'valid' => $data['valid'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'firstName' => $data['firstName'],
+                'lastName' => $data['lastName'],
+                'user' => new User($data)
+            ];
+            $getComments[] = new Comment($array);
+        }
+
+        return $getComments;
     }
 
-    public function add(Comments $comments)
+    public function add(Comment $comments)
     {
 
     }
 
-    public function update(Comments $comments)
+    public function update(Comment $comments)
     {
 
     }
 
-    public function delete(Comments $comments)
+    public function delete(Comment $comments)
     {
 
     }

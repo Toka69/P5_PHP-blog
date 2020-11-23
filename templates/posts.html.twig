@@ -4,11 +4,11 @@
 
     <section>
         <div class="container border col-md-6">
-        {% for post in posts_list %}
+        {% for post in postsList %}
             <p class="border">
                 <div>{{ post.title }}</div>
-                <div>{{ post.lead_paragraph }}</div>
-                <div>{{ post.modified_date }}</div>
+                <div>{{ post.leadParagraph }}</div>
+                <div>{{ post.modifiedDate }}</div>
                 <a href="/post?id={{ post.id }}">Voir l'article...</a>
             </p>
         {% endfor %}
