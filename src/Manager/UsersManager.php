@@ -24,13 +24,17 @@ class UsersManager extends AbstractManager
     /**
      * @return array
      */
-    public function getList(): array
+    public function getList(?string $order=""): array
     {
         $getList = [];
+        if ($order === "admin")
+        {
+            $order = 'WHERE u.admin = 1';
+        }
         $request = $this->db->query(
-            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
+            "SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
             u.logo, u.description, u.town, g.name 
-            FROM users u INNER JOIN gender g ON g.id = u.gender_id ORDER BY id'
+            FROM users u INNER JOIN gender g ON g.id = u.gender_id {$order} ORDER BY id"
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))

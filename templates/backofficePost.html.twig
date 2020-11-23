@@ -1,0 +1,34 @@
+{% extends 'baseBackoffice.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid">
+    <div class="card shadow mb-4 p-4">
+    <form>
+    <fieldset {{ disabled }}>
+        <div class="form-group"><label for="inputTitle">Titre</label><input class="form-control" id="inputTitle" type="text" placeholder="{{ post.title }}"></div>
+        <div class="form-group"><label for="inputLeadParagraph">Chapô</label><input class="form-control" id="inputLeadParagraph" type="text" placeholder="{{ post.leadParagraph }}"></div>
+        <div class="form-group"><label for="formControlTextareaContent">Contenu</label><textarea class="form-control" id="formControlTextareaContent" rows="3" placeholder="{{ post.content }}"></textarea></div>
+        <div class="form-group"><label for="inputCreatedDate">Date de création</label><input class="form-control" id="inputCreatedDate" type="text" placeholder="{{ post.createdDate }}"></div>
+        <div class="form-group"><label for="inputModifiedDate">Date de modification</label><input class="form-control" id="inputModifiedDate" type="text" placeholder="{{ post.modifiedDate }}"></div>
+        <div class="form-group">
+            <label for="formControlSelectGender">Auteur</label>
+            <select class="form-control" id="formControlSelectGender">
+                {% for userAdmin in usersAdmin %}
+                    <option {% if userAdmin.id == post.userId %} selected {% endif %}>
+                        {{ userAdmin.firstName }} {{ userAdmin.lastName }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </fieldset>
+        {% if disabled == 'disabled' %}
+            <a class="btn btn-primary" href="?id={{ post.id }}&edit" role="button">Editer</a>
+        {% else %}
+            <button type="submit" class="btn btn-primary">Valider</button>
+            <a class="btn btn-primary" href="?id={{ post.id }}" role="button">Annuler</a>
+        {% endif %}
+
+    </form>
+    </div>
+    </div>
+{% endblock %}

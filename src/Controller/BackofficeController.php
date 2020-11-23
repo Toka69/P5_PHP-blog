@@ -23,14 +23,10 @@ class BackofficeController extends AbstractController
      */
     public function backoffice(): Response
     {
-        $postsCount = $this->postsManager->count();
-        $usersCount = $this->usersManager->count();
-        $commentsCount = $this->commentsManager->count();
-
         return $this->render("backofficeDashboard.html.twig", [
-            "postsCount" => $postsCount,
-            "usersCount" => $usersCount,
-            "commentsCount" => $commentsCount
+            "postsCount" => $this->postsManager->count(),
+            "usersCount" => $this->usersManager->count(),
+            "commentsCount" => $this->commentsManager->count()
         ]);
     }
 
@@ -43,21 +39,23 @@ class BackofficeController extends AbstractController
      */
     public function backofficeUsers(): Response
     {
-        $usersList = $this->usersManager->getList();
-
         return $this->render("backofficeUsers.html.twig", [
-            "usersList" => $usersList
+            "usersList" => $this->usersManager->getList()
         ]);
     }
 
+    /**
+     * @return Response
+     *
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function backofficeUser(): Response
     {
         if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']))
         {
-            $securForm = $this->secureForm($_GET);
-            $user = $this->usersManager->getUser($securForm['id']);
-            $genders = $this->usersManager->getGenders();
-
+            $secureForm = $this->secureForm($_GET);
             if (isset($_GET['edit']))
             {
                 $disabled = null;
@@ -67,11 +65,11 @@ class BackofficeController extends AbstractController
                 $disabled = 'disabled';
             }
 
-            if ($user)
+            if ($this->usersManager->getUser($secureForm['id']))
             {
                 return $this->render("backofficeUser.html.twig", [
-                    "user" => $user,
-                    "genders" => $genders,
+                    "user" => $this->usersManager->getUser($secureForm['id']),
+                    "genders" => $this->usersManager->getGenders(),
                     "disabled" => $disabled
                 ]);
             }
@@ -89,23 +87,36 @@ class BackofficeController extends AbstractController
      */
     public function backofficePosts(): Response
     {
-        $postsList = $this->postsManager->getList();
+        return $this->render("backofficePosts.html.twig", [
+            "postsList" => $this->postsManager->getList()
+        ]);
+    }
 
-        if (isset($_GET['id'])) {
-            $securForm = $this->secureForm($_GET);
-            if (preg_match('#^[0-9]+$#', $securForm['id']) && $this->postsManager->getSinglePost($securForm['id']))
+    public function backofficePost(): Response
+    {
+        if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']))
+        {
+            $secureForm = $this->secureForm($_GET);
+            if (isset($_GET['edit']))
             {
-                return $this->render("backofficepost.html.twig", [
-                    "id" => (int)$securForm['id']
-                ]);
+                $disabled = null;
+            }
+            else
+            {
+                $disabled = 'disabled';
             }
 
-            return $this->redirect('backofficePosts');
+            if ($this->postsManager->getSinglePost($secureForm['id']))
+            {
+                return $this->render("backofficePost.html.twig", [
+                    "post" => $this->postsManager->getSinglePost($secureForm['id']),
+                    "usersAdmin" => $this->usersManager->getList("admin"),
+                    "disabled" => $disabled
+                ]);
+            }
         }
 
-        return $this->render("backofficePosts.html.twig", [
-            "postsList" => $postsList
-        ]);
+        return $this->redirect('backofficePosts');
     }
 
     /**
@@ -120,11 +131,11 @@ class BackofficeController extends AbstractController
         $commentsList = $this->commentsManager->getList();
 
         if (isset($_GET['id'])) {
-            $securForm = $this->secureForm($_GET);
-            if (preg_match('#^[0-9]+$#', $securForm['id']) && $this->commentsManager->getComment($securForm['id']) || $this->commentsManager->getComment($securForm['id']))
+            $secureForm = $this->secureForm($_GET);
+            if (preg_match('#^[0-9]+$#', $secureForm['id']) && $this->commentsManager->getComment($secureForm['id']) || $this->commentsManager->getComment($secureForm['id']))
             {
-                return $this->render("backofficecomment.html.twig", [
-                    "id" => (int)$securForm['id']
+                return $this->render("backofficeComment.html.twig", [
+                    "id" => (int)$secureForm['id']
                 ]);
             }
 
