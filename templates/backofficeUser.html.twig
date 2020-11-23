@@ -2,29 +2,34 @@
 
 {% block content %}
     <div class="container-fluid">
-    <div class="card shadow mb-4">
+    <div class="card shadow mb-4 p-4">
     <form>
         <fieldset {{ disabled }}>
             <div class="form-group"><label for="inputFirstName">Prénom</label><input class="form-control" id="inputFirstName" type="text" placeholder="{{ user.firstName }}"></div>
             <div class="form-group"><label for="inputLastName">Nom</label><input class="form-control" id="inputLastName" type="text" placeholder="{{ user.lastName}}"></div>
             <div class="form-group"><label for="inputEmail">Email</label><input class="form-control" id="inputEmail" type="email" placeholder="{{ user.email }}"></div>
-            <div class="form-group"><label for="inputPhone">Téléphone</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.phone }}"></div>
-            <div class="form-group"><label for="inputPhone">Adresse</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.address }}"></div>
-            <div class="form-group"><label for="inputPhone">Rue</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.street }}"></div>
-            <div class="form-group"><label for="inputPhone">Code Postal</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.postalCode }}"></div>
-            <div class="form-group"><label for="inputPhone">Ville</label><input class="form-control" id="exampleFormControlInput1" type="phone" placeholder="{{ user.town }}"></div>
+            <div class="form-group"><label for="inputPhone">Téléphone</label><input class="form-control" id="inputPhone" type="tel" placeholder="{{ user.phone }}"></div>
+            <div class="form-group"><label for="inputAddress">Adresse</label><input class="form-control" id="inputAddress" type="text" placeholder="{{ user.address }}"></div>
+            <div class="form-group"><label for="inputStreet">Rue</label><input class="form-control" id="inputStreet" type="text" placeholder="{{ user.street }}"></div>
+            <div class="form-group"><label for="inputPostalCode">Code Postal</label><input class="form-control" id="inputPostalCode" type="text" placeholder="{{ user.postalCode }}"></div>
+            <div class="form-group"><label for="inputTown">Ville</label><input class="form-control" id="inputTown" type="text" placeholder="{{ user.town }}"></div>
             <div class="form-group">
-                <label for="exampleFormControlSelect1">Genre</label>
-                <select class="form-control" id="exampleFormControlSelect1">
+                <label for="formControlSelectGender">Genre</label>
+                <select class="form-control" id="formControlSelectGender">
                     {% for gender in genders %}
                     <option>{{ gender.name }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="form-group"><label for="exampleFormControlTextarea1">Désignation</label><textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea></div>
+            <div class="form-group"><label for="formControlTextareaDescription">Description</label><textarea class="form-control" id="formControlTextareaDescription" rows="3" placeholder="{{ user.description }}"></textarea></div>
         </fieldset>
+        {% if disabled == 'disabled' %}
+            <a class="btn btn-primary" href="?id={{ user.id }}&edit" role="button">Editer</a>
+        {% else %}
+            <button type="submit" class="btn btn-primary">Valider</button>
+            <a class="btn btn-primary" href="?id={{ user.id }}" role="button">Annuler</a>
+        {% endif %}
     </form>
-        <a class="btn btn-primary" href="" role="button" value="edit">Editer</a>
 
     </div>
     </div>

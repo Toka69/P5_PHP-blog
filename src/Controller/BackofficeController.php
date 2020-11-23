@@ -14,7 +14,6 @@ use Twig\Error\SyntaxError;
  */
 class BackofficeController extends AbstractController
 {
-
     /**
      * @return Response
      *
@@ -58,12 +57,22 @@ class BackofficeController extends AbstractController
             $securForm = $this->securForm($_GET);
             $user = $this->usersManager->getUser($securForm['id']);
             $genders = $this->usersManager->getGenders();
+
+            if (isset($_GET['edit']))
+            {
+                $disabled = null;
+            }
+            else
+            {
+                $disabled = 'disabled';
+            }
+
             if ($user)
             {
                 return $this->render("backofficeUser.html.twig", [
                     "user" => $user,
                     "genders" => $genders,
-                    "disabled" => "disabled"
+                    "disabled" => $disabled
                 ]);
             }
         }
