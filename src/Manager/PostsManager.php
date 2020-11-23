@@ -4,32 +4,15 @@ namespace App\Manager;
 
 use App\Entity\Post;
 use App\Entity\User;
+use Lib\AbstractManager;
 use PDO;
 
 /**
  * Class PostsManager
  * @package App
  */
-class PostsManager
+class PostsManager extends AbstractManager
 {
-    protected PDO $db;
-
-    /**
-     * @param $db
-     */
-    public function __construct($db)
-    {
-        $this->setDb($db);
-    }
-
-    /**
-     * @param $db
-     */
-    private function setDb($db)
-    {
-        $this->db = $db;
-    }
-
     /**
      * @return int
      */

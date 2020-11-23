@@ -5,32 +5,15 @@ namespace App\Manager;
 
 use App\Entity\Comment;
 use App\Entity\User;
+use Lib\AbstractManager;
 use PDO;
 
 /**
  * Class CommentsManager
  * @package App
  */
-class CommentsManager
+class CommentsManager extends AbstractManager
 {
-    protected PDO $db;
-
-    /**
-     * @param $db
-     */
-    public function __construct($db)
-    {
-        $this->setDb($db);
-    }
-
-    /**
-     * @param $db
-     */
-    private function setDb($db)
-    {
-        $this->db = $db;
-    }
-
     /**
      * @return int
      */

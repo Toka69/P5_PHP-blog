@@ -4,32 +4,15 @@
 namespace App\Manager;
 
 use App\Entity\User;
+use Lib\AbstractManager;
 use PDO;
 
 /**
  * Class UsersManager
  * @package App
  */
-class UsersManager
+class UsersManager extends AbstractManager
 {
-    protected PDO $db;
-
-    /**
-     * @param $db
-     */
-    public function __construct($db)
-    {
-        $this->setDb($db);
-    }
-
-    /**
-     * @param $db
-     */
-    private function setDb($db)
-    {
-        $this->db = $db;
-    }
-
     /**
      * @return int
      */
