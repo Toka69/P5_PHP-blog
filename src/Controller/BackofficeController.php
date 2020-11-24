@@ -105,7 +105,6 @@ class BackofficeController extends AbstractController
             {
                 $disabled = 'disabled';
             }
-
             if ($this->postsManager->getSinglePost($secureForm['id']))
             {
                 return $this->render("backofficePost.html.twig", [
@@ -135,11 +134,14 @@ class BackofficeController extends AbstractController
 
     public function backofficeComment(): Response
     {
-        if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']) && $this->commentsManager->getComment($_GET['id']) || $this->commentsManager->getComment($_GET['id'])) {
+        if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id'])) {
             $secureForm = $this->secureForm($_GET);
-            if (isset($_GET['edit'])) {
+            if (isset($_GET['edit']))
+            {
                 $disabled = null;
-            } else {
+            }
+            else
+            {
                 $disabled = 'disabled';
             }
             if ($this->commentsManager->getComment($secureForm['id'])) {
