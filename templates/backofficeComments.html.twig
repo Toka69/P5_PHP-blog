@@ -25,7 +25,7 @@
                         </thead>
                         <tbody>
                         {% for comment in commentsList %}
-                            <tr class="clickable-table-row" onclick="location.href='back-comments?id={{ comment.id }}'">
+                            <tr class="clickable-table-row" onclick="location.href='back-comment?id={{ comment.id }}'">
                                 <td>{{ comment.message }}</td>
                                 <td>{{ comment.createdDate }}</td>
                                 <td>{{ comment.modifiedDate }}</td>

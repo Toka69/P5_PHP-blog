@@ -51,7 +51,7 @@ class CommentsManager extends AbstractManager
         return $getList;
     }
 
-    public function getComment($id): array
+    public function getComment($id): ?object
     {
         $getComment = [];
         $request =  $this->db->query(
@@ -71,10 +71,15 @@ class CommentsManager extends AbstractManager
                 'lastName' => $data['lastName'],
                 'user' => new User($data)
             ];
-            $getComment[] = new Comment($array);
+            $getComment = new Comment($array);
         }
 
-        return $getComment;
+        if(!empty($getComment))
+        {
+            return $getComment;
+        }
+
+        return null;
     }
 
     /**

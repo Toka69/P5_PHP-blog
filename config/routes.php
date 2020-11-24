@@ -19,6 +19,7 @@ return [
     new Route("backofficeUsers", "/back-users", BackofficeController::class, "backofficeUsers"),
     new Route("backofficePost", "/back-post", BackofficeController::class, "backofficePost"),
     new Route("backofficePosts", "/back-posts", BackofficeController::class, "backofficePosts"),
+    new Route("backofficeComment", "/back-comment", BackofficeController::class, "backofficeComment"),
     new Route("backofficeComments", "/back-comments", BackofficeController::class, "backofficeComments"),
     new Route("backofficeSettings", "/back-settings", BackofficeController::class, "backofficeSettings"),
     new Route("login", "/login", SecurityController::class, "login"),

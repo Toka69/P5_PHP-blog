@@ -128,23 +128,29 @@ class BackofficeController extends AbstractController
      */
     public function backofficeComments(): Response
     {
-        $commentsList = $this->commentsManager->getList();
+        return $this->render("backofficeComments.html.twig", [
+            "commentsList" => $this->commentsManager->getList()
+        ]);
+    }
 
-        if (isset($_GET['id'])) {
+    public function backofficeComment(): Response
+    {
+        if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']) && $this->commentsManager->getComment($_GET['id']) || $this->commentsManager->getComment($_GET['id'])) {
             $secureForm = $this->secureForm($_GET);
-            if (preg_match('#^[0-9]+$#', $secureForm['id']) && $this->commentsManager->getComment($secureForm['id']) || $this->commentsManager->getComment($secureForm['id']))
-            {
+            if (isset($_GET['edit'])) {
+                $disabled = null;
+            } else {
+                $disabled = 'disabled';
+            }
+            if ($this->commentsManager->getComment($secureForm['id'])) {
                 return $this->render("backofficeComment.html.twig", [
-                    "id" => (int)$secureForm['id']
+                    "comment" => $this->commentsManager->getComment($secureForm['id']),
+                    "disabled" => $disabled
                 ]);
             }
-
-            return $this->redirect('backofficeComments');
         }
 
-        return $this->render("backofficeComments.html.twig", [
-            "commentsList" => $commentsList
-        ]);
+            return $this->redirect('backofficeComments');
     }
 
     /**
