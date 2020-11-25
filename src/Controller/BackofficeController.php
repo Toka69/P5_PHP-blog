@@ -51,28 +51,65 @@ class BackofficeController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function backofficeUser(): Response
+    public function editUser(): Response
     {
-        if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']))
+        $secureRequestMethod = $this->secureRequestMethod($_GET);
+        $authorizeEdit = isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']) && $this->usersManager->getUser($secureRequestMethod['id']);
+
+        if($_SERVER ["REQUEST_METHOD"] == "POST" && $authorizeEdit)
         {
-            $secureForm = $this->secureForm($_GET);
-            if (isset($_GET['edit']))
+            $user = $this->usersManager->getUser($secureRequestMethod['id']);
+            $errors = [];
+            if (!isset($_POST['firstName']) || $_POST['firstName'] == null)
             {
-                $disabled = null;
+                $errors['firstName']= "Veuillez saisir votre prénom";
             }
-            else
+            if (!isset($_POST['lastName']) || $_POST['lastName'] == null)
             {
-                $disabled = 'disabled';
+                $errors['lastName']= "Veuillez saisir votre nom";
+            }
+            if (!isset($_POST['email']) || $_POST['email'] == null)
+            {
+                $errors['email']= "Veuillez saisir votre email";
+            }
+            if (count($errors) === 0)
+            {
+                $user->setFirstName($_POST['firstName']);
+                $user->setLastName($_POST['lastName']);
+                $user->setEmail($_POST['email']);
+                $this->usersManager->update($user);
+                return $this->redirect("backofficeUsers");
             }
 
-            if ($this->usersManager->getUser($secureForm['id']))
-            {
+            return $this->render("backofficeUser.html.twig", [
+                "user" => $user,
+                "errors" => $errors,
+                "genders" => $this->usersManager->getGenders(),
+                "disabled" => null
+            ]);
+        }
+
+        if (isset($_GET['edit']) && $authorizeEdit)
+        {
                 return $this->render("backofficeUser.html.twig", [
-                    "user" => $this->usersManager->getUser($secureForm['id']),
+                    "user" => $this->usersManager->getUser($secureRequestMethod['id']),
                     "genders" => $this->usersManager->getGenders(),
-                    "disabled" => $disabled
+                    "disabled" => null
                 ]);
-            }
+        }
+
+        return $this->redirect('backofficeUsers');
+    }
+
+    public function readUser(): Response
+    {
+        $secureRequestMethod = $this->secureRequestMethod($_GET);
+        if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']) && $this->usersManager->getUser($secureRequestMethod['id'])) {
+            return $this->render("backofficeUser.html.twig", [
+                "user" => $this->usersManager->getUser($secureRequestMethod['id']),
+                "genders" => $this->usersManager->getGenders(),
+                "disabled" => "disabled"
+            ]);
         }
 
         return $this->redirect('backofficeUsers');
@@ -96,7 +133,7 @@ class BackofficeController extends AbstractController
     {
         if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id']))
         {
-            $secureForm = $this->secureForm($_GET);
+            $secureRequestMethod = $this->secureRequestMethod($_GET);
             if (isset($_GET['edit']))
             {
                 $disabled = null;
@@ -105,10 +142,10 @@ class BackofficeController extends AbstractController
             {
                 $disabled = 'disabled';
             }
-            if ($this->postsManager->getSinglePost($secureForm['id']))
+            if ($this->postsManager->getSinglePost($secureRequestMethod['id']))
             {
                 return $this->render("backofficePost.html.twig", [
-                    "post" => $this->postsManager->getSinglePost($secureForm['id']),
+                    "post" => $this->postsManager->getSinglePost($secureRequestMethod['id']),
                     "usersAdmin" => $this->usersManager->getList("admin"),
                     "disabled" => $disabled
                 ]);
@@ -135,7 +172,7 @@ class BackofficeController extends AbstractController
     public function backofficeComment(): Response
     {
         if (isset($_GET['id']) && preg_match('#^[0-9]+$#', $_GET['id'])) {
-            $secureForm = $this->secureForm($_GET);
+            $secureRequestMethod = $this->secureRequestMethod($_GET);
             if (isset($_GET['edit']))
             {
                 $disabled = null;
@@ -144,9 +181,9 @@ class BackofficeController extends AbstractController
             {
                 $disabled = 'disabled';
             }
-            if ($this->commentsManager->getComment($secureForm['id'])) {
+            if ($this->commentsManager->getComment($secureRequestMethod['id'])) {
                 return $this->render("backofficeComment.html.twig", [
-                    "comment" => $this->commentsManager->getComment($secureForm['id']),
+                    "comment" => $this->commentsManager->getComment($secureRequestMethod['id']),
                     "disabled" => $disabled
                 ]);
             }

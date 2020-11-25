@@ -84,7 +84,7 @@ abstract class AbstractController
         return $data;
     }
 
-    public function secureForm($form): array
+    public function secureRequestMethod($form): array
     {
         $data = [];
         foreach($form as $key => $value)

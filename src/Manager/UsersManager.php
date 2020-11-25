@@ -49,7 +49,7 @@ class UsersManager extends AbstractManager
     {
         $getUser = [];
         $request = $this->db->query(
-            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
+            'SELECT u.id, u.admin, u.gender_id as genderId, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
             u.logo, u.description, u.town, g.name 
             FROM users u INNER JOIN gender g ON g.id = u.gender_id WHERE u.id= '.$id.' '
         );
@@ -68,7 +68,7 @@ class UsersManager extends AbstractManager
     }
 
     public function getGenders(){
-        return $this->db->query('SELECT name FROM gender');
+        return $this->db->query('SELECT id, name FROM gender')->fetchAll();
     }
 
     /**
@@ -103,7 +103,19 @@ class UsersManager extends AbstractManager
      */
     public function update(User $user)
     {
+        var_dump($user->getGenderId());
+        $request = $this->db->prepare('UPDATE users SET admin = :admin, first_name = :first_name, last_name = :last_name, email = :email,
+                 password = :password, gender_id = :gender_id WHERE id = :id');
 
+        $request->bindValue(':admin', $user->getAdmin());
+        $request->bindValue(':first_name', $user->getFirstName());
+        $request->bindValue(':last_name', $user->getLastName());
+        $request->bindValue(':email', $user->getEmail());
+        $request->bindValue(':password', $user->getPassword());
+        $request->bindValue(':gender_id', $user->getGenderId());
+        $request->bindValue(':id', $user->getId());
+
+        $request->execute();
     }
 
     /**

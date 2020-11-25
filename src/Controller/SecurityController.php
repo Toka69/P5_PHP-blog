@@ -30,9 +30,9 @@ class SecurityController extends AbstractController
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager($this->PDOConnection());
-            $securForm = $this->secureForm($_POST);
-            $request = $manager->checkCredentials($securForm['email']);
-            if ($request && password_verify($securForm['password'], $request['password'])) {
+            $secureRequestMethod = $this->secureRequestMethod($_POST);
+            $request = $manager->checkCredentials($secureRequestMethod['email']);
+            if ($request && password_verify($secureRequestMethod['password'], $request['password'])) {
                     $_SESSION['user'] = $manager->getUser($request['id']);
                     return $this->redirect('backoffice');
             }
@@ -58,17 +58,17 @@ class SecurityController extends AbstractController
         }
         if($_SERVER["REQUEST_METHOD"] === "POST") {
             $manager = new UsersManager($this->PDOConnection());
-            $securForm = $this->secureForm($_POST);
-            if (filter_var($securForm['email'], FILTER_VALIDATE_EMAIL)) {
-                $request = $manager->checkCredentials($securForm['email']);
+            $secureRequestMethod = $this->secureRequestMethod($_POST);
+            if (filter_var($secureRequestMethod['email'], FILTER_VALIDATE_EMAIL)) {
+                $request = $manager->checkCredentials($secureRequestMethod['email']);
                 if (!$request) {
-                    if (preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $securForm['password'])) {
-                        if ($securForm['password'] === $securForm['repeatPassword']) {
+                    if (preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $secureRequestMethod['password'])) {
+                        if ($secureRequestMethod['password'] === $secureRequestMethod['repeatPassword']) {
                             $user = new User([
-                                'firstName' => $securForm['firstName'],
-                                'lastName' => $securForm['lastName'],
-                                'email' => $securForm['email'],
-                                'password' => password_hash($securForm['password'], PASSWORD_BCRYPT, ["cost" => 12]),
+                                'firstName' => $secureRequestMethod['firstName'],
+                                'lastName' => $secureRequestMethod['lastName'],
+                                'email' => $secureRequestMethod['email'],
+                                'password' => password_hash($secureRequestMethod['password'], PASSWORD_BCRYPT, ["cost" => 12]),
                                 'genderId' => 4
                             ]);
                             $manager->add($user);
@@ -117,8 +117,8 @@ class SecurityController extends AbstractController
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager($this->PDOConnection());
-            $securForm = $this->secureForm($_POST);
-            $request = $manager->checkCredentials($securForm['email']);
+            $secureRequestMethod = $this->secureRequestMethod($_POST);
+            $request = $manager->checkCredentials($secureRequestMethod['email']);
             if (!$request){
                 return $this->render("forgot-password.html.twig", [
                     "message" => 'Ce compte email n\'existe pas! Veuillez réesayer.'

@@ -3,31 +3,33 @@
 {% block content %}
     <div class="container-fluid">
     <div class="card shadow mb-4 p-4">
-    <form>
+    <form method="post" action ="back-edit-user?id={{ user.id }}">
         <fieldset {{ disabled }}>
-            <div class="form-group"><label for="inputFirstName">Prénom</label><input class="form-control" id="inputFirstName" type="text" placeholder="{{ user.firstName }}"></div>
-            <div class="form-group"><label for="inputLastName">Nom</label><input class="form-control" id="inputLastName" type="text" placeholder="{{ user.lastName}}"></div>
-            <div class="form-group"><label for="inputEmail">Email</label><input class="form-control" id="inputEmail" type="email" placeholder="{{ user.email }}"></div>
-            <div class="form-group"><label for="inputPhone">Téléphone</label><input class="form-control" id="inputPhone" type="tel" placeholder="{{ user.phone }}"></div>
-            <div class="form-group"><label for="inputAddress">Adresse</label><input class="form-control" id="inputAddress" type="text" placeholder="{{ user.address }}"></div>
-            <div class="form-group"><label for="inputStreet">Rue</label><input class="form-control" id="inputStreet" type="text" placeholder="{{ user.street }}"></div>
-            <div class="form-group"><label for="inputPostalCode">Code Postal</label><input class="form-control" id="inputPostalCode" type="text" placeholder="{{ user.postalCode }}"></div>
-            <div class="form-group"><label for="inputTown">Ville</label><input class="form-control" id="inputTown" type="text" placeholder="{{ user.town }}"></div>
+            <div class="form-group"><label for="inputFirstName">Prénom* {{ errors.firstName }}</label><input class="form-control" id="inputFirstName" name="firstName" type="text" value="{{ user.firstName }}" required></div>
+            <div class="form-group"><label for="inputLastName">Nom* {{ errors.lastName }}</label><input class="form-control" id="inputLastName" name="lastName" type="text" value="{{ user.lastName}}" required></div>
+            <div class="form-group"><label for="inputEmail">Email* {{ errors.email }}</label><input class="form-control" id="inputEmail" name="email" type="email" value="{{ user.email }}" required></div>
+            <div class="form-group"><label for="inputPhone">Téléphone</label><input class="form-control" id="inputPhone" name="phone" type="tel" value="{{ user.phone }}"></div>
+            <div class="form-group"><label for="inputAddress">Adresse</label><input class="form-control" id="inputAddress" name="address" type="text" value="{{ user.address }}"></div>
+            <div class="form-group"><label for="inputStreet">Rue</label><input class="form-control" id="inputStreet" name="street" type="text" value="{{ user.street }}"></div>
+            <div class="form-group"><label for="inputPostalCode">Code Postal</label><input class="form-control" id="inputPostalCode" name="postalCode" type="text" value="{{ user.postalCode }}"></div>
+            <div class="form-group"><label for="inputTown">Ville</label><input class="form-control" id="inputTown" name="town" type="text" value="{{ user.town }}"></div>
             <div class="form-group">
                 <label for="formControlSelectGender">Genre</label>
                 <select class="form-control" id="formControlSelectGender">
                     {% for gender in genders %}
-                    <option>{{ gender.name }}</option>
+                        <option {% if gender.id == user.genderId %} selected {% endif %}>
+                            {{ gender.name }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="form-group"><label for="formControlTextareaDescription">Description</label><textarea class="form-control" id="formControlTextareaDescription" rows="3" placeholder="{{ user.description }}"></textarea></div>
+            <div class="form-group"><label for="formControlTextareaDescription">Description</label><textarea class="form-control" id="formControlTextareaDescription" name="description" rows="3">{{ user.description }}</textarea></div>
         </fieldset>
         {% if disabled == 'disabled' %}
-            <a class="btn btn-primary" href="?id={{ user.id }}&edit" role="button">Editer</a>
+            <a class="btn btn-primary" href="back-edit-user?id={{ user.id }}&edit" role="button">Editer</a>
         {% else %}
             <button type="submit" class="btn btn-primary">Valider</button>
-            <a class="btn btn-primary" href="?id={{ user.id }}" role="button">Annuler</a>
+            <a class="btn btn-primary" href="back-read-user?id={{ user.id }}" role="button">Annuler</a>
         {% endif %}
     </form>
 
