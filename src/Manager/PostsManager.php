@@ -60,7 +60,7 @@ class PostsManager extends AbstractManager
         $singlePost = [];
         $request = $this->db->query(
             'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
-            FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.''
+            FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.' '
         );
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
@@ -86,25 +86,35 @@ class PostsManager extends AbstractManager
     }
 
     /**
-     * @param Post $posts
+     * @param Post $post
      */
-    public function add(Post $posts)
+    public function add(Post $post)
     {
 
     }
 
     /**
-     * @param Post $posts
+     * @param Post $post
      */
-    public function update(Post $posts)
+    public function update(Post $post)
     {
+        $request = $this->db->prepare('UPDATE posts SET title = :title, lead_paragraph = :lead_paragraph, content = :content, 
+            modified_date = :modified_date, user_id = :user_id WHERE id = :id');
 
+        $request->bindValue(':title', $post->getTitle());
+        $request->bindValue(':lead_paragraph', $post->getLeadParagraph());
+        $request->bindValue(':content', $post->getContent());
+        $request->bindValue(':modified_date', $post->getModifiedDate());
+        $request->bindValue(':user_id', $post->getUserId());
+        $request->bindValue(':id', $post->getId());
+
+        $request->execute();
     }
 
     /**
-     * @param Post $posts
+     * @param Post $post
      */
-    public function delete(Post $posts)
+    public function delete(Post $post)
     {
 
     }
