@@ -23,6 +23,8 @@ class BackofficeController extends AbstractController
      */
     public function backoffice(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
+
         return $this->render("backofficeDashboard.html.twig", [
             "postsCount" => $this->postsManager->count(),
             "usersCount" => $this->usersManager->count(),
@@ -39,6 +41,8 @@ class BackofficeController extends AbstractController
      */
     public function backofficeUsers(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
+
         return $this->render("backofficeUsers.html.twig", [
             "usersList" => $this->usersManager->getList()
         ]);
@@ -53,6 +57,7 @@ class BackofficeController extends AbstractController
      */
     public function editUser(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $secureRequestMethod = $this->secureRequestMethod($_GET);
         $authorizeEdit = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($secureRequestMethod["id"]);
 
@@ -111,6 +116,7 @@ class BackofficeController extends AbstractController
      */
     public function readUser(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $secureRequestMethod = $this->secureRequestMethod($_GET);
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($secureRequestMethod["id"])) {
             return $this->render("backofficeUser.html.twig", [
@@ -123,8 +129,17 @@ class BackofficeController extends AbstractController
         return $this->redirect("backofficeUsers");
     }
 
+    /**
+     * @return Response
+     *
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function backofficePosts(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
+
         return $this->render("backofficePosts.html.twig", [
             "postsList" => $this->postsManager->getList()
         ]);
@@ -139,6 +154,7 @@ class BackofficeController extends AbstractController
      */
     public function editPost(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $authorizeEdit = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
         $secureRequestMethod = $this->secureRequestMethod($_GET);
 
@@ -199,6 +215,7 @@ class BackofficeController extends AbstractController
      */
     public function readPost(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $secureRequestMethod = $this->secureRequestMethod($_GET);
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]))
         {
@@ -221,6 +238,8 @@ class BackofficeController extends AbstractController
      */
     public function backofficeComments(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
+
         return $this->render("backofficeComments.html.twig", [
             "commentsList" => $this->commentsManager->getList()
         ]);
@@ -235,6 +254,7 @@ class BackofficeController extends AbstractController
      */
     public function backofficeComment(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"])) {
             $secureRequestMethod = $this->secureRequestMethod($_GET);
             if (isset($_GET["edit"]))
@@ -265,6 +285,8 @@ class BackofficeController extends AbstractController
      */
     public function backofficeSettings(): Response
     {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
+
         return $this->render("backofficeSettings.html.twig");
     }
 }
