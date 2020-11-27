@@ -49,7 +49,7 @@
 
         <!-- Divider -->
         <hr class="sidebar-divider">
-
+        {% if session.user.admin == 1 %}
         <!-- Nav Item - Pages Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="back-users">
@@ -64,13 +64,14 @@
                 <span>Articles</span>
             </a>
         </li>
+        {% endif %}
         <li class="nav-item">
             <a class="nav-link collapsed" href="back-comments">
                 <i class="fas fa-comments"></i>
                 <span>Commentaires</span>
             </a>
         </li>
-
+        {% if session.user.admin == 1 %}
         <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="back-settings">
@@ -78,7 +79,7 @@
                 <span>Paramètres</span>
             </a>
         </li>
-
+        {% endif %}
         <!-- Divider -->
         <hr class="sidebar-divider">
 

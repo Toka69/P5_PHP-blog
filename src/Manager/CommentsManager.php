@@ -15,22 +15,40 @@ use PDO;
 class CommentsManager extends AbstractManager
 {
     /**
+     * @param int|null $id
+     * @param int|null $admin
+     *
      * @return int
      */
-    public function count(): int
+    public function count(?int $id = null, ?int $admin = null): int
     {
+        if(is_int($admin) && $admin == 0)
+        {
+            return $this->db->query('SELECT COUNT(*) FROM comments WHERE user_id = '.$id.' ')->fetchColumn();
+        }
         return $this->db->query('SELECT COUNT(*) FROM comments')->fetchColumn();
     }
 
     /**
+     * @param int|null $id
+     * @param int|null $admin
+     *
      * @return array
      */
-    public function getList(): array
+    public function getList(?int $id = null, ?int $admin = null): array
     {
+        if(is_int($admin) && $admin == 0)
+        {
+            $order = "WHERE user_id = ".$id."";
+        }
+        else
+        {
+            $order = "";
+        }
         $getList = [];
         $request =  $this->db->query(
             'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
-            FROM comments c INNER JOIN users u ON u.id = c.user_id'
+            FROM comments c INNER JOIN users u ON u.id = c.user_id '.$order.' '
         );
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))

@@ -22,6 +22,8 @@ class UsersManager extends AbstractManager
     }
 
     /**
+     * @param string|null $order
+     *
      * @return array
      */
     public function getList(?string $order=""): array
@@ -99,7 +101,7 @@ class UsersManager extends AbstractManager
     }
 
     /**
-     * @param User $users
+     * @param User $user
      */
     public function update(User $user)
     {
@@ -119,7 +121,7 @@ class UsersManager extends AbstractManager
     }
 
     /**
-     * @param User $users
+     * @param User $user
      */
     public function delete(User $user)
     {

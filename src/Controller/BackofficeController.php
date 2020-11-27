@@ -24,11 +24,13 @@ class BackofficeController extends AbstractController
     public function backoffice(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
+        $id = $_SESSION['user']->getId();
+        $admin = $_SESSION['user']->getAdmin();
 
         return $this->render("backofficeDashboard.html.twig", [
             "postsCount" => $this->postsManager->count(),
             "usersCount" => $this->usersManager->count(),
-            "commentsCount" => $this->commentsManager->count()
+            "commentsCount" => $this->commentsManager->count($id, $admin)
         ]);
     }
 
@@ -239,9 +241,11 @@ class BackofficeController extends AbstractController
     public function backofficeComments(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
+        $id = $_SESSION['user']->getId();
+        $admin = $_SESSION['user']->getAdmin();
 
         return $this->render("backofficeComments.html.twig", [
-            "commentsList" => $this->commentsManager->getList()
+            "commentsList" => $this->commentsManager->getList($id, $admin)
         ]);
     }
 
