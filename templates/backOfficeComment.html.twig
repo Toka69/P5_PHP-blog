@@ -6,6 +6,7 @@
     <form method="post">
         <fieldset {{ disabled }}>
             <div class="form-group"><label for="formControlTextareaMessage">Message <span class="text-danger">{{ errors.message }}</span></label><textarea class="form-control" id="formControlTextareaMessage" name="message" rows="3" {% if comment.userId != session.user.id %}disabled{% endif %}>{{ comment.message }}</textarea></div>
+            {% if session.user.valid == 1 %}
             <div class="form-group">
                 <label for="formControlSelectValid">Validation <span class="text-danger">{{ errors.valid }}</span></label>
                 <select class="form-control" id="formControlSelectValid" name="valid">
@@ -17,6 +18,7 @@
                         </option>
                 </select>
             </div>
+            {% endif %}
         </fieldset>
     {% if disabled == 'disabled' %}
         <a class="btn btn-primary" href="back-edit-comment?id={{ comment.id }}&edit" role="button">Editer</a>
