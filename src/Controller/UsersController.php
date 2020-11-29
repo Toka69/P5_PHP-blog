@@ -110,4 +110,43 @@ class UsersController extends BackofficeController
 
         return $this->redirect("backofficeUsers");
     }
+
+    public function selectAdmin(): Response
+    {
+        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
+        {
+            $user = $this->usersManager->getUser($_GET["id"]);
+
+            if (isset($_GET["setAdmin"]) && !isset($_GET["setUser"]))
+            {
+                $user->setAdmin(1);
+                $this->usersManager->update($user);
+            }
+            if (isset($_GET["setUser"]) && !isset($_GET["setAdmin"]))
+            {
+                $user->setAdmin(0);
+                $this->usersManager->update($user);
+            }
+        }
+
+        return $this->redirect("backofficeUsers");
+    }
+
+    public function validUser(): Response
+    {
+        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"])) {
+            $user = $this->usersManager->getUser($_GET["id"]);
+
+            if (isset($_GET["id"]) && isset($_GET["valid"])) {
+                $user->setValid(1);
+                $this->usersManager->update($user);
+            }
+            if (isset($_GET["id"]) && isset($_GET["unvalid"])) {
+                $user->setValid(0);
+                $this->usersManager->update($user);
+            }
+        }
+
+        return $this->redirect("backofficeUsers");
+    }
 }

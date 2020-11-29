@@ -103,9 +103,8 @@ class UsersManager extends AbstractManager
      */
     public function update(User $user)
     {
-        var_dump($user->getGenderId());
         $request = $this->db->prepare('UPDATE users SET admin = :admin, first_name = :first_name, last_name = :last_name, email = :email,
-                 password = :password, pseudo = :pseudo, gender_id = :gender_id WHERE id = :id');
+                 password = :password, pseudo = :pseudo, gender_id = :gender_id, valid = :valid WHERE id = :id');
 
         $request->bindValue(':admin', $user->getAdmin());
         $request->bindValue(':first_name', $user->getFirstName());
@@ -114,6 +113,7 @@ class UsersManager extends AbstractManager
         $request->bindValue(':password', $user->getPassword());
         $request->bindValue(':pseudo', $user->getPseudo());
         $request->bindValue(':gender_id', $user->getGenderId());
+        $request->bindValue(':valid', $user->getValid());
         $request->bindValue(':id', $user->getId());
 
         $request->execute();

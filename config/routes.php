@@ -26,6 +26,8 @@ return [
     new Route("backofficeUsers", "/back-users", UsersController::class, "backofficeUsers"),
     new Route("profile", "/profile", UsersController::class, "readUser"),
     new Route("profileEdit", "/profile-edit", UsersController::class, "editUser"),
+    new Route("selectAdmin", "/select-admin", UsersController::class, "selectAdmin"),
+    new Route("validUser", "/valid-user", UsersController::class, "validUser"),
     // Posts
     new Route("readPost", "/back-read-post", PostsController::class, "readPost"),
     new Route("editPost", "/back-edit-post", PostsController::class, "editPost"),
