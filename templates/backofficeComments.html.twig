@@ -29,7 +29,7 @@
                                 <td>{{ comment.message }}</td>
                                 <td>{{ comment.createdDate }}</td>
                                 <td>{{ comment.modifiedDate }}</td>
-                                <td>{{ comment.valid }}</td>
+                                <td>{% if comment.valid == 1%}Oui{% else %}Non{% endif %}</td>
                                 <td>{{ comment.user.firstName }} {{ comment.user.lastName }}</td>
                             </tr>
                         {%  endfor %}
