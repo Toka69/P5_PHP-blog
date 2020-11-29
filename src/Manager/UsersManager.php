@@ -34,7 +34,7 @@ class UsersManager extends AbstractManager
             $order = 'WHERE u.admin = 1';
         }
         $request = $this->db->query(
-            "SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, g.name 
+            "SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, u.valid, g.name 
             FROM users u INNER JOIN gender g ON g.id = u.gender_id {$order} ORDER BY id"
         );
 
@@ -50,7 +50,7 @@ class UsersManager extends AbstractManager
     {
         $getUser = [];
         $request = $this->db->query(
-            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, u.gender_id as genderId 
+            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, u.gender_id as genderId, u.valid 
             FROM users u WHERE u.id= ' .$id.' '
         );
 
@@ -85,10 +85,9 @@ class UsersManager extends AbstractManager
      */
     public function add(User $user)
     {
-        $request = $this->db->prepare('INSERT INTO users(admin, first_name, last_name, email, password, pseudo, gender_id) 
-        VALUES(:admin, :first_name, :last_name, :email, :password, :gender_id)');
+        $request = $this->db->prepare('INSERT INTO users(first_name, last_name, email, password, pseudo, gender_id) 
+        VALUES(:first_name, :last_name, :email, :password, :pseudo, :gender_id)');
 
-        $request->bindValue(':admin', '0');
         $request->bindValue(':first_name', $user->getFirstName()); //PDO::PARAM ?
         $request->bindValue(':last_name', $user->getLastName());
         $request->bindValue(':email', $user->getEmail());
