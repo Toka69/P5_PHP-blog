@@ -73,7 +73,7 @@ class CommentsManager extends AbstractManager
     {
         $getComment = [];
         $request =  $this->db->query(
-            'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
+            'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.posts_id as postsId, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE c.id = '.$id.''
         );
 
@@ -83,6 +83,8 @@ class CommentsManager extends AbstractManager
                 'id' => $data['id'],
                 'message' => $data['message'],
                 'valid' => $data['valid'],
+                'postsId' => $data['postsId'],
+                'userId' => $data['userId'],
                 'createdDate' => $data['createdDate'],
                 'modifiedDate' => $data['modifiedDate'],
                 'firstName' => $data['firstName'],
@@ -111,7 +113,7 @@ class CommentsManager extends AbstractManager
         $getComments = [];
         $request = $this->db->query(
             'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
-            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND valid = '.$valid.''
+            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND c.valid = '.$valid.''
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
@@ -132,14 +134,24 @@ class CommentsManager extends AbstractManager
         return $getComments;
     }
 
-    public function add(Comment $comments)
+    public function add(Comment $comment)
     {
 
     }
 
-    public function update(Comment $comments)
+    public function update(Comment $comment)
     {
+        $request = $this->db->prepare('UPDATE comments SET message = :message, valid = :valid, posts_id = :posts_id, 
+            modified_date = :modified_date, user_id = :user_id WHERE id = :id');
 
+        $request->bindValue(':message', $comment->getMessage());
+        $request->bindValue(':valid', $comment->getValid());
+        $request->bindValue(':posts_id', $comment->getPostsId());
+        $request->bindValue(':modified_date', $comment->getModifiedDate());
+        $request->bindValue(':user_id', $comment->getUserId());
+        $request->bindValue(':id', $comment->getId());
+
+        $request->execute();
     }
 
     public function delete(Comment $comments)

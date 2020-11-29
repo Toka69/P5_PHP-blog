@@ -31,7 +31,8 @@ return [
     new Route("editPost", "/back-edit-post", PostsController::class, "editPost"),
     new Route("backofficePosts", "/back-posts", PostsController::class, "backofficePosts"),
     // Comments
-    new Route("backofficeComment", "/back-comment", CommentsController::class, "backofficeComment"),
+    new Route("readComment", "/back-read-comment", CommentsController::class, "readComment"),
+    new Route("editComment", "/back-edit-comment", CommentsController::class, "editComment"),
     new Route("backofficeComments", "/back-comments", CommentsController::class, "backofficeComments"),
     // Connexion
     new Route("login", "/login", SecurityController::class, "login"),
