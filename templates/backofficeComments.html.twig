@@ -26,7 +26,7 @@
                         <tbody>
                         {% for comment in commentsList %}
                             <tr class="clickable-table-row" onclick="location.href='back-read-comment?id={{ comment.id }}'">
-                                <td>{{ comment.message }}</td>
+                                <td>{{ comment.message|slice(0, 40) }} ...</td>
                                 <td>{{ comment.createdDate }}</td>
                                 <td>{{ comment.modifiedDate }}</td>
                                 <td>{% if comment.valid == 1%}Oui{% else %}Non{% endif %}</td>
