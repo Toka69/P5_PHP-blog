@@ -69,7 +69,7 @@ class SecurityController extends AbstractController
                                 'lastName' => $secureRequestMethod['lastName'],
                                 'email' => $secureRequestMethod['email'],
                                 'password' => password_hash($secureRequestMethod['password'], PASSWORD_BCRYPT, ["cost" => 12]),
-                                'genderId' => 4
+                                'genderId' => $secureRequestMethod['genderId']
                             ]);
                             $manager->add($user);
 
@@ -99,7 +99,9 @@ class SecurityController extends AbstractController
             ]);
         }
 
-        return $this->render("register.html.twig");
+        return $this->render("register.html.twig", [
+            "genders" => $this->usersManager->getGenders()
+        ]);
     }
 
     /**
