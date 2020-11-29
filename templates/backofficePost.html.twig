@@ -5,9 +5,9 @@
     <div class="card shadow mb-4 p-4">
     <form method="post" action="back-edit-post?id={{ post.id }}">
     <fieldset {{ disabled }}>
-        <div class="form-group"><label for="inputTitle">Titre {{ errors.title }}</label><input class="form-control" id="inputTitle" name="title" type="text" value="{{ post.title }}"></div>
-        <div class="form-group"><label for="inputLeadParagraph">Chapô {{ errors.leadParagraph }}</label><input class="form-control" id="inputLeadParagraph" name="leadParagraph" type="text" value="{{ post.leadParagraph }}"></div>
-        <div class="form-group"><label for="formControlTextareaContent">Contenu {{ errors.content }}</label><textarea class="form-control" id="formControlTextareaContent" name="content" rows="3">{{ post.content }}</textarea></div>
+        <div class="form-group"><label for="inputTitle">Titre <span class="text-danger">{{ errors.title }}</span></label><input class="form-control" id="inputTitle" name="title" type="text" value="{{ post.title }}"></div>
+        <div class="form-group"><label for="inputLeadParagraph">Chapô <span class="text-danger">{{ errors.leadParagraph }}</span></label><input class="form-control" id="inputLeadParagraph" name="leadParagraph" type="text" value="{{ post.leadParagraph }}"></div>
+        <div class="form-group"><label for="formControlTextareaContent">Contenu <span class="text-danger">{{ errors.content }}</span></label><textarea class="form-control" id="formControlTextareaContent" name="content" rows="3">{{ post.content }}</textarea></div>
         <div class="form-group"><label for="inputCreatedDate">Date de création</label><input class="form-control" id="inputCreatedDate" name="createdDate" type="text" value="{{ post.createdDate }}" disabled></div>
         <div class="form-group"><label for="inputModifiedDate">Date de modification</label><input class="form-control" id="inputModifiedDate" name="modifiedDate" type="text" value="{{ post.modifiedDate }}" disabled></div>
         <div class="form-group">
