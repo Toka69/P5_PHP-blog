@@ -16,35 +16,114 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                         <tr>
-                            <th>Logo</th>
                             <th>Prénom</th>
                             <th>Nom</th>
-                            <th>Téléphone</th>
                             <th>email</th>
-                            <th>Adresse</th>
+                            <th>Pseudo</th>
                             <th>Administrateur</th>
+                            <th>Validé</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for user in usersList %}
                             <tr>
-                                <td>{{ user.logo }}</td>
                                 <td>{{ user.firstName }}</td>
                                 <td>{{ user.lastName }}</td>
-                                <td><a href="tel:{{ user.phone }}">{{ user.phone }}</a></td>
                                 <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
-                                <td><a target="_blank" href="https://google.fr/maps/place/{{ user.postal_code }}+{{ user.town }}+{{ user.address }} {{ user.street }}">{{ user.address }} {{ user.street }} {{ user.postal_code }} {{ user.town }}</a></td>
+                                <td>{{ user.pseudo }}</td>
                                 <td>
                                     {% if user.admin == true %}
-                                        oui
+                                        <a class="btn btn-primary alert-danger" data-toggle="modal" data-target="#disableAdmin" href="" role="button">Oui</a></td>
                                     {% else %}
-                                        non
+                                        <a class="btn btn-primary alert-success" data-toggle="modal" data-target="#enableAdmin" href="" role="button">Non</a></td>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.valid == 1 %}
+                                        <a class="btn btn-primary alert-success" data-toggle="modal" data-target="#disableUser" href="" role="button">Oui</a></td>
+                                    {% else %}
+                                        <a class="btn btn-primary alert-danger" data-toggle="modal" data-target="#enableUser" href="" role="button">Non</a></td>
                                     {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
+
+                    <!-- Modal Admin -->
+                    <div class="modal fade" id="enableAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Changement de droits?</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">Etes-vous certain de vouloir modifier cet utilisateur en administrateur?</div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                    <a class="btn btn-primary" href="">Valider</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="disableAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Changement de droits?</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">Etes-vous certain de vouloir retirer les droits administrateur pour cet utilisateur?</div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                    <a class="btn btn-primary" href="">Valider</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal valid -->
+                    <div class="modal fade" id="disableUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modifier l'accès utilisateur?</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">Etes-vous certain de vouloir désactiver cet utilisateur?</div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                    <a class="btn btn-primary" href="">Valider</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="enableUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Changement de droits?</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">Etes-vous certain de vouloir activer cet utilisateur?</div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                                    <a class="btn btn-primary" href="">Valider</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
