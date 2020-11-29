@@ -54,14 +54,27 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user" name ="email" id="inputEmail" placeholder="Adresse email" required>
+                                                <input type="text" class="form-control form-control-user" name="pseudo" id="pseudo" placeholder="Pseudo *" required>
+                                        </div>
+                                        <div class="form-group">
+                                                <label for="formControlSelectGender">Genre</label>
+                                                <select class="form-control" id="formControlSelectGender" name="genderId">
+                                                    {% for gender in genders %}
+                                                        <option {% if gender.id == 4 %}selected{% endif %} value="{{ gender.id }}">
+                                                            {{ gender.name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="email" class="form-control form-control-user" name ="email" id="inputEmail" placeholder="Adresse email *" required>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                                <input type="password" class="form-control form-control-user" name="password" id="inputPassword" placeholder="Mot de passe" required>
+                                                <input type="password" class="form-control form-control-user" name="password" id="inputPassword" placeholder="Mot de passe *" required>
                                             </div>
                                             <div class="col-sm-6">
-                                                <input type="password" class="form-control form-control-user" name="repeatPassword" id="inputRepeatPassword" placeholder="Répétez le mot de passe" required>
+                                                <input type="password" class="form-control form-control-user" name="repeatPassword" id="inputRepeatPassword" placeholder="Répétez le mot de passe *" required>
                                             </div>
                                             <label class="mt-4" for="inputPassword">Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!</label>
                                         </div>
