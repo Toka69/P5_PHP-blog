@@ -13,15 +13,9 @@ class User
     protected $admin;
     protected $firstName;
     protected $lastName;
-    protected $phone;
     protected $email;
     protected $password;
-    protected $street;
-    protected $address;
-    protected $postalCode;
-    protected $town;
-    protected $logo;
-    protected $description;
+    protected $pseudo;
     protected $genderId;
 
     /**
@@ -163,17 +157,17 @@ class User
     /**
      * @return mixed
      */
-    public function getStreet()
+    public function getPseudo()
     {
-        return $this->street;
+        return $this->pseudo;
     }
 
     /**
-     * @param mixed $street
+     * @param mixed $pseudo
      */
-    public function setStreet($street): void
+    public function setPseudo($pseudo): void
     {
-        $this->street = $street;
+        $this->pseudo = $pseudo;
     }
 
     /**

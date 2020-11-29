@@ -120,7 +120,7 @@ CREATE TABLE `users` (
 -- Déchargement des données de la table `users`
 --
 
-INSERT INTO `users` (`id`, `admin`, `first_name`, `last_name`, `phone`, `email`, `password`, `street`, `address`, `postal_code`, `town`, `logo`, `description`, `gender_id`) VALUES
+INSERT INTO `users` (`id`, `admin`, `first_name`, `last_name`, `phone`, `email`, `password`, pseudo, `address`, `postal_code`, `town`, `logo`, `description`, `gender_id`) VALUES
 (3, 1, 'Matthias', 'LEROUX', '0603550664', 'm@m.fr', 'test', 'allée des muriers', '3', 38230, 'TIGNIEU', ' ', 'test', 1),
 (4, 0, 'John', 'DOE', '0632548562', 'john.doe@gmail.com', 'test', 'rue des acacias', '12', 75000, 'PARIS', ' ', 'test', 1),
 (5, 0, 'Jean', 'dupont', NULL, 'cendar78@msn.com', 'test', NULL, NULL, NULL, NULL, NULL, NULL, 1),

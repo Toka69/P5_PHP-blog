@@ -83,13 +83,8 @@ class BackofficeController extends AbstractController
                 $user->setFirstName($_POST["firstName"]);
                 $user->setLastName($_POST["lastName"]);
                 $user->setEmail($_POST["email"]);
-                $user->setPhone($_POST["phone"]);
-                $user->setAddress($_POST["address"]);
-                $user->setStreet($_POST["street"]);
-                $user->setPostalCode($_POST["postalCode"]);
-                $user->setTown($_POST["town"]);
-                //$user->setGenderId($_POST["formControlSelectGender"]);
-                $user->setDescription($_POST["description"]);
+                $user->setPseudo($_POST["pseudo"]);
+                $user->setGenderId($_POST["genderId"]);
                 $this->usersManager->update($user);
                 $_SESSION['user'] = $this->usersManager->getUser($id);
 

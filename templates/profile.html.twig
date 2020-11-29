@@ -8,22 +8,17 @@
             <div class="form-group"><label for="inputFirstName">Prénom* {{ errors.firstName }}</label><input class="form-control" id="inputFirstName" name="firstName" type="text" value="{{ user.firstName }}" required></div>
             <div class="form-group"><label for="inputLastName">Nom* {{ errors.lastName }}</label><input class="form-control" id="inputLastName" name="lastName" type="text" value="{{ user.lastName}}" required></div>
             <div class="form-group"><label for="inputEmail">Email* {{ errors.email }}</label><input class="form-control" id="inputEmail" name="email" type="email" value="{{ user.email }}" required></div>
-            <div class="form-group"><label for="inputPhone">Téléphone</label><input class="form-control" id="inputPhone" name="phone" type="tel" value="{{ user.phone }}"></div>
-            <div class="form-group"><label for="inputAddress">Adresse</label><input class="form-control" id="inputAddress" name="address" type="text" value="{{ user.address }}"></div>
-            <div class="form-group"><label for="inputStreet">Rue</label><input class="form-control" id="inputStreet" name="street" type="text" value="{{ user.street }}"></div>
-            <div class="form-group"><label for="inputPostalCode">Code Postal</label><input class="form-control" id="inputPostalCode" name="postalCode" type="text" value="{{ user.postalCode }}"></div>
-            <div class="form-group"><label for="inputTown">Ville</label><input class="form-control" id="inputTown" name="town" type="text" value="{{ user.town }}"></div>
+            <div class="form-group"><label for="inputPseudo">Pseudo</label><input class="form-control" id="inputPseudo" name="pseudo" type="text" value="{{ user.pseudo }}"></div>
             <div class="form-group">
                 <label for="formControlSelectGender">Genre</label>
-                <select class="form-control" id="formControlSelectGender">
+                <select class="form-control" id="formControlSelectGender" name="genderId">
                     {% for gender in genders %}
-                        <option {% if gender.id == user.genderId %} selected {% endif %}>
+                        <option {% if gender.id == user.genderId %}selected{% endif %} value="{{ gender.id }}">
                             {{ gender.name }}
                         </option>
                     {% endfor %}
                 </select>
             </div>
-            <div class="form-group"><label for="formControlTextareaDescription">Description</label><textarea class="form-control" id="formControlTextareaDescription" name="description" rows="3">{{ user.description }}</textarea></div>
         </fieldset>
         {% if disabled == 'disabled' %}
             <a class="btn btn-primary" href="profile-edit?edit" role="button">Editer</a>
