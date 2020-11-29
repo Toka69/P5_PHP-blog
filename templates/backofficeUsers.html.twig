@@ -27,7 +27,7 @@
                         </thead>
                         <tbody>
                         {% for user in usersList %}
-                            <tr class="clickable-table-row" onclick="location.href='back-read-user?id={{ user.id }}'">
+                            <tr>
                                 <td>{{ user.logo }}</td>
                                 <td>{{ user.firstName }}</td>
                                 <td>{{ user.lastName }}</td>

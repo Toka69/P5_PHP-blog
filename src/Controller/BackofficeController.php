@@ -60,12 +60,11 @@ class BackofficeController extends AbstractController
     public function editUser(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
-        $secureRequestMethod = $this->secureRequestMethod($_GET);
-        $authorizeEdit = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($secureRequestMethod["id"]);
+        $id = $_SESSION["user"]->getId();
 
-        if($_SERVER ["REQUEST_METHOD"] == "POST" && $authorizeEdit)
+        if($_SERVER ["REQUEST_METHOD"] == "POST")
         {
-            $user = $this->usersManager->getUser($secureRequestMethod["id"]);
+            $user = $this->usersManager->getUser($id);
             $errors = [];
             if (!isset($_POST["firstName"]) || $_POST["firstName"] == null)
             {
@@ -84,12 +83,20 @@ class BackofficeController extends AbstractController
                 $user->setFirstName($_POST["firstName"]);
                 $user->setLastName($_POST["lastName"]);
                 $user->setEmail($_POST["email"]);
+                $user->setPhone($_POST["phone"]);
+                $user->setAddress($_POST["address"]);
+                $user->setStreet($_POST["street"]);
+                $user->setPostalCode($_POST["postalCode"]);
+                $user->setTown($_POST["town"]);
+                //$user->setGenderId($_POST["formControlSelectGender"]);
+                $user->setDescription($_POST["description"]);
                 $this->usersManager->update($user);
+                $_SESSION['user'] = $this->usersManager->getUser($id);
 
-                return $this->redirect("backofficeUsers");
+                return $this->redirect("profile");
             }
 
-            return $this->render("backofficeUser.html.twig", [
+            return $this->render("profile.html.twig", [
                 "user" => $user,
                 "errors" => $errors,
                 "genders" => $this->usersManager->getGenders(),
@@ -97,10 +104,10 @@ class BackofficeController extends AbstractController
             ]);
         }
 
-        if (isset($_GET["edit"]) && $authorizeEdit)
+        if (isset($_GET["edit"]))
         {
-                return $this->render("backofficeUser.html.twig", [
-                    "user" => $this->usersManager->getUser($secureRequestMethod["id"]),
+                return $this->render("profile.html.twig", [
+                    "user" => $this->usersManager->getUser($id),
                     "genders" => $this->usersManager->getGenders(),
                     "disabled" => null
                 ]);
@@ -119,10 +126,11 @@ class BackofficeController extends AbstractController
     public function readUser(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
-        $secureRequestMethod = $this->secureRequestMethod($_GET);
-        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($secureRequestMethod["id"])) {
-            return $this->render("backofficeUser.html.twig", [
-                "user" => $this->usersManager->getUser($secureRequestMethod["id"]),
+
+        if (isset($_SESSION["user"]) && ($_SESSION["user"]) != null)
+        {
+            return $this->render("profile.html.twig", [
+                "user" => $_SESSION["user"],
                 "genders" => $this->usersManager->getGenders(),
                 "disabled" => "disabled"
             ]);
@@ -293,4 +301,5 @@ class BackofficeController extends AbstractController
 
         return $this->render("backofficeSettings.html.twig");
     }
+
 }
