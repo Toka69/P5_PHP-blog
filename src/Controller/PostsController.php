@@ -99,7 +99,7 @@ class PostsController extends BackofficeController
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $secureRequestMethod = $this->secureRequestMethod($_GET);
-        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]))
+        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->postsManager->getSinglePost($secureRequestMethod["id"]))
         {
             return $this->render("backofficePost.html.twig", [
                 "post" => $this->postsManager->getSinglePost($secureRequestMethod["id"]),
