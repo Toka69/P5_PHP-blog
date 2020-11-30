@@ -4,6 +4,8 @@
 namespace App\Controller;
 
 
+use App\Entity\Post;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -62,7 +64,6 @@ class PostsController extends BackofficeController
                 $post->setTitle($_POST["title"]);
                 $post->setLeadParagraph($_POST["leadParagraph"]);
                 $post->setContent($_POST["content"]);
-                $post->setModifiedDate(date("Y-m-d H:i:s"));
                 $post->setUserID($_POST["userId"]);
                 $this->postsManager->update($post);
 
@@ -107,6 +108,64 @@ class PostsController extends BackofficeController
                 "disabled" => "disabled"
             ]);
         }
+
+        return $this->redirect("backofficePosts");
+    }
+
+    public function addPost(): Response
+    {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST")
+        {
+            $errors = [];
+            if (!isset($_POST["title"]) || $_POST["title"] == null)
+            {
+                $errors["title"]= "Veuillez saisir le titre";
+            }
+            if (!isset($_POST["leadParagraph"]) || $_POST["leadParagraph"] == null)
+            {
+                $errors["leadParagraph"]= "Veuillez saisir le châpo";
+            }
+            if (!isset($_POST["content"]) || $_POST["content"] == null)
+            {
+                $errors["content"]= "Veuillez saisir le contenu";
+            }
+
+            if (count($errors) === 0)
+            {
+                $array = [
+                    'title' => $_POST['title'],
+                    'leadParagraph' => $_POST['leadParagraph'],
+                    'content' => $_POST['content'],
+                    'userId' => $_POST['userId']
+                ];
+                $post = new Post($array);
+                $this->postsManager->add($post);
+
+                return $this->redirect("backofficePosts");
+            }
+
+            return $this->render("add-post.html.twig", [
+                "usersAdmin" => $this->usersManager->getList("admin"),
+                "errors" => $errors
+            ]);
+        }
+
+        return $this->render("add-post.html.twig", [
+            "usersAdmin" => $this->usersManager->getList("admin")
+        ]);
+    }
+
+    public function deletePost(): Response
+    {
+        $post = $this->postsManager->getSinglePost($_GET["id"]);
+        $comments = $this->commentsManager->getCommentsPost($post->getId());
+        foreach ($comments as $comment)
+        {
+            $this->commentsManager->delete($comment);
+        }
+        $this->postsManager->delete($post);
 
         return $this->redirect("backofficePosts");
     }

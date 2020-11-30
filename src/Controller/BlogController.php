@@ -41,10 +41,15 @@ class BlogController extends AbstractController
     {
         $singlePost = $this->postsManager->getSinglePost($_GET['id']);
         $comments = $this->commentsManager->getCommentsPost($_GET['id'], 1);
+        $disabled = "";
+        if (!isset($_SESSION["user"])){
+            $disabled = "disabled";
+        }
 
         return $this->render("post.html.twig",[
             "singlePost" => $singlePost,
-            "comments" => $comments
+            "comments" => $comments,
+            "disabled" => $disabled
             ]);
     }
 }

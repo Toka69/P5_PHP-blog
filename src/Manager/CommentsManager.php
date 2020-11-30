@@ -108,12 +108,20 @@ class CommentsManager extends AbstractManager
      *
      * @return array
      */
-    public function getCommentsPost($id, $valid): array
+    public function getCommentsPost($id, ?int $valid = null): array
     {
         $getComments = [];
+        if ($valid !== null)
+        {
+            $option = "AND c.valid = ".$valid."";
+        }
+        else
+        {
+            $option = "";
+        }
         $request = $this->db->query(
-            'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
-            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' AND c.valid = '.$valid.''
+            "SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
+            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' '.$option.' "
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
@@ -136,7 +144,14 @@ class CommentsManager extends AbstractManager
 
     public function add(Comment $comment)
     {
+        $request = $this->db->prepare('INSERT INTO comments (message, posts_id, user_id) 
+                    VALUES (:message, :posts_id, :user_id)');
 
+        $request->bindValue(':message', $comment->getMessage());
+        $request->bindValue(':posts_id', $comment->getPostsID());
+        $request->bindValue(':user_id', $comment->getUserId());
+
+        $request->execute();
     }
 
     public function update(Comment $comment)
@@ -156,6 +171,8 @@ class CommentsManager extends AbstractManager
 
     public function delete(Comment $comments)
     {
-
+        $request = $this->db->prepare('DELETE FROM comments WHERE id = :id');
+        $request->bindValue(':id', $comments->getId());
+        $request->execute();
     }
 }

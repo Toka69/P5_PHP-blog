@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 
+use App\Entity\Comment;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -112,5 +113,37 @@ class CommentsController extends BackofficeController
         }
 
         return $this->redirect("backofficeComments");
+    }
+
+    public function addComment(): Response
+    {
+        if (!isset($_SESSION["user"])){return $this->redirect("login");}
+        if ($_SERVER["REQUEST_METHOD"] == "POST")
+        {
+            $errors = [];
+            if (!isset($_POST["message"]) || $_POST["message"] == "")
+            {
+                $errors["message"]= "Veuillez écrire un message";
+            }
+
+            if (count($errors) === 0)
+            {
+                $array = [
+                    'message' => $_POST['message'],
+                    'postsId' => $_GET['postId'],
+                    'userId' => $_SESSION['user']->getId()
+                ];
+                $comment = new Comment($array);
+                $this->commentsManager->add($comment);
+
+                return $this->redirect("posts");
+            }
+
+            return $this->render("post.html.twig", [
+                "errors" => $errors
+            ]);
+        }
+
+        return $this->redirect("posts");
     }
 }

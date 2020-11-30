@@ -33,14 +33,14 @@
                                 <td>{{ user.pseudo }}</td>
                                 <td>
                                     {% if user.admin == true %}
-                                        <a class="btn btn-primary alert-danger" href="select-admin?id={{ user.id }}&setUser" role="button">Oui</a></td>
+                                        <a class="btn btn-primary alert-danger" href="select-admin?id={{ user.id }}" role="button">Oui</a></td>
                                     {% else %}
                                         <a class="btn btn-primary alert-success" href="select-admin?id={{ user.id }}&setAdmin" role="button">Non</a></td>
                                     {% endif %}
                                 </td>
                                 <td>
                                     {% if user.valid == 1 %}
-                                        <a class="btn btn-primary alert-success" href="valid-user?id={{ user.id }}&unvalid" role="button">Oui</a></td>
+                                        <a class="btn btn-primary alert-success" href="valid-user?id={{ user.id }}" role="button">Oui</a></td>
                                     {% else %}
                                         <a class="btn btn-primary alert-danger" href="valid-user?id={{ user.id }}&valid" role="button">Non</a></td>
                                     {% endif %}

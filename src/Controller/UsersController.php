@@ -116,17 +116,12 @@ class UsersController extends BackofficeController
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
         {
             $user = $this->usersManager->getUser($_GET["id"]);
-
-            if (isset($_GET["setAdmin"]) && !isset($_GET["setUser"]))
+            $user->setAdmin(0);
+            if (isset($_GET["setAdmin"]))
             {
                 $user->setAdmin(1);
-                $this->usersManager->update($user);
             }
-            if (isset($_GET["setUser"]) && !isset($_GET["setAdmin"]))
-            {
-                $user->setAdmin(0);
-                $this->usersManager->update($user);
-            }
+            $this->usersManager->update($user);
         }
 
         return $this->redirect("backofficeUsers");
@@ -134,17 +129,14 @@ class UsersController extends BackofficeController
 
     public function validUser(): Response
     {
-        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"])) {
+        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
+        {
             $user = $this->usersManager->getUser($_GET["id"]);
-
-            if (isset($_GET["id"]) && isset($_GET["valid"])) {
+            $user->setValid(0);
+            if (isset($_GET["valid"])) {
                 $user->setValid(1);
-                $this->usersManager->update($user);
             }
-            if (isset($_GET["id"]) && isset($_GET["unvalid"])) {
-                $user->setValid(0);
-                $this->usersManager->update($user);
-            }
+            $this->usersManager->update($user);
         }
 
         return $this->redirect("backofficeUsers");

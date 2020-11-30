@@ -90,7 +90,15 @@ class PostsManager extends AbstractManager
      */
     public function add(Post $post)
     {
+        $request = $this->db->prepare('INSERT INTO posts (title, lead_paragraph, content, user_id) 
+                    VALUES (:title, :lead_paragraph, :content, :user_id)');
 
+        $request->bindValue(':title', $post->getTitle());
+        $request->bindValue(':lead_paragraph', $post->getLeadParagraph());
+        $request->bindValue(':content', $post->getContent());
+        $request->bindValue(':user_id', $post->getUserId());
+
+        $request->execute();
     }
 
     /**
@@ -99,12 +107,11 @@ class PostsManager extends AbstractManager
     public function update(Post $post)
     {
         $request = $this->db->prepare('UPDATE posts SET title = :title, lead_paragraph = :lead_paragraph, content = :content, 
-            modified_date = :modified_date, user_id = :user_id WHERE id = :id');
+            user_id = :user_id WHERE id = :id');
 
         $request->bindValue(':title', $post->getTitle());
         $request->bindValue(':lead_paragraph', $post->getLeadParagraph());
         $request->bindValue(':content', $post->getContent());
-        $request->bindValue(':modified_date', $post->getModifiedDate());
         $request->bindValue(':user_id', $post->getUserId());
         $request->bindValue(':id', $post->getId());
 
@@ -116,6 +123,8 @@ class PostsManager extends AbstractManager
      */
     public function delete(Post $post)
     {
-
+        $request = $this->db->prepare('DELETE FROM posts WHERE id = :id');
+        $request->bindValue(':id', $post->getId());
+        $request->execute();
     }
 }

@@ -31,10 +31,13 @@ return [
     // Posts
     new Route("readPost", "/back-read-post", PostsController::class, "readPost"),
     new Route("editPost", "/back-edit-post", PostsController::class, "editPost"),
+    new Route("deletePost", "/back-delete-post", PostsController::class, "deletePost"),
+    new Route("addPost", "/back-add-post", PostsController::class, "addPost"),
     new Route("backofficePosts", "/back-posts", PostsController::class, "backofficePosts"),
     // Comments
     new Route("readComment", "/back-read-comment", CommentsController::class, "readComment"),
     new Route("editComment", "/back-edit-comment", CommentsController::class, "editComment"),
+    new Route("addComment", "/back-add-comment", CommentsController::class, "addComment"),
     new Route("backofficeComments", "/back-comments", CommentsController::class, "backofficeComments"),
     // Connexion
     new Route("login", "/login", SecurityController::class, "login"),
