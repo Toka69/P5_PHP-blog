@@ -27,6 +27,11 @@ use Twig\Error\SyntaxError;
        }
 
        public function urlError(): Response
+       {
+            return $this->redirect("notFound");
+       }
+
+       public function notFound(): Response
         {
             return $this->render("404.html.twig");
         }

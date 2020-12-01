@@ -33,7 +33,7 @@ class Kernel
 
         if (is_null($route))
         {
-            return new RedirectResponse('url-error');
+            $route = $router->get('urlError');      //404
         }
 
         $controller = $route->getController();      //get the name of the class to instantiate

@@ -16,6 +16,7 @@ return [
     new Route("home", "/", HomeController::class, "home"),
     new Route("home", "/home", HomeController::class, "home"),
     new Route("urlError", "/url-error", HomeController::class, "urlError"),
+    new Route("notFound", "/404", HomeController::class, "notFound"),
     // Blog
     new Route("posts", "/posts", BlogController::class, "posts"),
     new Route("post", "/post", BlogController::class, "post"),
