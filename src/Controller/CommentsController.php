@@ -73,12 +73,13 @@ class CommentsController extends BackofficeController
 
         if ($authorizeEdit)
         {
-            $comment = $this->commentsManager->getComment($_GET["id"]);
+            $id = $secureRequestMethod["id"];
         }
         if (isset($_SESSION["commentId"]))
         {
-            $comment = $this->commentsManager->getComment($_SESSION["commentId"]);
+            $id = $_SESSION["commentId"];
         }
+        $comment = $this->commentsManager->getComment($id);
 
         if(is_null($comment))
         {
@@ -86,10 +87,11 @@ class CommentsController extends BackofficeController
             //return $this->redirect('urlError');
         }
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && $authorizeEdit)
+        if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
             $owner = true;
             $message = "";
+            $disabled = null;
 
             if (isset($_POST['message'])){$message = $_POST["message"];}
             if ($_SESSION["user"]->getId() !== $comment->getUserID())
@@ -112,16 +114,18 @@ class CommentsController extends BackofficeController
                 $comment->setValid($_POST["valid"]);
                 $comment->setModifiedDate(date("Y-m-d H:i:s"));
                 $this->commentsManager->update($comment);
+                $disabled = "disabled";
             }
             $_SESSION["comment"] = $comment;
             $_SESSION["errors"] = $errors;
-            $_SESSION["disabled"] = "disabled";
-            $_SESSION["commentId"] = $_GET["id"];
+            $_SESSION["disabled"] = $disabled;
+            $_SESSION["commentId"] = $id;
 
             return $this->redirect("editComment");
         }
 
-        if (isset($_GET["edit"]) && $authorizeEdit) {
+        if (isset($_GET["edit"]) && $authorizeEdit)
+        {
             $_SESSION["comment"] = $comment;
             $_SESSION["errors"] = $errors;
             $_SESSION["disabled"] = null;
