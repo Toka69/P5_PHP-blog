@@ -5,12 +5,15 @@ namespace App\Controller;
 
 
 use App\Entity\Post;
-use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
+/**
+ * Class PostsController
+ * @package App\Controller
+ */
 class PostsController extends BackofficeController
 {
     /**
@@ -112,6 +115,13 @@ class PostsController extends BackofficeController
         return $this->redirect("backofficePosts");
     }
 
+    /**
+     * @return Response
+     *
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function addPost(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
@@ -157,6 +167,9 @@ class PostsController extends BackofficeController
         ]);
     }
 
+    /**
+     * @return Response
+     */
     public function deletePost(): Response
     {
         $post = $this->postsManager->getSinglePost($_GET["id"]);

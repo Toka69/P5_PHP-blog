@@ -10,6 +10,10 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
+/**
+ * Class CommentsController
+ * @package App\Controller
+ */
 class CommentsController extends BackofficeController
 {
     /**
@@ -70,8 +74,9 @@ class CommentsController extends BackofficeController
             $comment = $this->commentsManager->getComment($_GET["id"]);
             $errors = [];
             $owner = true;
+            $message = "";
 
-            if (isset($_POST['message'])){$message = $_POST["message"];};
+            if (isset($_POST['message'])){$message = $_POST["message"];}
             if ($_SESSION["user"]->getId() !== $comment->getUserID())
             {
                 $message = $comment->getMessage();
@@ -115,6 +120,12 @@ class CommentsController extends BackofficeController
         return $this->redirect("backofficeComments");
     }
 
+    /**
+     * @return Response
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function addComment(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}

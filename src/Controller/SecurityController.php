@@ -12,6 +12,10 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
+/**
+ * Class SecurityController
+ * @package App\Controller
+ */
 class SecurityController extends AbstractController
 {
     /**
@@ -21,7 +25,6 @@ class SecurityController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-
     public function login(): Response
     {
         if(isset($_SESSION['user'])) {
@@ -139,6 +142,9 @@ class SecurityController extends AbstractController
         return $this->render("forgot-password.html.twig");
     }
 
+    /**
+     * @return Response
+     */
     public function logout(): Response
     {
         session_unset();

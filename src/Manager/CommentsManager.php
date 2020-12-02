@@ -69,6 +69,10 @@ class CommentsManager extends AbstractManager
         return $getList;
     }
 
+    /**
+     * @param $id
+     * @return object|null
+     */
     public function getComment($id): ?object
     {
         $getComment = [];
@@ -142,6 +146,9 @@ class CommentsManager extends AbstractManager
         return $getComments;
     }
 
+    /**
+     * @param Comment $comment
+     */
     public function add(Comment $comment)
     {
         $request = $this->db->prepare('INSERT INTO comments (message, posts_id, user_id) 
@@ -154,6 +161,9 @@ class CommentsManager extends AbstractManager
         $request->execute();
     }
 
+    /**
+     * @param Comment $comment
+     */
     public function update(Comment $comment)
     {
         $request = $this->db->prepare('UPDATE comments SET message = :message, valid = :valid, posts_id = :posts_id, 
@@ -169,6 +179,9 @@ class CommentsManager extends AbstractManager
         $request->execute();
     }
 
+    /**
+     * @param Comment $comments
+     */
     public function delete(Comment $comments)
     {
         $request = $this->db->prepare('DELETE FROM comments WHERE id = :id');

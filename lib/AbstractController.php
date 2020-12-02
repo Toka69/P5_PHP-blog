@@ -5,6 +5,7 @@ namespace Lib;
 use App\Manager\CommentsManager;
 use App\Manager\PostsManager;
 use App\Manager\UsersManager;
+use PDO;
 use Twig\Environment;
 use Lib\Router\Router;
 use Twig\Error\LoaderError;
@@ -70,11 +71,18 @@ abstract class AbstractController
         return new Response($twig->render($view, $data));
     }
 
+    /**
+     * @return PDO
+     */
     public function PDOConnection()
     {
         return PDOSingleton::getInstance()->getPDO();
     }
 
+    /**
+     * @param $data
+     * @return string
+     */
     public function testInput($data)
     {
         $data = trim($data);
@@ -84,6 +92,10 @@ abstract class AbstractController
         return $data;
     }
 
+    /**
+     * @param $form
+     * @return array
+     */
     public function secureRequestMethod($form): array
     {
         $data = [];

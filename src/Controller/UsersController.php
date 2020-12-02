@@ -9,6 +9,10 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
+/**
+ * Class UsersController
+ * @package App\Controller
+ */
 class UsersController extends BackofficeController
 {
     /**
@@ -111,6 +115,9 @@ class UsersController extends BackofficeController
         return $this->redirect("backofficeUsers");
     }
 
+    /**
+     * @return Response
+     */
     public function selectAdmin(): Response
     {
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
@@ -127,6 +134,9 @@ class UsersController extends BackofficeController
         return $this->redirect("backofficeUsers");
     }
 
+    /**
+     * @return Response
+     */
     public function validUser(): Response
     {
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))

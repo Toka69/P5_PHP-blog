@@ -46,6 +46,10 @@ class UsersManager extends AbstractManager
         return $getList;
     }
 
+    /**
+     * @param $id
+     * @return object|null
+     */
     public function getUser($id): ?object
     {
         $getUser = [];
@@ -67,6 +71,9 @@ class UsersManager extends AbstractManager
         return null;
     }
 
+    /**
+     * @return array
+     */
     public function getGenders(){
         return $this->db->query('SELECT id, name FROM gender')->fetchAll();
     }

@@ -6,6 +6,10 @@ namespace Lib;
 
 use PDO;
 
+/**
+ * Class AbstractManager
+ * @package Lib
+ */
 class AbstractManager
 {
     protected PDO $db;
@@ -14,6 +18,5 @@ class AbstractManager
     {
         $this->db = PDOSingleton::getInstance()->getPDO();
     }
-
 
 }
