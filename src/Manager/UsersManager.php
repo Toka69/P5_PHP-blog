@@ -87,6 +87,11 @@ class UsersManager extends AbstractManager
         return $this->db->query('SELECT id, password FROM users WHERE email = \''.$email.'\' ')->fetch();
     }
 
+    public function checkPseudo($pseudo)
+    {
+        return $this->db->query('SELECT pseudo FROM users WHERE pseudo = \''.$pseudo.'\' ')->fetch();
+    }
+
     /**
      * @param User $user
      */
