@@ -2,7 +2,9 @@
 
 {% block content %}
     <div class="container-fluid">
+
         <div class="card shadow mb-4 p-4">
+
             <form method="post" action="">
                 <fieldset>
                     <div class="form-group"><label for="inputTitle">Titre <span class="text-danger">{{ errors.title }}</span></label><input class="form-control" id="inputTitle" name="title" type="text" value="{{ post.title }}"></div>
@@ -22,8 +24,8 @@
                     <button type="submit" class="btn btn-primary">Valider</button>
                     <a class="btn btn-primary" href="back-posts" role="button">Annuler</a>
             </form>
+
         </div>
+
     </div>
-
-
 {% endblock %}
