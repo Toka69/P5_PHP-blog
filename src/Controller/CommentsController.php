@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Entity\Comment;
+use Psr\Log\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -68,11 +69,25 @@ class CommentsController extends BackofficeController
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $authorizeEdit = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
         $secureRequestMethod = $this->secureRequestMethod($_GET);
+        $errors = [];
+
+        if ($authorizeEdit)
+        {
+            $comment = $this->commentsManager->getComment($_GET["id"]);
+        }
+        if (isset($_SESSION["commentId"]))
+        {
+            $comment = $this->commentsManager->getComment($_SESSION["commentId"]);
+        }
+
+        if(is_null($comment))
+        {
+            throw new InvalidArgumentException('400 Bad request');
+            //return $this->redirect('urlError');
+        }
 
         if ($_SERVER["REQUEST_METHOD"] == "POST" && $authorizeEdit)
         {
-            $comment = $this->commentsManager->getComment($_GET["id"]);
-            $errors = [];
             $owner = true;
             $message = "";
 
@@ -91,33 +106,32 @@ class CommentsController extends BackofficeController
                 $errors["valid"]= "Veuillez sélectionner si le commentaire est valide";
             }
 
-
             if (count($errors) === 0)
             {
                 $comment->setMessage($message);
                 $comment->setValid($_POST["valid"]);
                 $comment->setModifiedDate(date("Y-m-d H:i:s"));
                 $this->commentsManager->update($comment);
-
-                return $this->redirect("backofficeComments");
             }
+            $_SESSION["comment"] = $comment;
+            $_SESSION["errors"] = $errors;
+            $_SESSION["disabled"] = "disabled";
+            $_SESSION["commentId"] = $_GET["id"];
 
-            return $this->render("backofficeComment.html.twig", [
-                "comment" => $comment,
-                "errors" => $errors,
-                "disabled" => null
-            ]);
+            return $this->redirect("editComment");
         }
 
-        if (isset($_GET["edit"]) && $authorizeEdit)
-        {
-            return $this->render("backofficeComment.html.twig", [
-                "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
-                "disabled" => null
-            ]);
+        if (isset($_GET["edit"]) && $authorizeEdit) {
+            $_SESSION["comment"] = $comment;
+            $_SESSION["errors"] = $errors;
+            $_SESSION["disabled"] = null;
         }
 
-        return $this->redirect("backofficeComments");
+        return $this->render("backofficeComment.html.twig", [
+            "comment" => $_SESSION["comment"],
+            "errors" => $_SESSION["errors"],
+            "disabled" => $_SESSION["disabled"]
+        ]);
     }
 
     /**
