@@ -6,6 +6,7 @@ use App\Manager\CommentsManager;
 use App\Manager\PostsManager;
 use App\Manager\UsersManager;
 use PDO;
+use Psr\Log\InvalidArgumentException;
 use Twig\Environment;
 use Lib\Router\Router;
 use Twig\Error\LoaderError;
@@ -105,5 +106,27 @@ abstract class AbstractController
         }
 
         return $data;
+    }
+
+    public function errorResponse ($request, $status)
+    {
+        if(is_null($request))
+        {
+            switch ($status)
+            {
+                case 400 :
+                    throw new InvalidArgumentException('400 Bad request');
+                    break;
+                case 401 :
+                    throw new InvalidArgumentException('401 Unauthorized');
+                    break;
+                case 403 :
+                    throw new InvalidArgumentException('403 Forbidden');
+                    break;
+                case 404 :
+                    throw new InvalidArgumentException('404 Not Found');
+                    break;
+            }
+        }
     }
 }

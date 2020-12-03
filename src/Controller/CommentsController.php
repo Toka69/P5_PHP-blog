@@ -44,8 +44,17 @@ class CommentsController extends BackofficeController
     public function readComment(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
+        $authorize = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
         $secureRequestMethod = $this->secureRequestMethod($_GET);
-        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->commentsManager->getComment($secureRequestMethod["id"]))
+        $comment = null;
+
+        if ($authorize) {
+            $comment = $this->commentsManager->getComment($secureRequestMethod["id"]);
+        }
+
+        $this->errorResponse($comment, 400);
+
+        if ( $authorize && $comment )
         {
             return $this->render("backofficeComment.html.twig", [
                 "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
@@ -66,13 +75,19 @@ class CommentsController extends BackofficeController
     public function editComment(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
-        $authorizeEdit = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
+        $authorize = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
         $secureRequestMethod = $this->secureRequestMethod($_GET);
+        $errors = [];
+        $comment = null;
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && $authorizeEdit)
+        if ($authorize) {
+            $comment = $this->commentsManager->getComment($secureRequestMethod["id"]);
+        }
+
+        $this->errorResponse($comment, 400);
+
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && $authorize)
         {
-            $comment = $this->commentsManager->getComment($_GET["id"]);
-            $errors = [];
             $owner = true;
             $message = "";
 
@@ -91,7 +106,6 @@ class CommentsController extends BackofficeController
                 $errors["valid"]= "Veuillez sélectionner si le commentaire est valide";
             }
 
-
             if (count($errors) === 0)
             {
                 $comment->setMessage($message);
@@ -101,23 +115,16 @@ class CommentsController extends BackofficeController
 
                 return $this->redirect("backofficeComments");
             }
+        }
 
+        if (isset($secureRequestMethod["edit"]) && $authorize)
+        {
             return $this->render("backofficeComment.html.twig", [
-                "comment" => $comment,
+                "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
                 "errors" => $errors,
                 "disabled" => null
             ]);
         }
-
-        if (isset($_GET["edit"]) && $authorizeEdit)
-        {
-            return $this->render("backofficeComment.html.twig", [
-                "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
-                "disabled" => null
-            ]);
-        }
-
-        return $this->redirect("backofficeComments");
     }
 
     /**
