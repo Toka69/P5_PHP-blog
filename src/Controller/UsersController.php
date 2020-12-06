@@ -42,6 +42,7 @@ class UsersController extends BackofficeController
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $id = $_SESSION["user"]->getId();
+        $secureRequestMethod = $this->secureRequestMethod($_POST);
 
         if($_SERVER ["REQUEST_METHOD"] == "POST")
         {
@@ -59,13 +60,17 @@ class UsersController extends BackofficeController
             {
                 $errors["email"]= "Veuillez saisir votre email";
             }
+            if ($_POST["password"] !== $_POST["repeatPassword"]) {
+                $errors["passwords"] = "Les mots de passe ne correspondent pas!";
+            }
             if (count($errors) === 0)
             {
-                $user->setFirstName($_POST["firstName"]);
-                $user->setLastName($_POST["lastName"]);
-                $user->setEmail($_POST["email"]);
-                $user->setPseudo($_POST["pseudo"]);
-                $user->setGenderId($_POST["genderId"]);
+                $user->setFirstName($secureRequestMethod["firstName"]);
+                $user->setLastName($secureRequestMethod["lastName"]);
+                $user->setEmail($secureRequestMethod["email"]);
+                $user->setPseudo($secureRequestMethod["pseudo"]);
+                $user->setGenderId($secureRequestMethod["genderId"]);
+                $user->setPassword(password_hash($secureRequestMethod['password'], PASSWORD_BCRYPT, ["cost" => 12]),);
                 $this->usersManager->update($user);
                 $_SESSION['user'] = $this->usersManager->getUser($id);
 
@@ -141,9 +146,10 @@ class UsersController extends BackofficeController
     {
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
         {
-            $user = $this->usersManager->getUser($_GET["id"]);
+            $secureRequestMethod = $this->secureRequestMethod($_POST);
+            $user = $this->usersManager->getUser($secureRequestMethod["id"]);
             $user->setValid(0);
-            if (isset($_GET["valid"])) {
+            if (isset($secureRequestMethod["valid"])) {
                 $user->setValid(1);
             }
             $this->usersManager->update($user);
