@@ -111,7 +111,7 @@ class SecurityController extends AbstractController
                 $this->usersManager->add($user);
                 $this->sendEmail($user->getEmail(), "Validez votre compte",
                     "Merci de vous être inscrit! Cliquez sur ce lien pour activer votre compte:
-                    http://localhost/valid-account?email=".$user->getEmail()."                 
+                    http://".$_SERVER['HTTP_HOST']."/valid-account?email=".$user->getEmail()."                 
                 ");
                 $message = "Le compte a bien été créé. Vous allez recevoir un email pour valider votre compte.";
                 $success = true;
