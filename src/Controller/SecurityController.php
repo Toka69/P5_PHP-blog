@@ -135,19 +135,14 @@ class SecurityController extends AbstractController
             $manager = new UsersManager();
             $secureRequestMethod = $this->secureRequestMethod($_POST);
             $request = $manager->checkCredentials($secureRequestMethod['email']);
-            if (!$request){
-                return $this->render("forgot-password.html.twig", [
-                    "message" => 'Ce compte email n\'existe pas! Veuillez réesayer.'
-                ]);
-            }
-            else
-            {
+            if ($request) {
                 //send an email
-                return $this->render("forgot-password.html.twig", [
-                    "message" => "Le mot de passe vient de vous être envoyé par email!",
-                    "success" => true
-                ]);
             }
+
+            return $this->render("forgot-password.html.twig", [
+                "message" => "Vous allez recevoir un email!",
+                "success" => true
+            ]);
         }
         return $this->render("forgot-password.html.twig");
     }
