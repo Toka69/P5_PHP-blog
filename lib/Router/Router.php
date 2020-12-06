@@ -50,5 +50,20 @@ class Router
                 return $route->getPath();
             }
         }
-    }    
+    }
+
+    /**
+     * @param string $name
+     * @return Route
+     */
+    public function get(string $name): Route
+    {
+        foreach ($this->routes as $route)
+        {
+            if ($route->getName() === $name)
+            {
+                return $route;
+            }
+        }
+    }
 }

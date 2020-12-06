@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Manager\CommentsManager;
-use App\Manager\PostsManager;
 use Lib\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Error\LoaderError;
@@ -25,8 +23,7 @@ class BlogController extends AbstractController
      */
     public function posts(): Response
     {
-        $manager = new PostsManager(self::PDOConnection());
-        $postsList = $manager->getList();
+        $postsList = $this->postsManager->getList();
 
         return $this->render("posts.html.twig",[
             "postsList" => $postsList
@@ -42,14 +39,17 @@ class BlogController extends AbstractController
      */
     public function post(): Response
     {
-        $postsManager = new PostsManager(self::PDOConnection());
-        $singlePost = $postsManager->getSinglePost($_GET['id']);
-        $commentsManager = new CommentsManager(self::PDOConnection());
-        $comments = $commentsManager->getComments($_GET['id'], 1);
+        $singlePost = $this->postsManager->getSinglePost($_GET['id']);
+        $comments = $this->commentsManager->getCommentsPost($_GET['id'], 1);
+        $disabled = "";
+        if (!isset($_SESSION["user"])){
+            $disabled = "disabled";
+        }
 
         return $this->render("post.html.twig",[
             "singlePost" => $singlePost,
-            "comments" => $comments
+            "comments" => $comments,
+            "disabled" => $disabled
             ]);
     }
 }

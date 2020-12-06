@@ -4,32 +4,15 @@ namespace App\Manager;
 
 use App\Entity\Post;
 use App\Entity\User;
+use Lib\AbstractManager;
 use PDO;
 
 /**
  * Class PostsManager
  * @package App
  */
-class PostsManager
+class PostsManager extends AbstractManager
 {
-    protected PDO $db;
-
-    /**
-     * @param $db
-     */
-    public function __construct($db)
-    {
-        $this->setDb($db);
-    }
-
-    /**
-     * @param $db
-     */
-    private function setDb($db)
-    {
-        $this->db = $db;
-    }
-
     /**
      * @return int
      */
@@ -70,14 +53,14 @@ class PostsManager
     /**
      * @param $id
      *
-     * @return object
+     * @return object|null
      */
-    public function getSinglePost($id): object
+    public function getSinglePost($id): ?object
     {
         $singlePost = [];
         $request = $this->db->query(
             'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
-            FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.''
+            FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.' '
         );
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
@@ -94,31 +77,54 @@ class PostsManager
             ];
             $singlePost = new Post($array);
         }
+        if(!empty($singlePost))
+        {
+            return $singlePost;
+        }
 
-        return $singlePost;
+        return null;
     }
 
     /**
-     * @param Post $posts
+     * @param Post $post
      */
-    public function add(Post $posts)
+    public function add(Post $post)
     {
+        $request = $this->db->prepare('INSERT INTO posts (title, lead_paragraph, content, user_id) 
+                    VALUES (:title, :lead_paragraph, :content, :user_id)');
 
+        $request->bindValue(':title', $post->getTitle());
+        $request->bindValue(':lead_paragraph', $post->getLeadParagraph());
+        $request->bindValue(':content', $post->getContent());
+        $request->bindValue(':user_id', $post->getUserId());
+
+        $request->execute();
     }
 
     /**
-     * @param Post $posts
+     * @param Post $post
      */
-    public function update(Post $posts)
+    public function update(Post $post)
     {
+        $request = $this->db->prepare('UPDATE posts SET title = :title, lead_paragraph = :lead_paragraph, content = :content, 
+            user_id = :user_id WHERE id = :id');
 
+        $request->bindValue(':title', $post->getTitle());
+        $request->bindValue(':lead_paragraph', $post->getLeadParagraph());
+        $request->bindValue(':content', $post->getContent());
+        $request->bindValue(':user_id', $post->getUserId());
+        $request->bindValue(':id', $post->getId());
+
+        $request->execute();
     }
 
     /**
-     * @param Post $posts
+     * @param Post $post
      */
-    public function delete(Post $posts)
+    public function delete(Post $post)
     {
-
+        $request = $this->db->prepare('DELETE FROM posts WHERE id = :id');
+        $request->bindValue(':id', $post->getId());
+        $request->execute();
     }
 }

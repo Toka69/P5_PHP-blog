@@ -25,11 +25,11 @@
                         </thead>
                         <tbody>
                         {% for comment in commentsList %}
-                            <tr>
-                                <td>{{ comment.message }}</td>
+                            <tr class="clickable-table-row" href="back-read-comment?id={{ comment.id }}">
+                                <td>{{ comment.message|slice(0, 40) }} ...</td>
                                 <td>{{ comment.createdDate }}</td>
                                 <td>{{ comment.modifiedDate }}</td>
-                                <td>{{ comment.valid }}</td>
+                                <td>{% if comment.valid == 1%}Oui{% else %}Non{% endif %}</td>
                                 <td>{{ comment.user.firstName }} {{ comment.user.lastName }}</td>
                             </tr>
                         {%  endfor %}
@@ -41,4 +41,17 @@
         </div>
 
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            $('#dataTable tr').click(function()
+                {
+                    var href = $(this).attr("href");
+                    window.location = href;
+                }
+            );
+        });
+    </script>
 {% endblock %}

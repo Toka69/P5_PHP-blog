@@ -13,16 +13,11 @@ class User
     protected $admin;
     protected $firstName;
     protected $lastName;
-    protected $phone;
     protected $email;
     protected $password;
-    protected $street;
-    protected $address;
-    protected $postalCode;
-    protected $town;
-    protected $logo;
-    protected $description;
+    protected $pseudo;
     protected $genderId;
+    protected $valid;
 
     /**
      * @param array $data
@@ -115,22 +110,6 @@ class User
     /**
      * @return mixed
      */
-    public function getPhone()
-    {
-        return $this->phone;
-    }
-
-    /**
-     * @param mixed $phone
-     */
-    public function setPhone($phone): void
-    {
-        $this->phone = $phone;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getEmail()
     {
         return $this->email;
@@ -163,97 +142,17 @@ class User
     /**
      * @return mixed
      */
-    public function getStreet()
+    public function getPseudo()
     {
-        return $this->street;
+        return $this->pseudo;
     }
 
     /**
-     * @param mixed $street
+     * @param mixed $pseudo
      */
-    public function setStreet($street): void
+    public function setPseudo($pseudo): void
     {
-        $this->street = $street;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * @param mixed $address
-     */
-    public function setAddress($address): void
-    {
-        $this->address = $address;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPostalCode()
-    {
-        return $this->postalCode;
-    }
-
-    /**
-     * @param mixed $postalCode
-     */
-    public function setPostalCode($postalCode): void
-    {
-        $this->postalCode = $postalCode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTown()
-    {
-        return $this->town;
-    }
-
-    /**
-     * @param mixed $town
-     */
-    public function setTown($town): void
-    {
-        $this->town = $town;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLogo()
-    {
-        return $this->logo;
-    }
-
-    /**
-     * @param mixed $logo
-     */
-    public function setLogo($logo): void
-    {
-        $this->logo = $logo;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    /**
-     * @param mixed $description
-     */
-    public function setDescription($description): void
-    {
-        $this->description = $description;
+        $this->pseudo = $pseudo;
     }
 
     /**
@@ -270,5 +169,21 @@ class User
     public function setGenderId($genderId): void
     {
         $this->genderId = $genderId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValid()
+    {
+        return $this->valid;
+    }
+
+    /**
+     * @param mixed $valid
+     */
+    public function setValid($valid): void
+    {
+        $this->valid = $valid;
     }
 }

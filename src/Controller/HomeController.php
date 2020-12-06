@@ -26,7 +26,22 @@ use Twig\Error\SyntaxError;
             return $this->render("home.html.twig");
        }
 
+     /**
+      * @return Response
+      */
        public function urlError(): Response
+       {
+            return $this->redirect("notFound");
+       }
+
+     /**
+      * @return Response
+      *
+      * @throws LoaderError
+      * @throws RuntimeError
+      * @throws SyntaxError
+      */
+       public function notFound(): Response
         {
             return $this->render("404.html.twig");
         }

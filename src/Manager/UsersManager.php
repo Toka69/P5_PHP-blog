@@ -4,32 +4,15 @@
 namespace App\Manager;
 
 use App\Entity\User;
+use Lib\AbstractManager;
 use PDO;
 
 /**
  * Class UsersManager
  * @package App
  */
-class UsersManager
+class UsersManager extends AbstractManager
 {
-    protected PDO $db;
-
-    /**
-     * @param $db
-     */
-    public function __construct($db)
-    {
-        $this->setDb($db);
-    }
-
-    /**
-     * @param $db
-     */
-    private function setDb($db)
-    {
-        $this->db = $db;
-    }
-
     /**
      * @return int
      */
@@ -39,15 +22,20 @@ class UsersManager
     }
 
     /**
+     * @param string|null $order
+     *
      * @return array
      */
-    public function getList(): array
+    public function getList(?string $order=""): array
     {
         $getList = [];
+        if ($order === "admin")
+        {
+            $order = 'WHERE u.admin = 1';
+        }
         $request = $this->db->query(
-            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
-            u.logo, u.description, u.town, g.name 
-            FROM users u INNER JOIN gender g ON g.id = u.gender_id ORDER BY id'
+            "SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, u.valid, g.name 
+            FROM users u INNER JOIN gender g ON g.id = u.gender_id {$order} ORDER BY id"
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
@@ -58,13 +46,16 @@ class UsersManager
         return $getList;
     }
 
-    public function getUser($id): object
+    /**
+     * @param $id
+     * @return object|null
+     */
+    public function getUser($id): ?object
     {
         $getUser = [];
         $request = $this->db->query(
-            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.phone, u.email, u.password, u.street, u.address, u.postal_code as postalCode, 
-            u.logo, u.description, u.town, g.name 
-            FROM users u INNER JOIN gender g ON g.id = u.gender_id WHERE u.id= '.$id.' '
+            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, u.gender_id as genderId, u.valid 
+            FROM users u WHERE u.id= ' .$id.' '
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
@@ -72,7 +63,19 @@ class UsersManager
             $getUser = new User($data);
         }
 
-        return $getUser;
+        if(!empty($getUser))
+        {
+            return $getUser;
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGenders(){
+        return $this->db->query('SELECT id, name FROM gender')->fetchAll();
     }
 
     /**
@@ -84,34 +87,52 @@ class UsersManager
         return $this->db->query('SELECT id, password FROM users WHERE email = \''.$email.'\' ')->fetch();
     }
 
+    public function checkPseudo($pseudo)
+    {
+        return $this->db->query('SELECT pseudo FROM users WHERE pseudo = \''.$pseudo.'\' ')->fetch();
+    }
+
     /**
      * @param User $user
      */
     public function add(User $user)
     {
-        $request = $this->db->prepare('INSERT INTO users(admin, first_name, last_name, email, password, gender_id) 
-        VALUES(:admin, :first_name, :last_name, :email, :password, :gender_id)');
+        $request = $this->db->prepare('INSERT INTO users(first_name, last_name, email, password, pseudo, gender_id) 
+        VALUES(:first_name, :last_name, :email, :password, :pseudo, :gender_id)');
 
-        $request->bindValue(':admin', '0');
         $request->bindValue(':first_name', $user->getFirstName()); //PDO::PARAM ?
         $request->bindValue(':last_name', $user->getLastName());
         $request->bindValue(':email', $user->getEmail());
         $request->bindValue(':password', $user->getPassword());
+        $request->bindValue(':pseudo', $user->getPseudo());
         $request->bindValue(':gender_id', $user->getGenderId());
 
         $request->execute();
     }
 
     /**
-     * @param User $users
+     * @param User $user
      */
     public function update(User $user)
     {
+        $request = $this->db->prepare('UPDATE users SET admin = :admin, first_name = :first_name, last_name = :last_name, email = :email,
+                 password = :password, pseudo = :pseudo, gender_id = :gender_id, valid = :valid WHERE id = :id');
 
+        $request->bindValue(':admin', $user->getAdmin());
+        $request->bindValue(':first_name', $user->getFirstName());
+        $request->bindValue(':last_name', $user->getLastName());
+        $request->bindValue(':email', $user->getEmail());
+        $request->bindValue(':password', $user->getPassword());
+        $request->bindValue(':pseudo', $user->getPseudo());
+        $request->bindValue(':gender_id', $user->getGenderId());
+        $request->bindValue(':valid', $user->getValid());
+        $request->bindValue(':id', $user->getId());
+
+        $request->execute();
     }
 
     /**
-     * @param User $users
+     * @param User $user
      */
     public function delete(User $user)
     {

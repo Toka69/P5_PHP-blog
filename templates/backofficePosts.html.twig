@@ -9,6 +9,7 @@
 
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">Liste des articles</h6>
+                <a class="btn btn-primary mt-4" href="back-add-post" role="button">+ Ajouter</a>
             </div>
 
             <div class="card-body">
@@ -26,10 +27,10 @@
                         </thead>
                         <tbody>
                         {% for post in postsList %}
-                        <tr>
+                        <tr class="clickable-table-row" href='back-read-post?id={{ post.id }}'">
                                 <td>{{ post.title }}</td>
                                 <td>{{ post.leadParagraph }}</td>
-                                <td>{{ post.content }}</td>
+                                <td>{{ post.content|slice(0, 40) }} ...</td>
                                 <td>{{ post.createdDate }}</td>
                                 <td>{{ post.modifiedDate }}</td>
                                 <td>{{ post.user.firstName }} {{ post.user.lastName }}</td>
@@ -43,4 +44,17 @@
         </div>
 
     </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            $('#dataTable tr').click(function()
+                {
+                    var href = $(this).attr("href");
+                    window.location = href;
+                }
+            );
+        });
+    </script>
 {% endblock %}

@@ -1,99 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+    <head>
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
 
-    <title>SB Admin 2 - Register</title>
+        <title>SB Admin 2 - Register</title>
 
-    <!-- Custom fonts for this template-->
-    <link href="admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+        <!-- Custom fonts for this template-->
+        <link href="admin/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <!-- Custom styles for this template-->
-    <link href="admin/css/sb-admin-2.min.css" rel="stylesheet">
+        <!-- Custom styles for this template-->
+        <link href="admin/css/sb-admin-2.min.css" rel="stylesheet">
 
-</head>
+    </head>
 
-<body class="bg-gradient-primary">
+    <body class="bg-gradient-primary">
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-
-            <div class="card o-hidden border-0 shadow-lg my-5">
-                <div class="card-body p-0">
-                    <!-- Nested Row within Card Body -->
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="p-5">
-                                <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">Créer un compte!</h1>
-                                </div>
-                                <div class="text-center text-danger m-5">
-                                    {{ message }}
-                                </div>
-                                <form class="user" action="register" method="post">
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" name="firstName" id="firstName" placeholder="Prénom" required>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card o-hidden border-0 shadow-lg my-5">
+                        <div class="card-body p-0">
+                            <!-- Nested Row within Card Body -->
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="p-5">
+                                        <div class="text-center">
+                                            <h1 class="h4 text-gray-900 mb-4">Créer un compte!</h1>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control form-control-user" name="lastName" id="lastName" placeholder="Nom" required>
-                                        </div>
+                                        {% for error in errors %}
+                                            <div class="text-center text-danger m-5">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                        {%  if success == true %}
+                                            <div class="text-center text-success m-5">
+                                                {{ message }}
+                                            </div>
+                                            <a class="btn btn-primary btn-user btn-block" href="login" >Se connecter</a>
+                                        {% else %}
+                                            <div class="text-center text-danger m-5">
+                                                {{ message }}
+                                            </div>
+                                            <form class="user" action="register" method="post">
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="text" class="form-control form-control-user" name="firstName" id="firstName" placeholder="Prénom" value="{{ value.firstName }}">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="text" class="form-control form-control-user" name="lastName" id="lastName" placeholder="Nom" value="{{ value.lastName }}">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control form-control-user" name="pseudo" id="pseudo" placeholder="Pseudo *" value="{{ value.pseudo }}" required>
+                                                </div>
+                                                <div class="form-group">
+                                                        <label for="formControlSelectGender">Genre</label>
+                                                        <select class="form-control" id="formControlSelectGender" name="genderId">
+                                                            {% for gender in genders %}
+                                                                <option {% if gender.id == value.genderId %}selected{% endif %} value="{{ gender.id }}">
+                                                                    {{ gender.name }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="email" class="form-control form-control-user" name ="email" id="inputEmail" placeholder="Adresse email *" value="{{ value.email }}"required>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                                        <input type="password" class="form-control form-control-user" name="password" id="inputPassword" placeholder="Mot de passe *" value="{{ value.password }}" required>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <input type="password" class="form-control form-control-user" name="repeatPassword" id="inputRepeatPassword" placeholder="Répétez le mot de passe *" value="{{ value.repeatPassword }}"required>
+                                                    </div>
+                                                    <label class="mt-4" for="inputPassword">Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!</label>
+                                                </div>
+                                                <input type="submit" class="btn btn-primary btn-user btn-block" value="Envoyer" />
+                                            </form>
+                                            <hr>
+                                            <div class="text-center">
+                                                <a class="small" href="forgot-password">Mot de passe oublié?</a>
+                                            </div>
+                                            <div class="text-center">
+                                                <a class="small" href="login">Déjà un compte? Connectez-vous!</a>
+                                            </div>
+                                        {% endif %}
                                     </div>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control form-control-user" name ="email" id="inputEmail" placeholder="Adresse email" required>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="password" class="form-control form-control-user" name="password" id="inputPassword" placeholder="Mot de passe" required>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="password" class="form-control form-control-user" name="repeatPassword" id="inputRepeatPassword" placeholder="Répétez le mot de passe" required>
-                                        </div>
-                                        <label class="mt-4" for="inputPassword">Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!</label>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox small">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck" required>
-                                            <label class="custom-control-label" for="customCheck">J'ai lu et j'accepte les conditions</label>
-                                        </div>
-                                    </div>
-                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="Envoyer" />
-                                </form>
-                                <hr>
-                                <div class="text-center">
-                                    <a class="small" href="forgot-password">Mot de passe oublié?</a>
-                                </div>
-                                <div class="text-center">
-                                    <a class="small" href="login">Déjà un compte? Connectez-vous!</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
-</div>
 
-<!-- Bootstrap core JavaScript-->
-<script src="admin/vendor/jquery/jquery.min.js"></script>
-<script src="admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="admin/vendor/jquery/jquery.min.js"></script>
+        <script src="admin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="admin/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="admin/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="admin/js/sb-admin-2.min.js"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="admin/js/sb-admin-2.min.js"></script>
 
-</body>
+    </body>
 
 </html>

@@ -12,6 +12,10 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
+/**
+ * Class SecurityController
+ * @package App\Controller
+ */
 class SecurityController extends AbstractController
 {
     /**
@@ -21,7 +25,6 @@ class SecurityController extends AbstractController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-
     public function login(): Response
     {
         if(isset($_SESSION['user'])) {
@@ -29,10 +32,10 @@ class SecurityController extends AbstractController
         }
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
-            $manager = new UsersManager($this->PDOConnection());
-            $securPost = $this->securPost($_POST);
-            $request = $manager->checkCredentials($securPost['email']);
-            if ($request && password_verify($securPost['password'], $request['password'])) {
+            $manager = new UsersManager();
+            $secureRequestMethod = $this->secureRequestMethod($_POST);
+            $request = $manager->checkCredentials($secureRequestMethod['email']);
+            if ($request && password_verify($secureRequestMethod['password'], $request['password'])) {
                     $_SESSION['user'] = $manager->getUser($request['id']);
                     return $this->redirect('backoffice');
             }
@@ -53,53 +56,66 @@ class SecurityController extends AbstractController
      */
     public function register(): Response
     {
-        if(isset($_SESSION['user'])) {
+        if (isset($_SESSION['user'])) {
             return $this->redirect('backoffice');
         }
-        if($_SERVER["REQUEST_METHOD"] === "POST") {
-            $manager = new UsersManager($this->PDOConnection());
-            $securPost = $this->securPost($_POST);
-            var_dump($securPost);
-            if (filter_var($securPost['email'], FILTER_VALIDATE_EMAIL)) {
-                $request = $manager->checkCredentials($securPost['email']);
-                if (!$request) {
-                    if (preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $securPost['password'])) {
-                        if ($securPost['password'] === $securPost['repeatPassword']) {
-                            $user = new User([
-                                'firstName' => $securPost['firstName'],
-                                'lastName' => $securPost['lastName'],
-                                'email' => $securPost['email'],
-                                'password' => password_hash($securPost['password'], PASSWORD_BCRYPT, ["cost" => 12]),
-                                'genderId' => 4
-                            ]);
-                            $manager->add($user);
+        $errors =[];
+        $message = "";
+        $success = "";
+        $value = [];
 
-                            return $this->render("login.html.twig", [
-                                "message" => "Le compte a bien été créé. Vous pouvez vous connecter."
-                            ]);
-                        }
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $secureRequestMethod = $this->secureRequestMethod($_POST);
+            $checkCredentials = $this->usersManager->checkCredentials($secureRequestMethod['email']);
+            $checkPseudo = $this->usersManager->checkPseudo($secureRequestMethod["pseudo"]);
 
-                        return $this->render("register.html.twig", [
-                            "message" => "Les mots de passe ne correspondent pas!"
-                        ]);
-                    }
-
-                    return $this->render("register.html.twig", [
-                        "message" => "Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!"
-                    ]);
-                }
-
-                return $this->render("register.html.twig", [
-                    "message" => "Ce compte utilisateur existe déjà! Veuillez réessayer."
-                ]);
+            if (!filter_var($secureRequestMethod['email'], FILTER_VALIDATE_EMAIL)) {
+                $errors["email"] = "Le format de l'email est incorrect! Veuillez réessayer.";
+            }
+            if ($checkCredentials) {
+                $errors["accountExist"] = "Ce compte utilisateur existe déjà! Veuillez réessayer.";
+            }
+            if (!preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $secureRequestMethod['password'])) {
+                $errors["emailFormat"] = "Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!";
+            }
+            if ($secureRequestMethod["password"] !== $secureRequestMethod["repeatPassword"]) {
+                $errors["passwords"] = "Les mots de passe ne correspondent pas!";
+            }
+            if ($checkPseudo){
+                $errors["pseudo"] = "Pseudo déjà prit! Veuillez en saisir un autre.";
             }
 
-            return $this->render("register.html.twig", [
-                "message" => "Le format de l'email est incorrect! Veuillez réessayer."
-            ]);
+            if (count($errors) === 0) {
+                $user = new User([
+                    'firstName' => $secureRequestMethod['firstName'],
+                    'lastName' => $secureRequestMethod['lastName'],
+                    'pseudo' => $secureRequestMethod['pseudo'],
+                    'email' => $secureRequestMethod['email'],
+                    'password' => password_hash($secureRequestMethod['password'], PASSWORD_BCRYPT, ["cost" => 12]),
+                    'genderId' => $secureRequestMethod['genderId']
+                ]);
+                $this->usersManager->add($user);
+                $message = "Le compte a bien été créé. Vous pouvez vous connecter.";
+                $success = true;
+            }
+            $value = [
+                "firstName" => $secureRequestMethod["firstName"],
+                "lastName" => $secureRequestMethod["lastName"],
+                "pseudo" => $secureRequestMethod["pseudo"],
+                "genderId" => $secureRequestMethod["genderId"],
+                "email" => $secureRequestMethod["email"],
+                "password" => $secureRequestMethod["password"],
+                "repeatPassword" => $secureRequestMethod["repeatPassword"]
+            ];
         }
 
-        return $this->render("register.html.twig");
+        return $this->render("register.html.twig", [
+            "message" => $message,
+            "success" => $success,
+            "value" => $value,
+            "errors" => $errors,
+            "genders" => $this->usersManager->getGenders()
+        ]);
     }
 
     /**
@@ -116,22 +132,24 @@ class SecurityController extends AbstractController
         }
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
-            $manager = new UsersManager($this->PDOConnection());
-            $securPost = $this->securPost($_POST);
-            $request = $manager->checkCredentials($securPost['email']);
-            if (!$request){
-                return $this->render("forgot-password.html.twig", [
-                    "message" => 'Ce compte email n\'existe pas! Veuillez réesayer.'
-                ]);
-            }
-            else
-            {
+            $manager = new UsersManager();
+            $secureRequestMethod = $this->secureRequestMethod($_POST);
+            $request = $manager->checkCredentials($secureRequestMethod['email']);
+            if ($request) {
                 //send an email
             }
+
+            return $this->render("forgot-password.html.twig", [
+                "message" => "Vous allez recevoir un email!",
+                "success" => true
+            ]);
         }
         return $this->render("forgot-password.html.twig");
     }
 
+    /**
+     * @return Response
+     */
     public function logout(): Response
     {
         session_unset();

@@ -2,6 +2,11 @@
 
 namespace Lib;
 
+use App\Manager\CommentsManager;
+use App\Manager\PostsManager;
+use App\Manager\UsersManager;
+use PDO;
+use Psr\Log\InvalidArgumentException;
 use Twig\Environment;
 use Lib\Router\Router;
 use Twig\Error\LoaderError;
@@ -19,6 +24,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 abstract class AbstractController
 {
     private Router $router;
+    protected CommentsManager $commentsManager;
+    protected UsersManager $usersManager;
+    protected PostsManager $postsManager;
 
     /**
      * @param Router $router
@@ -26,6 +34,9 @@ abstract class AbstractController
     public function __construct(Router $router)
     {
         $this->router = $router;
+        $this->commentsManager = new CommentsManager();
+        $this->usersManager = new UsersManager();
+        $this->postsManager = new PostsManager();
     }
 
     /**
@@ -61,12 +72,19 @@ abstract class AbstractController
         return new Response($twig->render($view, $data));
     }
 
+    /**
+     * @return PDO
+     */
     public function PDOConnection()
     {
         return PDOSingleton::getInstance()->getPDO();
     }
 
-    public function test_input($data)
+    /**
+     * @param $data
+     * @return string
+     */
+    public function testInput($data)
     {
         $data = trim($data);
         $data = stripslashes($data);
@@ -75,14 +93,40 @@ abstract class AbstractController
         return $data;
     }
 
-    public function securPost($post): array
+    /**
+     * @param $form
+     * @return array
+     */
+    public function secureRequestMethod($form): array
     {
         $data = [];
-        foreach($post as $key => $value)
+        foreach($form as $key => $value)
         {
-            $data[$key] = $this->test_input($value);
+            $data[$key] = $this->testInput($value);
         }
 
         return $data;
+    }
+
+    public function errorResponse ($request, $status)
+    {
+        if(is_null($request))
+        {
+            switch ($status)
+            {
+                case 400 :
+                    throw new InvalidArgumentException('400 Bad request');
+                    break;
+                case 401 :
+                    throw new InvalidArgumentException('401 Unauthorized');
+                    break;
+                case 403 :
+                    throw new InvalidArgumentException('403 Forbidden');
+                    break;
+                case 404 :
+                    throw new InvalidArgumentException('404 Not Found');
+                    break;
+            }
+        }
     }
 }
