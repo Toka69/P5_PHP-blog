@@ -115,9 +115,9 @@ class CommentsManager extends AbstractManager
     public function getCommentsPost($id, ?int $valid = null): array
     {
         $getComments = [];
-        if ($valid !== null)
+        if ($valid == 1)
         {
-            $option = "AND c.valid = ".$valid."";
+            $option = "AND c.valid = ".$valid;
         }
         else
         {
@@ -125,7 +125,7 @@ class CommentsManager extends AbstractManager
         }
         $request = $this->db->query(
             "SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
-            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = '.$id.' '.$option.' "
+            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = ".$id." ".$option." "
         );
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
