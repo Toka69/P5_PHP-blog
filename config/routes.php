@@ -44,5 +44,6 @@ return [
     new Route("login", "/login", SecurityController::class, "login"),
     new Route("register", "/register", SecurityController::class, "register"),
     new Route("forgotPassword", "/forgot-password", SecurityController::class, "forgotPassword"),
-    new Route("logout", "/logout", SecurityController::class, "logout")
+    new Route("logout", "/logout", SecurityController::class, "logout"),
+    new Route("validAccount", "/valid-account", SecurityController::class, "validAccount")
 ];
