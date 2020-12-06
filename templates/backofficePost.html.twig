@@ -24,8 +24,8 @@
                     </div>
                 </fieldset>
                 {% if disabled == 'disabled' %}
-                    <a class="btn btn-primary" href="back-edit-post?id={{ post.id }}&edit" role="button">Editer</a>
-                    <a class="btn btn-primary" href="back-delete-post?id={{ post.id }}&edit" role="button">Supprimer</a>
+                    <a class="btn btn-primary" href="back-edit-post?id={{ post.id }}" role="button">Editer</a>
+                    <a class="btn btn-primary" href="back-delete-post?id={{ post.id }}" role="button">Supprimer</a>
                 {% else %}
                     <button type="submit" class="btn btn-primary">Valider</button>
                     <a class="btn btn-primary" href="back-read-post?id={{ post.id }}" role="button">Annuler</a>
@@ -35,4 +35,4 @@
         </div>
 
     </div>
-{% endblock
+{% endblock %}

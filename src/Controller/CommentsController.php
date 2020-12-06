@@ -51,18 +51,12 @@ class CommentsController extends BackofficeController
         if ($authorize) {
             $comment = $this->commentsManager->getComment($secureRequestMethod["id"]);
         }
-
         $this->errorResponse($comment, 400);
 
-        if ( $authorize && $comment )
-        {
-            return $this->render("backofficeComment.html.twig", [
-                "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
-                "disabled" => "disabled"
-            ]);
-        }
-
-        return $this->redirect("backofficeComments");
+        return $this->render("backofficeComment.html.twig", [
+            "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
+            "disabled" => "disabled"
+        ]);
     }
 
     /**
@@ -117,14 +111,11 @@ class CommentsController extends BackofficeController
             }
         }
 
-        if (isset($secureRequestMethod["edit"]) && $authorize)
-        {
-            return $this->render("backofficeComment.html.twig", [
-                "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
-                "errors" => $errors,
-                "disabled" => null
-            ]);
-        }
+        return $this->render("backofficeComment.html.twig", [
+            "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
+            "errors" => $errors,
+            "disabled" => null
+        ]);
     }
 
     /**
@@ -136,9 +127,10 @@ class CommentsController extends BackofficeController
     public function addComment(): Response
     {
         if (!isset($_SESSION["user"])){return $this->redirect("login");}
+        $errors = [];
+
         if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
-            $errors = [];
             if (!isset($_POST["message"]) || $_POST["message"] == "")
             {
                 $errors["message"]= "Veuillez écrire un message";
@@ -156,12 +148,10 @@ class CommentsController extends BackofficeController
 
                 return $this->redirect("posts");
             }
-
-            return $this->render("post.html.twig", [
-                "errors" => $errors
-            ]);
         }
 
-        return $this->redirect("posts");
+        return $this->render("post.html.twig", [
+            "errors" => $errors
+        ]);
     }
 }

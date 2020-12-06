@@ -25,7 +25,7 @@
                     {% endif %}
                 </fieldset>
             {% if disabled == 'disabled' %}
-                <a class="btn btn-primary" href="back-edit-comment?id={{ comment.id }}&edit" role="button">Editer</a>
+                <a class="btn btn-primary" href="back-edit-comment?id={{ comment.id }}" role="button">Editer</a>
             {% else %}
                 <button type="submit" class="btn btn-primary">Valider</button>
                 <a class="btn btn-primary" href="back-read-comment?id={{ comment.id }}" role="button">Annuler</a>
