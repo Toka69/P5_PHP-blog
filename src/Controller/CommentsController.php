@@ -145,6 +145,9 @@ class CommentsController extends BackofficeController
                 ];
                 $comment = new Comment($array);
                 $this->commentsManager->add($comment);
+                $this->sendEmail($_ENV["MAIL_NOTIFICATION"], "Nouveau commentaire",
+                    "Un nouveau commentaire a été posté. Connectez-vous pour le valider!
+                    http://".$_SERVER["HTTP_HOST"]."/back");
 
                 return $this->redirect("posts");
             }
