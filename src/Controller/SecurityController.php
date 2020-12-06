@@ -136,7 +136,12 @@ class SecurityController extends AbstractController
             $secureRequestMethod = $this->secureRequestMethod($_POST);
             $request = $manager->checkCredentials($secureRequestMethod['email']);
             if ($request) {
-                //send an email
+                $password = $this->generatePwd();
+                $this->sendEmail($secureRequestMethod['email'],'Nouveau mot de passe', 'Veuillez trouver ci-joint votre nouveau mot de passe '.$password.'');
+                $password = password_hash($password, PASSWORD_BCRYPT, ["cost" => 12]);
+                $user = $this->usersManager->getUser($request['id']);
+                $user->setPassword($password);
+                $this->usersManager->update($user);
             }
 
             return $this->render("forgot-password.html.twig", [
@@ -154,5 +159,23 @@ class SecurityController extends AbstractController
     {
         session_unset();
         return $this->redirect("login");
+    }
+
+    public function generatePwd()
+    {
+        $charList1 = '0123456789';
+        $charList2 = 'abcdefghijklmnopqrstuvwxyz';
+        $charList3 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $password = '';
+
+        $max1 = mb_strlen($charList1, '8bit') - 1;
+        $max2 = mb_strlen($charList2, '8bit') - 1;
+        $max3 = mb_strlen($charList3, '8bit') - 1;
+        for ($i = 0; $i < 3; $i++)
+        {
+            $password .= $charList1[random_int(0, $max1)].$charList2[random_int(0, $max2)].$charList3[random_int(0, $max3)];
+        }
+
+        return $password;
     }
 }
