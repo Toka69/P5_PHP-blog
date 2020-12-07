@@ -21,7 +21,6 @@ return [
     new Route("posts", "/posts", BlogController::class, "posts"),
     new Route("post", "/post", BlogController::class, "post"),
     // Backoffice
-    new Route("backofficeSettings", "/back-settings", BackofficeController::class, "backofficeSettings"),
     new Route("backoffice", "/back", BackofficeController::class, "backoffice"),
     // Users
     new Route("backofficeUsers", "/back-users", UsersController::class, "backofficeUsers"),
