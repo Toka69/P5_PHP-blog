@@ -27,7 +27,7 @@
                         </thead>
                         <tbody>
                         {% for post in postsList %}
-                        <tr class="clickable-table-row" href='back-read-post?id={{ post.id }}'">
+                        <tr class="clickable-table-row" href='back-read-post?id={{ post.id }}'>
                                 <td>{{ post.title }}</td>
                                 <td>{{ post.leadParagraph }}</td>
                                 <td>{{ post.content|slice(0, 40) }} ...</td>

@@ -20,14 +20,14 @@
         <div class="container col-md-8 pt-5">
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
+                        <a class="page-link" href="?page={{ currentPage - 1 }}" tabindex="-1" {% if currentPage == 1 %}aria-disabled="true"{% endif %}>Précèdent</a>
                     </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
+                    {% for i in 1..nbPages %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endfor %}
+                    <li class="page-item {% if currentPage == nbPages %}disabled{% endif %}">
+                        <a class="page-link" href="?page={{ currentPage + 1 }}" {% if currentPage == nbPages %}aria-disabled="true"{% endif %}>Suivant</a>
                     </li>
                 </ul>
             </nav>

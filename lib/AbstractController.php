@@ -147,4 +147,20 @@ abstract class AbstractController
 
         $mailer->send($message);
     }
+
+    public function getPostsListPagination($currentPage)
+    {
+        $nbPosts = $this->postsManager->count();
+        $perPage = 5;
+        $nbPages = (int)ceil($nbPosts / $perPage);
+        $first = ($currentPage * $perPage) - $perPage;
+        $posts = $this->postsManager->getListPagination($first, $perPage);
+
+        $array = [
+            "nbPages" => $nbPages,
+            "posts" => $posts
+        ];
+
+        return $array;
+    }
 }
