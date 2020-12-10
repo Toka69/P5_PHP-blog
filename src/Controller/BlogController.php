@@ -23,10 +23,23 @@ class BlogController extends AbstractController
      */
     public function posts(): Response
     {
-        $postsList = $this->postsManager->getList();
+        if (isset($_GET['page']) && !empty($_GET['page']))
+        {
+            $currentPage = (int) strip_tags($_GET['page']);
+        }
+        else
+        {
+            $currentPage = 1;
+        }
+
+        $pagination = $this->getPostsListPagination($currentPage);
+        $postsList = $pagination["posts"];
+        $nbPages = $pagination["nbPages"];
 
         return $this->render("posts.html.twig",[
-            "postsList" => $postsList
+            "postsList" => $postsList,
+            "nbPages" => $nbPages,
+            "currentPage" => $currentPage
         ]);
     }
 

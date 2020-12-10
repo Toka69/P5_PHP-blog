@@ -2,33 +2,35 @@
 
 {% block content %}
     <section>
-        <div class="container col-md-8 border">
-                <p>
-                    <div class="h1">{{ singlePost.title }}</div>
-                    <div class="h3">{{ singlePost.leadParagraph }}</div>
-                    <div class="border">{{ singlePost.content }}</div>
-                </p>
-                <p>
-                    <div align="right">Auteur : {{ singlePost.user.firstName }} {{ singlePost.user.lastName }}</div>
-                    <div align="right">Date de modification : {{ singlePost.modifiedDate }}</div>
-                </p>
+        <div class="container col-md-8 pt-5">
+            <div class="text-center p-5">
+                <h1>{{ singlePost.title }}</h1>
+                <h3>{{ singlePost.leadParagraph }}</h3>
+            </div>
+            <div>
+                <p class="card-text">{{ singlePost.content|nl2br }}</p>
+            </div>
+            <div class="border text-right mt-3 p-2 rounded bg-light">
+                <div>Auteur : {{ singlePost.user.firstName }} {{ singlePost.user.lastName }}</div>
+                <div>Date de modification : {{ singlePost.modifiedDate }}</div>
+            </div>
         </div>
-        <div class="container col-md-8">
-            Commentaires :
+        <div class="container col-md-8 mt-5">
+            <h6>Commentaires :</h6>
             {% if comments == null %}<div>Il n'y a pas encore de commentaires</div>{% endif %}
             {% for comment in comments %}
-                <div class="border p-2">
-                    <p>
-                        <div>{{ comment.message }}</div>
-                    </p>
-                    <p>
-                        <div align="right">Auteur : {{ comment.user.firstName }} {{ comment.user.lastName }}</div>
-                        <div align="right">Date: {{ comment.createdDate }}</div>
-                    </p>
+                <div class="card mt-1">
+                    <div class="card-body">
+                        <p class="card-text">{{ comment.message }}</p>
+                    </div>
+                    <div class="card-footer text-muted text-right">
+                        <div>Auteur : {{ comment.user.firstName }} {{ comment.user.lastName }}</div>
+                        <div>Date: {{ comment.createdDate }}</div>
+                    </div>
                 </div>
             {% endfor %}
         </div>
-        <div class="container col-md-8">
+        <div class="container col-md-8 mt-5">
             <form method="post" action="back-add-comment?postId={{ singlePost.id }}">
                 <fieldset {{ disabled }}>
                 <div class="form-group">

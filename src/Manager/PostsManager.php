@@ -127,4 +127,35 @@ class PostsManager extends AbstractManager
         $request->bindValue(':id', $post->getId());
         $request->execute();
     }
+
+    public function getListPagination($first, $perPage): array
+    {
+        $getList = [];
+        $request = $this->db->prepare(
+            'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
+            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC LIMIT :first, :perPage'
+        );
+
+        $request->bindValue(':first', $first, PDO::PARAM_INT);
+        $request->bindValue(':perPage', $perPage, PDO::PARAM_INT);
+
+        $request->execute();
+
+        while($data = $request->fetch(PDO::FETCH_ASSOC))
+        {
+            $array = [
+                'id' => $data['id'],
+                'title' => $data['title'],
+                'leadParagraph' => $data['leadParagraph'],
+                'content' => $data['content'],
+                'createdDate' => $data['createdDate'],
+                'modifiedDate' => $data['modifiedDate'],
+                'userId' => $data['userId'],
+                'user' => new User ($data)
+            ];
+            $getList[] = new Post($array);
+        }
+
+        return $getList;
+    }
 }
