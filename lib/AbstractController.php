@@ -7,6 +7,9 @@ use App\Manager\PostsManager;
 use App\Manager\UsersManager;
 use PDO;
 use Psr\Log\InvalidArgumentException;
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
 use Twig\Environment;
 use Lib\Router\Router;
 use Twig\Error\LoaderError;
@@ -128,5 +131,20 @@ abstract class AbstractController
                     break;
             }
         }
+    }
+
+    public function sendEmail ($to, $subject, $body)
+    {
+        $transport = (new Swift_SmtpTransport($_ENV['MAIL_SMTP'], $_ENV['MAIL_PORT'], $_ENV['MAIL_ENCRYPTION']))
+            ->setUsername($_ENV['MAIL_USER'])
+            ->setPassword($_ENV['MAIL_PASSWORD']);
+        $mailer = new Swift_Mailer($transport);
+
+        $message = (new Swift_Message($subject))
+            ->setFrom([$_ENV['MAIL_USER'] => 'Matthias LEROUX'])
+            ->setTo($to)
+            ->setBody($body);
+
+        $mailer->send($message);
     }
 }

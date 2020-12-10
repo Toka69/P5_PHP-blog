@@ -6,8 +6,18 @@
         <div class="card shadow mb-4 p-4">
 
             <form method="post">
+                <fieldset disabled>
+                    <div class="form-group"><label for="formControlTextareaContent">Article</label><textarea class="form-control" id="formControlTextareaContent" name="content" rows="3">{{ post.content }}</textarea></div>
+                </fieldset>
+            </form>
+
+        </div>
+
+        <div class="card shadow mb-4 p-4">
+
+            <form method="post">
                 <fieldset {{ disabled }}>
-                    <div class="form-group"><label for="formControlTextareaMessage">Message <span class="text-danger">{{ errors.message }}</span></label><textarea class="form-control" id="formControlTextareaMessage" name="message" rows="3" {% if comment.userId != session.user.id %}disabled{% endif %}>{{ comment.message }}</textarea></div>
+                    <div class="form-group"><label for="formControlTextareaMessage">Commentaire<span class="text-danger">{{ errors.message }}</span></label><textarea class="form-control" id="formControlTextareaMessage" name="message" rows="3" {% if comment.userId != session.user.id %}disabled{% endif %}>{{ comment.message }}</textarea></div>
                     <div class="form-group"><label for="inputCreatedDate">Date de création</label><input class="form-control" id="inputCreatedDate" name="createdDate" type="text" value="{{ comment.createdDate }}" disabled></div>
                     <div class="form-group"><label for="inputModifiedDate">Date de modification</label><input class="form-control" id="inputModifiedDate" name="modifiedDate" type="text" value="{{ comment.modifiedDate }}" disabled></div>
                     {% if session.user.valid == 1 %}

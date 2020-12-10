@@ -130,12 +130,4 @@ class UsersManager extends AbstractManager
 
         $request->execute();
     }
-
-    /**
-     * @param User $user
-     */
-    public function delete(User $user)
-    {
-
-    }
 }

@@ -54,7 +54,8 @@ class CommentsController extends BackofficeController
         $this->errorResponse($comment, 400);
 
         return $this->render("backofficeComment.html.twig", [
-            "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
+            "post" => $this->postsManager->getSinglePost($comment->getPostsId()),
+            "comment" => $comment,
             "disabled" => "disabled"
         ]);
     }
@@ -112,7 +113,8 @@ class CommentsController extends BackofficeController
         }
 
         return $this->render("backofficeComment.html.twig", [
-            "comment" => $this->commentsManager->getComment($secureRequestMethod["id"]),
+            "post" => $this->postsManager->getSinglePost($comment->getPostsId()),
+            "comment" => $comment,
             "errors" => $errors,
             "disabled" => null
         ]);
@@ -145,6 +147,9 @@ class CommentsController extends BackofficeController
                 ];
                 $comment = new Comment($array);
                 $this->commentsManager->add($comment);
+                $this->sendEmail($_ENV["MAIL_NOTIFICATION"], "Nouveau commentaire",
+                    "Un nouveau commentaire a été posté. Connectez-vous pour le valider!
+                    http://".$_SERVER["HTTP_HOST"]."/back");
 
                 return $this->redirect("posts");
             }

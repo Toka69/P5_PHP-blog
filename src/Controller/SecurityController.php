@@ -27,24 +27,39 @@ class SecurityController extends AbstractController
      */
     public function login(): Response
     {
-        if(isset($_SESSION['user'])) {
-            return $this->redirect('backoffice');
+        if(isset($_SESSION['user'])) {return $this->redirect('backoffice');}
+
+        $message = "";
+        $alert = "";
+        if(isset($_SESSION["message"])) {
+            $message = $_SESSION["message"];
+            $alert = $_SESSION["alert"];
+            unset($_SESSION["message"]);
+            unset($_SESSION["alert"]);
         }
+
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager();
             $secureRequestMethod = $this->secureRequestMethod($_POST);
             $request = $manager->checkCredentials($secureRequestMethod['email']);
-            if ($request && password_verify($secureRequestMethod['password'], $request['password'])) {
+            $authorize = $request && password_verify($secureRequestMethod['password'], $request['password']);
+
+            if ($authorize)
+            {
                     $_SESSION['user'] = $manager->getUser($request['id']);
+
                     return $this->redirect('backoffice');
             }
-            return $this->render("login.html.twig", [
-                "message" => "Erreur d'identifiants. Veuillez réessayer!"
-            ]);
+
+            $message = "Erreur d'identifiants. Veuillez réessayer!";
+            $alert = "danger";
         }
 
-        return $this->render("login.html.twig");
+        return $this->render("login.html.twig", [
+            "message" => $message,
+            "alert" => $alert
+        ]);
     }
 
     /**
@@ -56,9 +71,8 @@ class SecurityController extends AbstractController
      */
     public function register(): Response
     {
-        if (isset($_SESSION['user'])) {
-            return $this->redirect('backoffice');
-        }
+        if (isset($_SESSION['user'])) {return $this->redirect('backoffice');}
+
         $errors =[];
         $message = "";
         $success = "";
@@ -95,7 +109,11 @@ class SecurityController extends AbstractController
                     'genderId' => $secureRequestMethod['genderId']
                 ]);
                 $this->usersManager->add($user);
-                $message = "Le compte a bien été créé. Vous pouvez vous connecter.";
+                $this->sendEmail($user->getEmail(), "Validez votre compte",
+                    "Merci de vous être inscrit! Cliquez sur ce lien pour activer votre compte:
+                    http://".$_SERVER['HTTP_HOST']."/valid-account?email=".$user->getEmail()."                 
+                ");
+                $message = "Le compte a bien été créé. Vous allez recevoir un email pour valider votre compte.";
                 $success = true;
             }
             $value = [
@@ -127,16 +145,20 @@ class SecurityController extends AbstractController
      */
     public function forgotPassword(): Response
     {
-        if(isset($_SESSION['user'])) {
-            return $this->redirect('backoffice');
-        }
+        if(isset($_SESSION['user'])) {return $this->redirect('backoffice');}
+
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager();
             $secureRequestMethod = $this->secureRequestMethod($_POST);
             $request = $manager->checkCredentials($secureRequestMethod['email']);
             if ($request) {
-                //send an email
+                $password = $this->generatePwd();
+                $this->sendEmail($secureRequestMethod['email'],'Nouveau mot de passe', 'Veuillez trouver ci-joint votre nouveau mot de passe '.$password.'');
+                $password = password_hash($password, PASSWORD_BCRYPT, ["cost" => 12]);
+                $user = $this->usersManager->getUser($request['id']);
+                $user->setPassword($password);
+                $this->usersManager->update($user);
             }
 
             return $this->render("forgot-password.html.twig", [
@@ -154,5 +176,39 @@ class SecurityController extends AbstractController
     {
         session_unset();
         return $this->redirect("login");
+    }
+
+    public function generatePwd()
+    {
+        $charList1 = '0123456789';
+        $charList2 = 'abcdefghijklmnopqrstuvwxyz';
+        $charList3 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $password = '';
+
+        $max1 = mb_strlen($charList1, '8bit') - 1;
+        $max2 = mb_strlen($charList2, '8bit') - 1;
+        $max3 = mb_strlen($charList3, '8bit') - 1;
+        for ($i = 0; $i < 3; $i++)
+        {
+            $password .= $charList1[random_int(0, $max1)].$charList2[random_int(0, $max2)].$charList3[random_int(0, $max3)];
+        }
+
+        return $password;
+    }
+
+    public function validAccount()
+    {
+        if (isset($_GET['email']) && $user = $this->usersManager->checkCredentials($_GET['email']))
+        {
+            $user = $this->usersManager->getUser($user['id']);
+            $user->setValid(1);
+            $this->usersManager->update($user);
+            $_SESSION['message'] = "Compte validé! Vous pouvez vous connecter.";
+            $_SESSION['alert'] = "success";
+
+            return $this->redirect("login");
+        }
+
+        $this->errorResponse(null, 400);
     }
 }
