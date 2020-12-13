@@ -83,17 +83,12 @@ class UsersController extends BackofficeController
             ]);
         }
 
-        if (isset($_GET["edit"]))
-        {
             return $this->render("profile.html.twig", [
                 "user" => $this->usersManager->getUser($id),
                 "genders" => $this->usersManager->getGenders(),
                 "disabled" => null
             ]);
         }
-
-        return $this->redirect("backofficeUsers");
-    }
 
     /**
      * @return Response
