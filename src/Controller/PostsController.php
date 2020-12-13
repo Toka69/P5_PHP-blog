@@ -25,8 +25,6 @@ class PostsController extends BackofficeController
      */
     public function backofficePosts(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-
         return $this->render("backofficePosts.html.twig", [
             "postsList" => $this->postsManager->getList()
         ]);
@@ -41,20 +39,15 @@ class PostsController extends BackofficeController
      */
     public function editPost(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-        $authorize = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
-        $secureRequestMethod = $this->secureRequestMethod($_GET);
         $errors = [];
-        $post = null;
+        $post = $this->exist($_GET["id"], "post");
 
-        if($authorize)
+        if ($post == null)
         {
-            $post = $this->postsManager->getSinglePost($_GET["id"]);
+            return $this->errorResponse(400);
         }
 
-        $this->errorResponse($post, 400);
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && $authorize)
+        if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
             if (!isset($_POST["title"]) || $_POST["title"] == null)
             {
@@ -82,7 +75,7 @@ class PostsController extends BackofficeController
         }
 
         return $this->render("backofficePost.html.twig", [
-            "post" => $this->postsManager->getSinglePost($secureRequestMethod["id"]),
+            "post" => $this->postsManager->getPost($_GET["id"]),
             "errors" => $errors,
             "usersAdmin" => $this->usersManager->getList("admin"),
             "disabled" => null
@@ -98,19 +91,15 @@ class PostsController extends BackofficeController
      */
     public function readPost(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-        $authorize = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
-        $secureRequestMethod = $this->secureRequestMethod($_GET);
-        $post = null;
+        $post = $this->exist($_GET["id"], "post");
 
-        if ($authorize)
+        if ($post == null)
         {
-            $post = $this->postsManager->getSinglePost($secureRequestMethod["id"]);
+            return $this->errorResponse(400);
         }
-        $this->errorResponse($post, 400);
 
         return $this->render("backofficePost.html.twig", [
-            "post" => $this->postsManager->getSinglePost($secureRequestMethod["id"]),
+            "post" => $this->postsManager->getPost($_GET["id"]),
             "usersAdmin" => $this->usersManager->getList("admin"),
             "disabled" => "disabled"
         ]);
@@ -125,7 +114,13 @@ class PostsController extends BackofficeController
      */
     public function addPost(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
+        $post = $this->exist($_GET["id"], "post");
+
+        if ($post == null)
+        {
+            return $this->errorResponse(400);
+        }
+
         $errors = [];
 
         if ($_SERVER["REQUEST_METHOD"] == "POST")
@@ -169,8 +164,7 @@ class PostsController extends BackofficeController
      */
     public function deletePost(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-        $post = $this->postsManager->getSinglePost($_GET["id"]);
+        $post = $this->postsManager->getPost($_GET["id"]);
         $comments = $this->commentsManager->getCommentsPost($post->getId());
         foreach ($comments as $comment)
         {

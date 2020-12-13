@@ -24,8 +24,6 @@ class UsersController extends BackofficeController
      */
     public function backofficeUsers(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-
         return $this->render("backofficeUsers.html.twig", [
             "usersList" => $this->usersManager->getList()
         ]);
@@ -40,7 +38,6 @@ class UsersController extends BackofficeController
      */
     public function editUser(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $id = $_SESSION["user"]->getId();
         $secureRequestMethod = $this->secureRequestMethod($_POST);
 
@@ -106,8 +103,6 @@ class UsersController extends BackofficeController
      */
     public function readUser(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-
         if (isset($_SESSION["user"]) && ($_SESSION["user"]) != null)
         {
             return $this->render("profile.html.twig", [

@@ -6,7 +6,6 @@ use App\Manager\CommentsManager;
 use App\Manager\PostsManager;
 use App\Manager\UsersManager;
 use PDO;
-use Psr\Log\InvalidArgumentException;
 use Swift_Mailer;
 use Swift_Message;
 use Swift_SmtpTransport;
@@ -111,26 +110,10 @@ abstract class AbstractController
         return $data;
     }
 
-    public function errorResponse ($request, $status)
+    public function errorResponse ($status)
     {
-        if(is_null($request))
-        {
-            switch ($status)
-            {
-                case 400 :
-                    throw new InvalidArgumentException('400 Bad request');
-                    break;
-                case 401 :
-                    throw new InvalidArgumentException('401 Unauthorized');
-                    break;
-                case 403 :
-                    throw new InvalidArgumentException('403 Forbidden');
-                    break;
-                case 404 :
-                    throw new InvalidArgumentException('404 Not Found');
-                    break;
-            }
-        }
+        $_SESSION["codeHttp"] = $status;
+        return $this->redirect("index");
     }
 
     public function sendEmail ($to, $subject, $body)
@@ -162,5 +145,18 @@ abstract class AbstractController
         ];
 
         return $array;
+    }
+
+    public function exist($id, $var): ?object
+    {
+        $authorize = isset($id) && preg_match("#^[0-9]+$#", $id);
+        $exist = null;
+
+        if ($authorize)
+        {
+            $exist = $this->{$var."sManager"}->{"get".ucfirst($var)}($id);
+        }
+
+        return $exist;
     }
 }

@@ -23,7 +23,6 @@ class BackofficeController extends AbstractController
      */
     public function backoffice(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $id = $_SESSION['user']->getId();
         $admin = $_SESSION['user']->getAdmin();
 
@@ -43,8 +42,6 @@ class BackofficeController extends AbstractController
      */
     public function backofficeSettings(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-
         return $this->render("backofficeSettings.html.twig");
     }
 

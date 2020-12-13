@@ -25,7 +25,6 @@ class CommentsController extends BackofficeController
      */
     public function backofficeComments(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $id = $_SESSION['user']->getId();
         $admin = $_SESSION['user']->getAdmin();
 
@@ -43,18 +42,15 @@ class CommentsController extends BackofficeController
      */
     public function readComment(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-        $authorize = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
-        $secureRequestMethod = $this->secureRequestMethod($_GET);
-        $comment = null;
+        $comment = $this->exist($_GET["id"], "comment");
 
-        if ($authorize) {
-            $comment = $this->commentsManager->getComment($secureRequestMethod["id"]);
+        if ($comment == null)
+        {
+            return $this->errorResponse(400);
         }
-        $this->errorResponse($comment, 400);
 
         return $this->render("backofficeComment.html.twig", [
-            "post" => $this->postsManager->getSinglePost($comment->getPostsId()),
+            "post" => $this->postsManager->getPost($comment->getPostsId()),
             "comment" => $comment,
             "disabled" => "disabled"
         ]);
@@ -69,19 +65,16 @@ class CommentsController extends BackofficeController
      */
     public function editComment(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
-        $authorize = isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]);
-        $secureRequestMethod = $this->secureRequestMethod($_GET);
-        $errors = [];
-        $comment = null;
+        $comment = $this->exist($_GET["id"], "comment");
 
-        if ($authorize) {
-            $comment = $this->commentsManager->getComment($secureRequestMethod["id"]);
+        if ($comment == null)
+        {
+            return $this->errorResponse(400);
         }
 
-        $this->errorResponse($comment, 400);
+        $errors = [];
 
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && $authorize)
+        if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
             $owner = true;
             $message = "";
@@ -113,7 +106,7 @@ class CommentsController extends BackofficeController
         }
 
         return $this->render("backofficeComment.html.twig", [
-            "post" => $this->postsManager->getSinglePost($comment->getPostsId()),
+            "post" => $this->postsManager->getPost($comment->getPostsId()),
             "comment" => $comment,
             "errors" => $errors,
             "disabled" => null
@@ -128,7 +121,6 @@ class CommentsController extends BackofficeController
      */
     public function addComment(): Response
     {
-        if (!isset($_SESSION["user"])){return $this->redirect("login");}
         $errors = [];
 
         if ($_SERVER["REQUEST_METHOD"] == "POST")

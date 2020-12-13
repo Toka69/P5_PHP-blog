@@ -56,7 +56,7 @@ class Router
      * @param string $name
      * @return Route
      */
-    public function get(string $name): Route
+    public function get(string $name): ?Route
     {
         foreach ($this->routes as $route)
         {
@@ -64,6 +64,31 @@ class Router
             {
                 return $route;
             }
+            if ($route->getPath() === $name)
+            {
+                return $route;
+            }
         }
+
+        return null;
+    }
+
+    public function errorResponse(?object $route = null, ?object $session = null, ?int $codeHttp = null)
+    {
+        unset($_SESSION["codeHttp"]);
+
+        if (is_null($route))
+        {
+            throw new \Exception('Cet adresse n\'existe pas', 404);
+        }
+        if (is_null($session) && strpos($route->getName(), "backoffice") !== false)
+        {
+            throw new \Exception('Accès refusé. Nécessite une authentification.', 401);
+        }
+        if (isset($codeHttp))
+        {
+            throw new \Exception('Not Found', $codeHttp);
+        }
+        return null;
     }
 }
