@@ -83,11 +83,11 @@ class Router
         }
         if (is_null($session) && strpos($route->getName(), "backoffice") !== false)
         {
-            throw new \Exception('Accès refusé. Nécessite une authentification.', 401);
+            throw new \Exception('Accès refusé. Nécessite une authentification', 401);
         }
         if (isset($codeHttp))
         {
-            throw new \Exception('Not Found', $codeHttp);
+            throw new \Exception('Mauvaise requête', $codeHttp);
         }
         return null;
     }

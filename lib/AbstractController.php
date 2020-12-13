@@ -113,7 +113,7 @@ abstract class AbstractController
     public function errorResponse ($status)
     {
         $_SESSION["codeHttp"] = $status;
-        return $this->redirect("index");
+        return $this->redirect("notFound");
     }
 
     public function sendEmail ($to, $subject, $body)

@@ -43,9 +43,17 @@ class HomeController extends AbstractController
     */
     public function notFound(): Response
     {
-        return $this->render("404.html.twig", [
+        if (!isset($_SESSION["messageHttpResponseCode"]))
+        {
+            return $this->redirect("home");
+        }
+
+        $messageHttpResponseCode = $_SESSION["messageHttpResponseCode"];
+        unset ($_SESSION["messageHttpResponseCode"]);
+
+        return $this->render("notFound.html.twig", [
             "httpResponseCode" => http_response_code(),
-            "messageHttpResponseCode" => $_SESSION["messageHttpResponseCode"]
+            "messageHttpResponseCode" => $messageHttpResponseCode
         ]);
     }
 
