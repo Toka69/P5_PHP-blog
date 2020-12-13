@@ -40,11 +40,12 @@ class UsersController extends BackofficeController
     {
         $id = $_SESSION["user"]->getId();
         $secureRequestMethod = $this->secureRequestMethod($_POST);
+        $errors = [];
 
         if($_SERVER ["REQUEST_METHOD"] == "POST")
         {
             $user = $this->usersManager->getUser($id);
-            $errors = [];
+
             if (!isset($_POST["firstName"]) || $_POST["firstName"] == null)
             {
                 $errors["firstName"]= "Veuillez saisir votre prénom";
@@ -71,7 +72,7 @@ class UsersController extends BackofficeController
                 $this->usersManager->update($user);
                 $_SESSION['user'] = $this->usersManager->getUser($id);
 
-                return $this->redirect("profile");
+                return $this->redirect("backofficeProfile");
             }
 
             return $this->render("profile.html.twig", [
