@@ -36,7 +36,7 @@ class UsersController extends BackofficeController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function editUser(): Response
+    public function editProfile(): Response
     {
         $id = $_SESSION["user"]->getId();
         $secureRequestMethod = $this->secureRequestMethod($_POST);
@@ -54,10 +54,6 @@ class UsersController extends BackofficeController
             {
                 $errors["lastName"]= "Veuillez saisir votre nom";
             }
-            if (!isset($_POST["email"]) || $_POST["email"] == null)
-            {
-                $errors["email"]= "Veuillez saisir votre email";
-            }
             if ($_POST["password"] !== $_POST["repeatPassword"]) {
                 $errors["passwords"] = "Les mots de passe ne correspondent pas!";
             }
@@ -68,7 +64,7 @@ class UsersController extends BackofficeController
                 $user->setEmail($secureRequestMethod["email"]);
                 $user->setPseudo($secureRequestMethod["pseudo"]);
                 $user->setGenderId($secureRequestMethod["genderId"]);
-                $user->setPassword(password_hash($secureRequestMethod['password'], PASSWORD_BCRYPT, ["cost" => 12]),);
+                if ($_POST["password"] != ""){$user->setPassword(password_hash($secureRequestMethod['password'], PASSWORD_BCRYPT, ["cost" => 12]),);}
                 $this->usersManager->update($user);
                 $_SESSION['user'] = $this->usersManager->getUser($id);
 
@@ -97,18 +93,13 @@ class UsersController extends BackofficeController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function readUser(): Response
+    public function readProfile(): Response
     {
-        if (isset($_SESSION["user"]) && ($_SESSION["user"]) != null)
-        {
-            return $this->render("profile.html.twig", [
-                "user" => $_SESSION["user"],
-                "genders" => $this->usersManager->getGenders(),
-                "disabled" => "disabled"
-            ]);
-        }
-
-        return $this->redirect("backofficeUsers");
+        return $this->render("profile.html.twig", [
+            "user" => $_SESSION["user"],
+            "genders" => $this->usersManager->getGenders(),
+            "disabled" => "disabled"
+        ]);
     }
 
     /**
