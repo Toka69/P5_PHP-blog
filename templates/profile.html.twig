@@ -5,10 +5,10 @@
         <div class="card shadow mb-4 p-4">
             <form method="post" action ="">
                 <fieldset {{ disabled }}>
-                    <div class="form-group"><label for="inputFirstName">Prénom* {{ errors.firstName }}</label><input class="form-control" id="inputFirstName" name="firstName" type="text" value="{{ user.firstName }}" required></div>
-                    <div class="form-group"><label for="inputLastName">Nom* {{ errors.lastName }}</label><input class="form-control" id="inputLastName" name="lastName" type="text" value="{{ user.lastName}}" required></div>
+                    <div class="form-group"><label for="inputFirstName">Prénom</label><input class="form-control" id="inputFirstName" name="firstName" type="text" value="{{ user.firstName }}"></div>
+                    <div class="form-group"><label for="inputLastName">Nom</label><input class="form-control" id="inputLastName" name="lastName" type="text" value="{{ user.lastName}}"></div>
                     <div class="form-group"><label for="inputEmail">Email* {{ errors.email }}</label><input class="form-control" id="inputEmail" name="email" type="email" value="{{ user.email }}" required></div>
-                    <div class="form-group"><label for="inputPseudo">Pseudo</label><input class="form-control" id="inputPseudo" name="pseudo" type="text" value="{{ user.pseudo }}"></div>
+                    <div class="form-group"><label for="inputPseudo">Pseudo* {{ errors.pseudo }}</label><input class="form-control" id="inputPseudo" name="pseudo" type="text" value="{{ user.pseudo }}" required></div>
                     <div class="form-group">
                         <label for="formControlSelectGender">Genre</label>
                         <select class="form-control" id="formControlSelectGender" name="genderId">

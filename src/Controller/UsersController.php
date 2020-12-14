@@ -46,13 +46,13 @@ class UsersController extends BackofficeController
         {
             $user = $this->usersManager->getUser($id);
 
-            if (!isset($_POST["firstName"]) || $_POST["firstName"] == null)
+            if (!isset($_POST["email"]) || $_POST["email"] == "")
             {
-                $errors["firstName"]= "Veuillez saisir votre prénom";
+                $errors["email"]= "Veuillez saisir votre email";
             }
-            if (!isset($_POST["lastName"]) || $_POST["lastName"] == null)
+            if (!isset($_POST["pseudo"]) || $_POST["pseudo"] == "")
             {
-                $errors["lastName"]= "Veuillez saisir votre nom";
+                $errors["pseudo"]= "Veuillez saisir votre pseudo";
             }
             if ($_POST["password"] !== $_POST["repeatPassword"]) {
                 $errors["passwords"] = "Les mots de passe ne correspondent pas!";
@@ -128,7 +128,7 @@ class UsersController extends BackofficeController
     {
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
         {
-            $secureRequestMethod = $this->secureRequestMethod($_POST);
+            $secureRequestMethod = $this->secureRequestMethod($_GET);
             $user = $this->usersManager->getUser($secureRequestMethod["id"]);
             $user->setValid(0);
             if (isset($secureRequestMethod["valid"])) {

@@ -31,7 +31,8 @@ class SecurityController extends AbstractController
 
         $message = "";
         $alert = "";
-        if(isset($_SESSION["message"])) {
+        if(isset($_SESSION["message"]))
+        {
             $message = $_SESSION["message"];
             $alert = $_SESSION["alert"];
             unset($_SESSION["message"]);
@@ -40,20 +41,33 @@ class SecurityController extends AbstractController
 
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
-            $manager = new UsersManager();
+            $errors = [];
+            $user = null;
             $secureRequestMethod = $this->secureRequestMethod($_POST);
-            $request = $manager->checkCredentials($secureRequestMethod['email']);
+            $request = $this->usersManager->checkCredentials($secureRequestMethod['email']);
+            if ($request){$user = $this->usersManager->getUser($request['id']);}
             $authorize = $request && password_verify($secureRequestMethod['password'], $request['password']);
 
-            if ($authorize)
+            if (!$authorize)
             {
-                    $_SESSION['user'] = $manager->getUser($request['id']);
+                $errors["message"]= "Erreur d'identifiants. Veuillez réessayer!";
+                $errors["alert"] = "danger";
+            }
+            if ($user && $user->getValid() == 0)
+            {
+                $errors["message"]= "Votre compte a été désactivé. Veuillez contacter l'administrateur à l'adresse : ".$_ENV["MAIL_NOTIFICATION"]."";
+                $errors["alert"] = "danger";
+            }
+
+            if (count($errors) === 0)
+            {
+                    $_SESSION["user"] = $user;
 
                     return $this->redirect('backoffice');
             }
 
-            $message = "Erreur d'identifiants. Veuillez réessayer!";
-            $alert = "danger";
+            $message = $errors["message"];
+            $alert = $errors["alert"];
         }
 
         return $this->render("login.html.twig", [
@@ -201,14 +215,22 @@ class SecurityController extends AbstractController
         if (isset($_GET['email']) && $user = $this->usersManager->checkCredentials($_GET['email']))
         {
             $user = $this->usersManager->getUser($user['id']);
-            $user->setValid(1);
-            $this->usersManager->update($user);
-            $_SESSION['message'] = "Compte validé! Vous pouvez vous connecter.";
-            $_SESSION['alert'] = "success";
+            if ($user->getValidByMail() == 0)
+            {
+                $user->setValidByMail(1);
+                $user->setValid(1);
+                $this->usersManager->update($user);
+                $_SESSION['message'] = "Compte validé! Vous pouvez vous connecter.";
+                $_SESSION['alert'] = "success";
+            }
+            else{
+                $_SESSION['message'] = "Ce lien n'est plus valable.";
+                $_SESSION['alert'] = "danger";
+            }
 
             return $this->redirect("login");
         }
 
-        $this->errorResponse(null, 400);
+        $this->errorResponse(400);
     }
 }
