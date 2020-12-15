@@ -71,7 +71,8 @@ class SecurityController extends AbstractController
 
         return $this->render("login.html.twig", [
             "message" => $message,
-            "alert" => $alert
+            "alert" => $alert,
+            "csrfToken" => $_SESSION["csrfToken"]
         ]);
     }
 
@@ -91,7 +92,8 @@ class SecurityController extends AbstractController
         $success = "";
         $value = [];
 
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if ($_SERVER["REQUEST_METHOD"] === "POST")
+        {
             $checkCredentials = $this->usersManager->checkCredentials($_POST['email']);
             $checkPseudo = $this->usersManager->checkPseudo($_POST["pseudo"]);
 
@@ -144,7 +146,8 @@ class SecurityController extends AbstractController
             "success" => $success,
             "value" => $value,
             "errors" => $errors,
-            "genders" => $this->usersManager->getGenders()
+            "genders" => $this->usersManager->getGenders(),
+            "csrfToken" => $_SESSION["csrfToken"]
         ]);
     }
 
@@ -177,7 +180,9 @@ class SecurityController extends AbstractController
                 "success" => true
             ]);
         }
-        return $this->render("forgot-password.html.twig");
+        return $this->render("forgot-password.html.twig", [
+            "csrfToken" => $_SESSION["csrfToken"]
+        ]);
     }
 
     /**

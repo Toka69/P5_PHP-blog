@@ -109,7 +109,8 @@ class CommentsController extends BackofficeController
             "post" => $this->postsManager->getPost($comment->getPostsId()),
             "comment" => $comment,
             "errors" => $errors,
-            "disabled" => null
+            "disabled" => null,
+            "csrfToken" => $_SESSION["csrfToken"]
         ]);
     }
 

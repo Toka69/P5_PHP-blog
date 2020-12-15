@@ -74,7 +74,8 @@ class UsersController extends BackofficeController
             "user" => $user,
             "errors" => $errors,
             "genders" => $this->usersManager->getGenders(),
-            "disabled" => null
+            "disabled" => null,
+            "csrfToken" => $_SESSION["csrfToken"]
         ]);
         }
 
