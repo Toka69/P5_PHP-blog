@@ -71,8 +71,7 @@ class SecurityController extends AbstractController
 
         return $this->render("login.html.twig", [
             "message" => $message,
-            "alert" => $alert,
-            "csrfToken" => $_SESSION["csrfToken"]
+            "alert" => $alert
         ]);
     }
 
@@ -146,8 +145,7 @@ class SecurityController extends AbstractController
             "success" => $success,
             "value" => $value,
             "errors" => $errors,
-            "genders" => $this->usersManager->getGenders(),
-            "csrfToken" => $_SESSION["csrfToken"]
+            "genders" => $this->usersManager->getGenders()
         ]);
     }
 
@@ -180,9 +178,7 @@ class SecurityController extends AbstractController
                 "success" => true
             ]);
         }
-        return $this->render("forgot-password.html.twig", [
-            "csrfToken" => $_SESSION["csrfToken"]
-        ]);
+        return $this->render("forgot-password.html.twig");
     }
 
     /**

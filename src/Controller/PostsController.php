@@ -79,8 +79,7 @@ class PostsController extends BackofficeController
             "post" => $post,
             "errors" => $errors,
             "usersAdmin" => $this->usersManager->getList("admin"),
-            "disabled" => null,
-            "csrfToken" => $_SESSION["csrfToken"]
+            "disabled" => null
         ]);
     }
 
@@ -150,8 +149,7 @@ class PostsController extends BackofficeController
 
         return $this->render("add-post.html.twig", [
             "usersAdmin" => $this->usersManager->getList("admin"),
-            "errors" => $errors,
-            "csrfToken" => $_SESSION["csrfToken"]
+            "errors" => $errors
         ]);
     }
 

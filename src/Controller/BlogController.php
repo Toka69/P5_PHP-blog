@@ -69,8 +69,7 @@ class BlogController extends AbstractController
         return $this->render("post.html.twig",[
             "singlePost" => $singlePost,
             "comments" => $comments,
-            "disabled" => $disabled,
-            "csrfToken" => $_SESSION["csrfToken"]
+            "disabled" => $disabled
             ]);
     }
 }

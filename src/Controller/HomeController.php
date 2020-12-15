@@ -23,9 +23,7 @@ class HomeController extends AbstractController
     */
     public function home(): Response
     {
-        return $this->render("home.html.twig", [
-            "csrfToken" => $_SESSION["csrfToken"]
-        ]);
+        return $this->render("home.html.twig");
     }
 
     /**
