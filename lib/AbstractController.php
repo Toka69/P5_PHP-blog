@@ -77,7 +77,7 @@ abstract class AbstractController
     /**
      * @return PDO
      */
-    public function PDOConnection()
+    public function PDOConnection(): PDO
     {
         return PDOSingleton::getInstance()->getPDO();
     }
@@ -86,7 +86,7 @@ abstract class AbstractController
      * @param $data
      * @return string
      */
-    public function testInput($data)
+    public function testInput($data): string
     {
         $data = trim($data);
         $data = stripslashes($data);
@@ -110,7 +110,7 @@ abstract class AbstractController
         return $data;
     }
 
-    public function errorResponse ($status)
+    public function errorResponse($status): Response
     {
         $_SESSION["codeHttp"] = $status;
         return $this->redirect("notFound");
@@ -131,7 +131,7 @@ abstract class AbstractController
         $mailer->send($message);
     }
 
-    public function getPostsListPagination($currentPage)
+    public function getPostsListPagination($currentPage): array
     {
         $nbPosts = $this->postsManager->count();
         $perPage = 5;
@@ -139,12 +139,10 @@ abstract class AbstractController
         $first = ($currentPage * $perPage) - $perPage;
         $posts = $this->postsManager->getListPagination($first, $perPage);
 
-        $array = [
+        return [
             "nbPages" => $nbPages,
             "posts" => $posts
         ];
-
-        return $array;
     }
 
     public function exist($id, $var): ?object

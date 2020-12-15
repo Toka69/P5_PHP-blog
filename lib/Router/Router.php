@@ -2,6 +2,7 @@
 
 namespace Lib\Router;
 
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -79,15 +80,25 @@ class Router
 
         if (is_null($route))
         {
-            throw new \Exception('Cet adresse n\'existe pas', 404);
+            throw new Exception('Cet adresse n\'existe pas', 404);
         }
         if (is_null($session) && strpos($route->getName(), "backoffice") !== false)
         {
-            throw new \Exception('Accès refusé. Nécessite une authentification', 401);
+            throw new Exception('Accès refusé. Nécessite une authentification', 401);
         }
         if (isset($codeHttp))
         {
-            throw new \Exception('Mauvaise requête', $codeHttp);
+            switch($codeHttp)
+            {
+                case 400:
+                    throw new Exception('Mauvaise requête', $codeHttp);
+                case 401:
+                    throw new Exception('Accès refusé. Nécessite une authentification', $codeHttp);
+                case 404:
+                    throw new Exception('Cet adresse n\'existe pas', $codeHttp);
+                default:
+                    throw new Exception('Exception', $codeHttp);
+            }
         }
         return null;
     }

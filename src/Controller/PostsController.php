@@ -40,6 +40,7 @@ class PostsController extends BackofficeController
     public function editPost(): Response
     {
         $errors = [];
+
         $post = $this->exist($_GET["id"], "post");
 
         if ($post == null)
@@ -75,7 +76,7 @@ class PostsController extends BackofficeController
         }
 
         return $this->render("backofficePost.html.twig", [
-            "post" => $this->postsManager->getPost($_GET["id"]),
+            "post" => $post,
             "errors" => $errors,
             "usersAdmin" => $this->usersManager->getList("admin"),
             "disabled" => null
@@ -114,13 +115,6 @@ class PostsController extends BackofficeController
      */
     public function addPost(): Response
     {
-        $post = $this->exist($_GET["id"], "post");
-
-        if ($post == null)
-        {
-            return $this->errorResponse(400);
-        }
-
         $errors = [];
 
         if ($_SERVER["REQUEST_METHOD"] == "POST")
@@ -164,7 +158,7 @@ class PostsController extends BackofficeController
      */
     public function deletePost(): Response
     {
-        $post = $this->postsManager->getPost($_GET["id"]);
+        $post = $this->exist($_GET["id"], "post");
         $comments = $this->commentsManager->getCommentsPost($post->getId());
         foreach ($comments as $comment)
         {

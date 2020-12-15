@@ -39,13 +39,12 @@ class UsersController extends BackofficeController
     public function editProfile(): Response
     {
         $id = $_SESSION["user"]->getId();
+        $user = $this->usersManager->getUser($id);
         $secureRequestMethod = $this->secureRequestMethod($_POST);
         $errors = [];
 
         if($_SERVER ["REQUEST_METHOD"] == "POST")
         {
-            $user = $this->usersManager->getUser($id);
-
             if (!isset($_POST["email"]) || $_POST["email"] == "")
             {
                 $errors["email"]= "Veuillez saisir votre email";
@@ -70,20 +69,14 @@ class UsersController extends BackofficeController
 
                 return $this->redirect("backofficeProfile");
             }
-
-            return $this->render("profile.html.twig", [
-                "user" => $user,
-                "errors" => $errors,
-                "genders" => $this->usersManager->getGenders(),
-                "disabled" => null
-            ]);
         }
 
-            return $this->render("profile.html.twig", [
-                "user" => $this->usersManager->getUser($id),
-                "genders" => $this->usersManager->getGenders(),
-                "disabled" => null
-            ]);
+        return $this->render("profile.html.twig", [
+            "user" => $user,
+            "errors" => $errors,
+            "genders" => $this->usersManager->getGenders(),
+            "disabled" => null
+        ]);
         }
 
     /**
