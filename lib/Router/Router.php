@@ -82,6 +82,11 @@ class Router
         {
             throw new Exception('Cet adresse n\'existe pas', 404);
         }
+        if (isset($_POST["csrfToken"]) &&  $_POST["csrfToken"] !== $_SESSION["csrfToken"])
+        {
+            unset($_SESSION["csrfToken"]);
+            throw new Exception('Mauvaise requête', 400);
+        }
         if (is_null($session) && strpos($route->getName(), "backoffice") !== false)
         {
             throw new Exception('Accès refusé. Nécessite une authentification', 401);

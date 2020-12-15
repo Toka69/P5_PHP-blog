@@ -29,6 +29,7 @@ abstract class AbstractController
     protected CommentsManager $commentsManager;
     protected UsersManager $usersManager;
     protected PostsManager $postsManager;
+    protected $CsrfToken;
 
     /**
      * @param Router $router
@@ -39,6 +40,9 @@ abstract class AbstractController
         $this->commentsManager = new CommentsManager();
         $this->usersManager = new UsersManager();
         $this->postsManager = new PostsManager();
+        $this->CsrfToken = $this->generateCsrfToken();
+        $_GET = $this->secureRequestMethod($_GET);
+        $_POST = $this->secureRequestMethod($_POST);
     }
 
     /**
@@ -156,5 +160,15 @@ abstract class AbstractController
         }
 
         return $exist;
+    }
+
+    function generateCsrfToken() {
+        if(!isset($_SESSION["csrfToken"])) {
+            $token = bin2hex(random_bytes(64));
+            $_SESSION["csrfToken"] = $token;
+        } else {
+            $token = $_SESSION["csrfToken"];
+        }
+        return $token;
     }
 }

@@ -40,7 +40,6 @@ class UsersController extends BackofficeController
     {
         $id = $_SESSION["user"]->getId();
         $user = $this->usersManager->getUser($id);
-        $secureRequestMethod = $this->secureRequestMethod($_POST);
         $errors = [];
 
         if($_SERVER ["REQUEST_METHOD"] == "POST")
@@ -58,12 +57,12 @@ class UsersController extends BackofficeController
             }
             if (count($errors) === 0)
             {
-                $user->setFirstName($secureRequestMethod["firstName"]);
-                $user->setLastName($secureRequestMethod["lastName"]);
-                $user->setEmail($secureRequestMethod["email"]);
-                $user->setPseudo($secureRequestMethod["pseudo"]);
-                $user->setGenderId($secureRequestMethod["genderId"]);
-                if ($_POST["password"] != ""){$user->setPassword(password_hash($secureRequestMethod['password'], PASSWORD_BCRYPT, ["cost" => 12]),);}
+                $user->setFirstName($_POST["firstName"]);
+                $user->setLastName($_POST["lastName"]);
+                $user->setEmail($_POST["email"]);
+                $user->setPseudo($_POST["pseudo"]);
+                $user->setGenderId($_POST["genderId"]);
+                if ($_POST["password"] != ""){$user->setPassword(password_hash($_POST['password'], PASSWORD_BCRYPT, ["cost" => 12]));}
                 $this->usersManager->update($user);
                 $_SESSION['user'] = $this->usersManager->getUser($id);
 
@@ -121,10 +120,9 @@ class UsersController extends BackofficeController
     {
         if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
         {
-            $secureRequestMethod = $this->secureRequestMethod($_GET);
-            $user = $this->usersManager->getUser($secureRequestMethod["id"]);
+            $user = $this->usersManager->getUser($_GET["id"]);
             $user->setValid(0);
-            if (isset($secureRequestMethod["valid"])) {
+            if (isset($_GET["valid"])) {
                 $user->setValid(1);
             }
             $this->usersManager->update($user);

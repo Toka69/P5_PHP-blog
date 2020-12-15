@@ -43,10 +43,9 @@ class SecurityController extends AbstractController
         {
             $errors = [];
             $user = null;
-            $secureRequestMethod = $this->secureRequestMethod($_POST);
-            $request = $this->usersManager->checkCredentials($secureRequestMethod['email']);
+            $request = $this->usersManager->checkCredentials($_POST['email']);
             if ($request){$user = $this->usersManager->getUser($request['id']);}
-            $authorize = $request && password_verify($secureRequestMethod['password'], $request['password']);
+            $authorize = $request && password_verify($_POST['password'], $request['password']);
 
             if (!$authorize)
             {
@@ -93,20 +92,19 @@ class SecurityController extends AbstractController
         $value = [];
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $secureRequestMethod = $this->secureRequestMethod($_POST);
-            $checkCredentials = $this->usersManager->checkCredentials($secureRequestMethod['email']);
-            $checkPseudo = $this->usersManager->checkPseudo($secureRequestMethod["pseudo"]);
+            $checkCredentials = $this->usersManager->checkCredentials($_POST['email']);
+            $checkPseudo = $this->usersManager->checkPseudo($_POST["pseudo"]);
 
-            if (!filter_var($secureRequestMethod['email'], FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
                 $errors["email"] = "Le format de l'email est incorrect! Veuillez réessayer.";
             }
             if ($checkCredentials) {
                 $errors["accountExist"] = "Ce compte utilisateur existe déjà! Veuillez réessayer.";
             }
-            if (!preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $secureRequestMethod['password'])) {
+            if (!preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $_POST['password'])) {
                 $errors["emailFormat"] = "Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!";
             }
-            if ($secureRequestMethod["password"] !== $secureRequestMethod["repeatPassword"]) {
+            if ($_POST["password"] !== $_POST["repeatPassword"]) {
                 $errors["passwords"] = "Les mots de passe ne correspondent pas!";
             }
             if ($checkPseudo){
@@ -115,12 +113,12 @@ class SecurityController extends AbstractController
 
             if (count($errors) === 0) {
                 $user = new User([
-                    'firstName' => $secureRequestMethod['firstName'],
-                    'lastName' => $secureRequestMethod['lastName'],
-                    'pseudo' => $secureRequestMethod['pseudo'],
-                    'email' => $secureRequestMethod['email'],
-                    'password' => password_hash($secureRequestMethod['password'], PASSWORD_BCRYPT, ["cost" => 12]),
-                    'genderId' => $secureRequestMethod['genderId']
+                    'firstName' => $_POST['firstName'],
+                    'lastName' => $_POST['lastName'],
+                    'pseudo' => $_POST['pseudo'],
+                    'email' => $_POST['email'],
+                    'password' => password_hash($_POST['password'], PASSWORD_BCRYPT, ["cost" => 12]),
+                    'genderId' => $_POST['genderId']
                 ]);
                 $this->usersManager->add($user);
                 $this->sendEmail($user->getEmail(), "Validez votre compte",
@@ -131,13 +129,13 @@ class SecurityController extends AbstractController
                 $success = true;
             }
             $value = [
-                "firstName" => $secureRequestMethod["firstName"],
-                "lastName" => $secureRequestMethod["lastName"],
-                "pseudo" => $secureRequestMethod["pseudo"],
-                "genderId" => $secureRequestMethod["genderId"],
-                "email" => $secureRequestMethod["email"],
-                "password" => $secureRequestMethod["password"],
-                "repeatPassword" => $secureRequestMethod["repeatPassword"]
+                "firstName" => $_POST["firstName"],
+                "lastName" => $_POST["lastName"],
+                "pseudo" => $_POST["pseudo"],
+                "genderId" => $_POST["genderId"],
+                "email" => $_POST["email"],
+                "password" => $_POST["password"],
+                "repeatPassword" => $_POST["repeatPassword"]
             ];
         }
 
@@ -164,11 +162,10 @@ class SecurityController extends AbstractController
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager();
-            $secureRequestMethod = $this->secureRequestMethod($_POST);
-            $request = $manager->checkCredentials($secureRequestMethod['email']);
+            $request = $manager->checkCredentials($_POST['email']);
             if ($request) {
                 $password = $this->generatePwd();
-                $this->sendEmail($secureRequestMethod['email'],'Nouveau mot de passe', 'Veuillez trouver ci-joint votre nouveau mot de passe '.$password.'');
+                $this->sendEmail($_POST['email'],'Nouveau mot de passe', 'Veuillez trouver ci-joint votre nouveau mot de passe '.$password.'');
                 $password = password_hash($password, PASSWORD_BCRYPT, ["cost" => 12]);
                 $user = $this->usersManager->getUser($request['id']);
                 $user->setPassword($password);

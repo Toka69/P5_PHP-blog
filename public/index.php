@@ -28,14 +28,8 @@ if ($_ENV["APP_ENV"] === "dev" )
     ErrorHandler::register();
     DebugClassLoader::enable();
 }
-/*
-try{
-    //code erreur
-}
-catch(){
-    //
-}
-*/
+
+
 
 $kernel = new Kernel();
 
