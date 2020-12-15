@@ -36,6 +36,7 @@
                 <div class="form-group">
                     <textarea class="form-control" id="formControlTextareaMessage" {%  if disabled == "disabled" %}data-toggle="modal" data-target="#commentModal"{% endif %} name="message" rows="3" placeholder="Qu'en pensez vous?"></textarea>
                 </div>
+                <input type="hidden" name="csrfToken" value="{{ csrfToken }}" />
                 <button type="submit" class="btn btn-primary">Valider</button>
                 </fieldset>
             </form>

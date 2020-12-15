@@ -22,6 +22,7 @@
                             {% endfor %}
                         </select>
                     </div>
+                    <input type="hidden" name="csrfToken" value="{{ csrfToken }}" />
                 </fieldset>
                 {% if disabled == 'disabled' %}
                     <a class="btn btn-primary" href="back-edit-post?id={{ post.id }}" role="button">Editer</a>

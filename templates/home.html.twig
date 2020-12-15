@@ -46,6 +46,7 @@
                     <div class="form-group">
                         <textarea class="form-control" id="formControlTextareaMessage" name="message" rows="3" placeholder="Message"></textarea>
                     </div>
+                    <input type="hidden" name="csrfToken" value="{{ csrfToken }}" />
                     <button type="submit" class="btn btn-primary btn-xl">Valider</button>
             </form>
         </div>
