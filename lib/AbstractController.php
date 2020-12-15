@@ -5,6 +5,7 @@ namespace Lib;
 use App\Manager\CommentsManager;
 use App\Manager\PostsManager;
 use App\Manager\UsersManager;
+use Exception;
 use PDO;
 use Swift_Mailer;
 use Swift_Message;
@@ -33,6 +34,7 @@ abstract class AbstractController
 
     /**
      * @param Router $router
+     * @throws Exception
      */
     public function __construct(Router $router)
     {
@@ -88,6 +90,7 @@ abstract class AbstractController
 
     /**
      * @param $data
+     *
      * @return string
      */
     public function testInput($data): string
@@ -101,6 +104,7 @@ abstract class AbstractController
 
     /**
      * @param $form
+     *
      * @return array
      */
     public function secureRequestMethod($form): array
@@ -114,12 +118,21 @@ abstract class AbstractController
         return $data;
     }
 
+    /**
+     * @param $status
+     * @return Response
+     */
     public function errorResponse($status): Response
     {
         $_SESSION["codeHttp"] = $status;
         return $this->redirect("notFound");
     }
 
+    /**
+     * @param $to
+     * @param $subject
+     * @param $body
+     */
     public function sendEmail ($to, $subject, $body)
     {
         $transport = (new Swift_SmtpTransport($_ENV['MAIL_SMTP'], $_ENV['MAIL_PORT'], $_ENV['MAIL_ENCRYPTION']))
@@ -135,6 +148,11 @@ abstract class AbstractController
         $mailer->send($message);
     }
 
+    /**
+     * @param $currentPage
+     *
+     * @return array
+     */
     public function getPostsListPagination($currentPage): array
     {
         $nbPosts = $this->postsManager->count();
@@ -149,6 +167,12 @@ abstract class AbstractController
         ];
     }
 
+    /**
+     * @param $id
+     * @param $var
+     *
+     * @return object|null
+     */
     public function exist($id, $var): ?object
     {
         $authorize = isset($id) && preg_match("#^[0-9]+$#", $id);
@@ -162,7 +186,13 @@ abstract class AbstractController
         return $exist;
     }
 
-    function generateCsrfToken() {
+    /**
+     * @return mixed|string
+     *
+     * @throws Exception
+     */
+    function generateCsrfToken(): string
+    {
         if(!isset($_SESSION["csrfToken"])) {
             $token = bin2hex(random_bytes(64));
             $_SESSION["csrfToken"] = $token;

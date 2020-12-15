@@ -29,8 +29,6 @@ if ($_ENV["APP_ENV"] === "dev" )
     DebugClassLoader::enable();
 }
 
-
-
 $kernel = new Kernel();
 
 $response = $kernel->run();

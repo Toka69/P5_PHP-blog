@@ -5,6 +5,7 @@ namespace App\Controller;
 
 
 use App\Entity\User;
+use Lib\Router\Router;
 use App\Manager\UsersManager;
 use Lib\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,6 +62,8 @@ class SecurityController extends AbstractController
             if (count($errors) === 0)
             {
                     $_SESSION["user"] = $user;
+                    $router = new Router();
+                    $_SESSION['ip'] = $router->ip();
 
                     return $this->redirect('backoffice');
             }
@@ -190,7 +193,7 @@ class SecurityController extends AbstractController
         return $this->redirect("login");
     }
 
-    public function generatePwd()
+    public function generatePwd(): string
     {
         $charList1 = '0123456789';
         $charList2 = 'abcdefghijklmnopqrstuvwxyz';
@@ -208,7 +211,7 @@ class SecurityController extends AbstractController
         return $password;
     }
 
-    public function validAccount()
+    public function validAccount(): Response
     {
         if (isset($_GET['email']) && $user = $this->usersManager->checkCredentials($_GET['email']))
         {
@@ -229,6 +232,6 @@ class SecurityController extends AbstractController
             return $this->redirect("login");
         }
 
-        $this->errorResponse(400);
+        return $this->errorResponse(400);
     }
 }

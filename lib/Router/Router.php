@@ -74,6 +74,15 @@ class Router
         return null;
     }
 
+    /**
+     * @param object|null $route
+     * @param object|null $session
+     * @param int|null $codeHttp
+     *
+     * @return null
+     *
+     * @throws Exception
+     */
     public function errorResponse(?object $route = null, ?object $session = null, ?int $codeHttp = null)
     {
         unset($_SESSION["codeHttp"]);
@@ -87,7 +96,7 @@ class Router
             unset($_SESSION["csrfToken"]);
             throw new Exception('Mauvaise requête', 400);
         }
-        if (is_null($session) && strpos($route->getName(), "backoffice") !== false)
+        if (is_null($session) && strpos($route->getName(), "backoffice") !== false || $_SESSION["ip"] != $this->ip())
         {
             throw new Exception('Accès refusé. Nécessite une authentification', 401);
         }
@@ -106,5 +115,13 @@ class Router
             }
         }
         return null;
+    }
+
+    public function ip(): string
+    {
+        $ip = $_SERVER["REMOTE_ADDR"];
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) { $ip=$ip.'_'.$_SERVER['HTTP_X_FORWARDED_FOR']; }
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) { $ip=$ip.'_'.$_SERVER['HTTP_CLIENT_IP']; }
+        return $ip;
     }
 }
