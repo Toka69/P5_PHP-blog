@@ -33,6 +33,7 @@
                         </select>
                     </div>
                     {% endif %}
+                    <input type="hidden" name="csrfToken" value="{{ session.csrfToken }}" />
                 </fieldset>
             {% if disabled == 'disabled' %}
                 <a class="btn btn-primary" href="back-edit-comment?id={{ comment.id }}" role="button">Editer</a>

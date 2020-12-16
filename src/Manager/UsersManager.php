@@ -54,7 +54,7 @@ class UsersManager extends AbstractManager
     {
         $getUser = [];
         $request = $this->db->query(
-            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, u.gender_id as genderId, u.valid 
+            'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, u.gender_id as genderId, u.valid, u.valid_by_mail as validByMail 
             FROM users u WHERE u.id= ' .$id.' '
         );
 
@@ -74,7 +74,8 @@ class UsersManager extends AbstractManager
     /**
      * @return array
      */
-    public function getGenders(){
+    public function getGenders()
+    {
         return $this->db->query('SELECT id, name FROM gender')->fetchAll();
     }
 
@@ -116,7 +117,7 @@ class UsersManager extends AbstractManager
     public function update(User $user)
     {
         $request = $this->db->prepare('UPDATE users SET admin = :admin, first_name = :first_name, last_name = :last_name, email = :email,
-                 password = :password, pseudo = :pseudo, gender_id = :gender_id, valid = :valid WHERE id = :id');
+                 password = :password, pseudo = :pseudo, gender_id = :gender_id, valid = :valid, valid_by_mail = :validByMail WHERE id = :id');
 
         $request->bindValue(':admin', $user->getAdmin());
         $request->bindValue(':first_name', $user->getFirstName());
@@ -126,6 +127,7 @@ class UsersManager extends AbstractManager
         $request->bindValue(':pseudo', $user->getPseudo());
         $request->bindValue(':gender_id', $user->getGenderId());
         $request->bindValue(':valid', $user->getValid());
+        $request->bindValue(':validByMail', $user->getValidByMail());
         $request->bindValue(':id', $user->getId());
 
         $request->execute();

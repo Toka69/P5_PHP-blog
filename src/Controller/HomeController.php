@@ -28,14 +28,6 @@ class HomeController extends AbstractController
 
     /**
     * @return Response
-    */
-    public function urlError(): Response
-    {
-        return $this->redirect("notFound");
-    }
-
-    /**
-    * @return Response
     *
     * @throws LoaderError
     * @throws RuntimeError
@@ -43,20 +35,31 @@ class HomeController extends AbstractController
     */
     public function notFound(): Response
     {
-        return $this->render("404.html.twig");
+        if (!isset($_SESSION["messageHttpResponseCode"]))
+        {
+            return $this->errorResponse(400);
+        }
+
+        $messageHttpResponseCode = $_SESSION["messageHttpResponseCode"];
+        unset ($_SESSION["messageHttpResponseCode"]);
+
+        return $this->render("notFound.html.twig", [
+            "httpResponseCode" => http_response_code(),
+            "messageHttpResponseCode" => $messageHttpResponseCode
+        ]);
     }
 
-    public function contact(){
+    public function contact(): Response
+    {
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
-         $secureRequestMethod = $this->secureRequestMethod($_POST);
          $this->sendEmail($_ENV['MAIL_NOTIFICATION'], 'Nouvelle demande de contact depuis le site',
 
-'Demande de '.$secureRequestMethod['name'].'
+'Demande de '.$_POST['name'].'
              
-'.$secureRequestMethod['message'].'
+'.$_POST['message'].'
 
-'.$secureRequestMethod['email'].'            
+'.$_POST['email'].'            
             
             ');
         }

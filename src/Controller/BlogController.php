@@ -52,7 +52,14 @@ class BlogController extends AbstractController
      */
     public function post(): Response
     {
-        $singlePost = $this->postsManager->getSinglePost($_GET['id']);
+        $post = $this->exist($_GET["id"], "post");
+
+        if ($post == null)
+        {
+            return $this->errorResponse(400);
+        }
+
+        $singlePost = $this->postsManager->getPost($_GET['id']);
         $comments = $this->commentsManager->getCommentsPost($_GET['id'], 1);
         $disabled = "";
         if (!isset($_SESSION["user"])){

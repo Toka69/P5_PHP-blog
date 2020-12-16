@@ -55,7 +55,7 @@ class PostsManager extends AbstractManager
      *
      * @return object|null
      */
-    public function getSinglePost($id): ?object
+    public function getPost($id): ?object
     {
         $singlePost = [];
         $request = $this->db->query(
