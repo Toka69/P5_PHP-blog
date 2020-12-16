@@ -24,17 +24,17 @@ return [
     // Backoffice
     new Route("backoffice", "/back", BackofficeController::class, "backoffice"),
     // Users
-    new Route("backofficeUsers", "/back-users", UsersController::class, "backofficeUsers"),
+    new Route("backofficeAdminUsers", "/back-users", UsersController::class, "backofficeAdminUsers"),
     new Route("backofficeProfile", "/profile", UsersController::class, "readProfile"),
     new Route("backofficeProfileEdit", "/profile-edit", UsersController::class, "editProfile"),
-    new Route("backofficeSelectAdmin", "/select-admin", UsersController::class, "selectAdmin"),
-    new Route("backofficeValidUser", "/valid-user", UsersController::class, "validUser"),
+    new Route("backofficeAdminSelectAdmin", "/select-admin", UsersController::class, "selectAdmin"),
+    new Route("backofficeAdminValidUser", "/valid-user", UsersController::class, "validUser"),
     // Posts
-    new Route("backofficeReadPost", "/back-read-post", PostsController::class, "readPost"),
-    new Route("backofficeEditPost", "/back-edit-post", PostsController::class, "editPost"),
-    new Route("backofficeDeletePost", "/back-delete-post", PostsController::class, "deletePost"),
-    new Route("backofficeAddPost", "/back-add-post", PostsController::class, "addPost"),
-    new Route("backofficePosts", "/back-posts", PostsController::class, "backofficePosts"),
+    new Route("backofficeAdminReadPost", "/back-read-post", PostsController::class, "readPost"),
+    new Route("backofficeAdminEditPost", "/back-edit-post", PostsController::class, "editPost"),
+    new Route("backofficeAdminDeletePost", "/back-delete-post", PostsController::class, "deletePost"),
+    new Route("backofficeAdminAddPost", "/back-add-post", PostsController::class, "addPost"),
+    new Route("backofficeAdminPosts", "/back-posts", PostsController::class, "backofficePosts"),
     // Comments
     new Route("backofficeReadComment", "/back-read-comment", CommentsController::class, "readComment"),
     new Route("backofficeEditComment", "/back-edit-comment", CommentsController::class, "editComment"),

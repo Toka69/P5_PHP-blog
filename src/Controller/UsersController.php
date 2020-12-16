@@ -22,7 +22,7 @@ class UsersController extends BackofficeController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function backofficeUsers(): Response
+    public function backofficeAdminUsers(): Response
     {
         return $this->render("backofficeUsers.html.twig", [
             "usersList" => $this->usersManager->getList()
