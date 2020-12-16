@@ -34,7 +34,7 @@
             <form method="post" action="back-add-comment?postId={{ singlePost.id }}">
                 <fieldset {{ disabled }}>
                 <div class="form-group">
-                    <textarea class="form-control" id="formControlTextareaMessage" {%  if disabled == "disabled" %}data-toggle="modal" data-target="#commentModal"{% endif %} name="message" rows="3" placeholder="Qu'en pensez vous?"></textarea>
+                    <textarea class="form-control" id="formControlTextareaMessage" {%  if disabled == "disabled" %}data-toggle="modal" data-target="#commentModal"{% endif %} name="message" rows="3" placeholder="Qu'en pensez vous?" required></textarea>
                 </div>
                 <input type="hidden" name="csrfToken" value="{{ session.csrfToken }}" />
                 <button type="submit" class="btn btn-primary">Valider</button>

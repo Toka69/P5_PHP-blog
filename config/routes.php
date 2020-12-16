@@ -20,6 +20,7 @@ return [
     // Blog
     new Route("posts", "/posts", BlogController::class, "posts"),
     new Route("post", "/post", BlogController::class, "post"),
+    new Route("postConfirm", "/post-confirm", BlogController::class, "postConfirm"),
     // Backoffice
     new Route("backoffice", "/back", BackofficeController::class, "backoffice"),
     // Users

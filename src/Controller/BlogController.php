@@ -72,4 +72,16 @@ class BlogController extends AbstractController
             "disabled" => $disabled
             ]);
     }
+
+    /**
+     * @return Response
+     *
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function postConfirm(): Response
+    {
+        return $this->render("postConfirm.html.twig");
+    }
 }
