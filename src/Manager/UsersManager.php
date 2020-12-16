@@ -53,10 +53,11 @@ class UsersManager extends AbstractManager
     public function getUser($id): ?object
     {
         $getUser = [];
-        $request = $this->db->query(
+        $request = $this->db->prepare(
             'SELECT u.id, u.admin, u.first_name as firstName, u.last_name as lastName, u.email, u.password, u.pseudo, u.gender_id as genderId, u.valid, u.valid_by_mail as validByMail 
-            FROM users u WHERE u.id= ' .$id.' '
+            FROM users u WHERE u.id= ? '
         );
+        $request->execute(array($id));
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
         {
@@ -85,12 +86,20 @@ class UsersManager extends AbstractManager
      */
     public function checkCredentials($email)
     {
-        return $this->db->query('SELECT id, password FROM users WHERE email = \''.$email.'\' ')->fetch();
+        $request = $this->db->prepare('SELECT id, password FROM users WHERE email = ?');
+        $request->execute(array($email));
+        return $request->fetch();
     }
 
+    /**
+     * @param $pseudo
+     * @return mixed
+     */
     public function checkPseudo($pseudo)
     {
-        return $this->db->query('SELECT pseudo FROM users WHERE pseudo = \''.$pseudo.'\' ')->fetch();
+        $request = $this->db->prepare('SELECT pseudo FROM users WHERE pseudo = ? ');
+        $request->execute(array($pseudo));
+        return $request->fetch();
     }
 
     /**

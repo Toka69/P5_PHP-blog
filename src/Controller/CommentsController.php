@@ -125,11 +125,6 @@ class CommentsController extends BackofficeController
 
         if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
-            if (!isset($_POST["message"]) || $_POST["message"] == "")
-            {
-                $errors["message"]= "Veuillez écrire un message";
-            }
-
             if (count($errors) === 0)
             {
                 $array = [
@@ -143,12 +138,11 @@ class CommentsController extends BackofficeController
                     "Un nouveau commentaire a été posté. Connectez-vous pour le valider!
                     http://".$_SERVER["HTTP_HOST"]."/back");
 
-                return $this->redirect("posts");
+                //return $this->render("postConfirm.html.twig");
+                return $this->redirect("postConfirm");
             }
         }
 
-        return $this->render("post.html.twig", [
-            "errors" => $errors
-        ]);
+        return $this->redirect("posts");
     }
 }
