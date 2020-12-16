@@ -131,7 +131,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `admin`, `first_name`, `last_name`, `email`, `password`, `pseudo`, `gender_id`, `valid`, `valid_by_mail`) VALUES
-(27, 1, 'Matthias', 'LEROUX', 'matthiasleroux@laposte.net', '$2y$12$18CDf9z/HelChnJZ3CwoLeb15z2UfNULBWjUQa0CwM.4r7F8fqlwW', 'Tokashi381', 3, 1, 0),
+(27, 1, 'John', 'Boss', 'john.boss@example.com', '$2y$12$18CDf9z/HelChnJZ3CwoLeb15z2UfNULBWjUQa0CwM.4r7F8fqlwW', 'John86', 3, 1, 0),
 (36, 0, 'Eddie', 'Ruiz', 'eddie.ruiz@example.com', '$2y$12$JJdheZwfxsMYgvlghtfudOZ59g7dyn0o.zf3dR6l4MJW9HQpO.6Ya', 'Eddie45', 3, 1, 0),
 (37, 0, 'Billie', 'Miller', 'billie.miller@example.com', '$2y$12$rklBjR4olizw191UFu3.6ewPjYP/wq/gccsto3UR0/wFJInqYfBUi', 'Billie56', 2, 1, 0);
 
