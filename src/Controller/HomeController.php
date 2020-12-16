@@ -28,14 +28,6 @@ class HomeController extends AbstractController
 
     /**
     * @return Response
-    */
-    public function urlError(): Response
-    {
-        return $this->redirect("notFound");
-    }
-
-    /**
-    * @return Response
     *
     * @throws LoaderError
     * @throws RuntimeError
@@ -45,7 +37,7 @@ class HomeController extends AbstractController
     {
         if (!isset($_SESSION["messageHttpResponseCode"]))
         {
-            return $this->redirect("home");
+            return $this->errorResponse(400);
         }
 
         $messageHttpResponseCode = $_SESSION["messageHttpResponseCode"];
@@ -57,17 +49,17 @@ class HomeController extends AbstractController
         ]);
     }
 
-    public function contact(){
+    public function contact(): Response
+    {
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
-         $secureRequestMethod = $this->secureRequestMethod($_POST);
          $this->sendEmail($_ENV['MAIL_NOTIFICATION'], 'Nouvelle demande de contact depuis le site',
 
-'Demande de '.$secureRequestMethod['name'].'
+'Demande de '.$_POST['name'].'
              
-'.$secureRequestMethod['message'].'
+'.$_POST['message'].'
 
-'.$secureRequestMethod['email'].'            
+'.$_POST['email'].'            
             
             ');
         }

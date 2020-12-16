@@ -12,7 +12,6 @@ class PDOSingleton
 {
     /**
      * @var PDO
-     * @var
      */
     private PDO $pdo;
     private static $instance;
@@ -25,7 +24,7 @@ class PDOSingleton
     /**
      * @return PDOSingleton
      */
-    public static function getInstance()
+    public static function getInstance(): PDOSingleton
     {
         if (is_null(self::$instance))
         {
@@ -37,7 +36,8 @@ class PDOSingleton
     /**
      * @return PDO
      */
-    public function getPDO(){
+    public function getPDO(): PDO
+    {
         return $this->pdo;
     }
 }

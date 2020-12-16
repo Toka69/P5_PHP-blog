@@ -15,7 +15,6 @@ return [
     // Home
     new Route("index", "/", HomeController::class, "home"),
     new Route("home", "/home", HomeController::class, "home"),
-    new Route("urlError", "/url-error", HomeController::class, "urlError"),
     new Route("notFound", "/notFound", HomeController::class, "notFound"),
     new Route("contact", "/contact", HomeController::class, "contact"),
     // Blog
@@ -25,8 +24,8 @@ return [
     new Route("backoffice", "/back", BackofficeController::class, "backoffice"),
     // Users
     new Route("backofficeUsers", "/back-users", UsersController::class, "backofficeUsers"),
-    new Route("backofficeProfile", "/profile", UsersController::class, "readUser"),
-    new Route("backofficeProfileEdit", "/profile-edit", UsersController::class, "editUser"),
+    new Route("backofficeProfile", "/profile", UsersController::class, "readProfile"),
+    new Route("backofficeProfileEdit", "/profile-edit", UsersController::class, "editProfile"),
     new Route("backofficeSelectAdmin", "/select-admin", UsersController::class, "selectAdmin"),
     new Route("backofficeValidUser", "/valid-user", UsersController::class, "validUser"),
     // Posts

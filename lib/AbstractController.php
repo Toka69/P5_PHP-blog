@@ -5,6 +5,7 @@ namespace Lib;
 use App\Manager\CommentsManager;
 use App\Manager\PostsManager;
 use App\Manager\UsersManager;
+use Exception;
 use PDO;
 use Swift_Mailer;
 use Swift_Message;
@@ -29,9 +30,11 @@ abstract class AbstractController
     protected CommentsManager $commentsManager;
     protected UsersManager $usersManager;
     protected PostsManager $postsManager;
+    protected $CsrfToken;
 
     /**
      * @param Router $router
+     * @throws Exception
      */
     public function __construct(Router $router)
     {
@@ -39,6 +42,9 @@ abstract class AbstractController
         $this->commentsManager = new CommentsManager();
         $this->usersManager = new UsersManager();
         $this->postsManager = new PostsManager();
+        $this->CsrfToken = $this->generateCsrfToken();
+        $_GET = $this->secureRequestMethod($_GET);
+        $_POST = $this->secureRequestMethod($_POST);
     }
 
     /**
@@ -77,16 +83,17 @@ abstract class AbstractController
     /**
      * @return PDO
      */
-    public function PDOConnection()
+    public function PDOConnection(): PDO
     {
         return PDOSingleton::getInstance()->getPDO();
     }
 
     /**
      * @param $data
+     *
      * @return string
      */
-    public function testInput($data)
+    public function testInput($data): string
     {
         $data = trim($data);
         $data = stripslashes($data);
@@ -97,6 +104,7 @@ abstract class AbstractController
 
     /**
      * @param $form
+     *
      * @return array
      */
     public function secureRequestMethod($form): array
@@ -110,12 +118,21 @@ abstract class AbstractController
         return $data;
     }
 
-    public function errorResponse ($status)
+    /**
+     * @param $status
+     * @return Response
+     */
+    public function errorResponse($status): Response
     {
         $_SESSION["codeHttp"] = $status;
         return $this->redirect("notFound");
     }
 
+    /**
+     * @param $to
+     * @param $subject
+     * @param $body
+     */
     public function sendEmail ($to, $subject, $body)
     {
         $transport = (new Swift_SmtpTransport($_ENV['MAIL_SMTP'], $_ENV['MAIL_PORT'], $_ENV['MAIL_ENCRYPTION']))
@@ -131,7 +148,12 @@ abstract class AbstractController
         $mailer->send($message);
     }
 
-    public function getPostsListPagination($currentPage)
+    /**
+     * @param $currentPage
+     *
+     * @return array
+     */
+    public function getPostsListPagination($currentPage): array
     {
         $nbPosts = $this->postsManager->count();
         $perPage = 5;
@@ -139,14 +161,18 @@ abstract class AbstractController
         $first = ($currentPage * $perPage) - $perPage;
         $posts = $this->postsManager->getListPagination($first, $perPage);
 
-        $array = [
+        return [
             "nbPages" => $nbPages,
             "posts" => $posts
         ];
-
-        return $array;
     }
 
+    /**
+     * @param $id
+     * @param $var
+     *
+     * @return object|null
+     */
     public function exist($id, $var): ?object
     {
         $authorize = isset($id) && preg_match("#^[0-9]+$#", $id);
@@ -158,5 +184,21 @@ abstract class AbstractController
         }
 
         return $exist;
+    }
+
+    /**
+     * @return mixed|string
+     *
+     * @throws Exception
+     */
+    function generateCsrfToken(): string
+    {
+        if(!isset($_SESSION["csrfToken"])) {
+            $token = bin2hex(random_bytes(64));
+            $_SESSION["csrfToken"] = $token;
+        } else {
+            $token = $_SESSION["csrfToken"];
+        }
+        return $token;
     }
 }

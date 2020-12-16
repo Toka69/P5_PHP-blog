@@ -18,6 +18,7 @@ class User
     protected $pseudo;
     protected $genderId;
     protected $valid;
+    protected $validByMail;
 
     /**
      * @param array $data
@@ -185,5 +186,21 @@ class User
     public function setValid($valid): void
     {
         $this->valid = $valid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getValidByMail()
+    {
+        return $this->validByMail;
+    }
+
+    /**
+     * @param mixed $validByMail
+     */
+    public function setValidByMail($validByMail): void
+    {
+        $this->validByMail = $validByMail;
     }
 }
