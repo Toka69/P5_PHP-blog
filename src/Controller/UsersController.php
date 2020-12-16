@@ -110,7 +110,7 @@ class UsersController extends BackofficeController
             $this->usersManager->update($user);
         }
 
-        return $this->redirect("backofficeUsers");
+        return $this->redirect("backofficeAdminUsers");
     }
 
     /**
@@ -128,6 +128,6 @@ class UsersController extends BackofficeController
             $this->usersManager->update($user);
         }
 
-        return $this->redirect("backofficeUsers");
+        return $this->redirect("backofficeAdminUsers");
     }
 }
