@@ -23,6 +23,7 @@ class Router
 
     /**
      * @param Request $request
+     *
      * @return Route|null
      */
     public function match(Request $request): ?Route
@@ -40,6 +41,7 @@ class Router
 
     /**
      * @param string $name
+     *
      * @return string
      */
     public function generate(string $name): string
@@ -55,6 +57,7 @@ class Router
 
     /**
      * @param string $name
+     *
      * @return Route
      */
     public function get(string $name): ?Route
@@ -91,7 +94,7 @@ class Router
         {
             throw new Exception('Cet adresse n\'existe pas', 404);
         }
-        if (isset($_POST["csrfToken"]) &&  $_POST["csrfToken"] !== $_SESSION["csrfToken"])
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST["csrfToken"]) || $_POST["csrfToken"] !== $_SESSION["csrfToken"])
         {
             unset($_SESSION["csrfToken"]);
             throw new Exception('Mauvaise requête', 400);

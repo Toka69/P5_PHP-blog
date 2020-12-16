@@ -30,7 +30,7 @@ abstract class AbstractController
     protected CommentsManager $commentsManager;
     protected UsersManager $usersManager;
     protected PostsManager $postsManager;
-    protected $CsrfToken;
+    protected $csrfToken;
 
     /**
      * @param Router $router
@@ -42,7 +42,7 @@ abstract class AbstractController
         $this->commentsManager = new CommentsManager();
         $this->usersManager = new UsersManager();
         $this->postsManager = new PostsManager();
-        $this->CsrfToken = $this->generateCsrfToken();
+        $this->csrfToken = $this->generateCsrfToken();
         $_GET = $this->secureRequestMethod($_GET);
         $_POST = $this->secureRequestMethod($_POST);
     }
