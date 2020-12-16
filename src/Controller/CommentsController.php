@@ -85,7 +85,7 @@ class CommentsController extends BackofficeController
                 $message = $comment->getMessage();
                 $owner = false;
             }
-            if (!isset($_POST["message"]) || $_POST["message"] == "" && $owner == true)
+            if ((!isset($_POST["message"]) || $_POST["message"] == "") && $owner == true)
             {
                 $errors["message"]= "Veuillez écrire un message";
             }
