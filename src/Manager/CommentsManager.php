@@ -24,7 +24,9 @@ class CommentsManager extends AbstractManager
     {
         if(is_int($admin) && $admin == 0)
         {
-            return $this->db->query('SELECT COUNT(*) FROM comments WHERE user_id = '.$id.' ')->fetchColumn();
+            $request = $this->db->prepare('SELECT COUNT(*) FROM comments WHERE user_id = ?');
+            $request->execute(array($id));
+            return $request->fetchColumn();
         }
         return $this->db->query('SELECT COUNT(*) FROM comments')->fetchColumn();
     }
@@ -39,17 +41,18 @@ class CommentsManager extends AbstractManager
     {
         if(is_int($admin) && $admin == 0)
         {
-            $order = "WHERE user_id = ".$id."";
+            $order = "WHERE user_id = ?";
         }
         else
         {
             $order = "";
         }
         $getList = [];
-        $request =  $this->db->query(
+        $request =  $this->db->prepare(
             'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
             FROM comments c INNER JOIN users u ON u.id = c.user_id '.$order.' '
         );
+        $request->execute(array($id));
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
@@ -76,10 +79,11 @@ class CommentsManager extends AbstractManager
     public function getComment($id): ?object
     {
         $getComment = [];
-        $request =  $this->db->query(
+        $request =  $this->db->prepare(
             'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.posts_id as postsId, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
-            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE c.id = '.$id.''
+            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE c.id = ?'
         );
+        $request->execute(array($id));
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
         {
@@ -117,16 +121,18 @@ class CommentsManager extends AbstractManager
         $getComments = [];
         if ($valid == 1)
         {
-            $option = "AND c.valid = ".$valid;
+            $option = $valid;
         }
         else
         {
             $option = "";
         }
-        $request = $this->db->query(
+        $request = $this->db->prepare(
             "SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
-            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = ".$id." ".$option." "
+            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = ? AND c.valid= ? "
         );
+
+        $request->execute(array($id, $option));
 
         while ($data = $request->fetch(PDO::FETCH_ASSOC))
         {

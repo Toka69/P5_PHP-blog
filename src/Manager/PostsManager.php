@@ -58,10 +58,11 @@ class PostsManager extends AbstractManager
     public function getPost($id): ?object
     {
         $singlePost = [];
-        $request = $this->db->query(
+        $request = $this->db->prepare(
             'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
-            FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id =' .$id.' '
+            FROM posts p INNER JOIN users u ON u.id = p.user_id WHERE p.id = ? '
         );
+        $request->execute(array($id));
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
         {
