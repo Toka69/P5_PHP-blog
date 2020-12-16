@@ -71,7 +71,7 @@ class PostsController extends BackofficeController
                 $post->setUserID($_POST["userId"]);
                 $this->postsManager->update($post);
 
-                return $this->redirect("backofficePosts");
+                return $this->redirect("backofficeAdminPosts");
             }
         }
 
@@ -143,7 +143,7 @@ class PostsController extends BackofficeController
                 $post = new Post($array);
                 $this->postsManager->add($post);
 
-                return $this->redirect("backofficePosts");
+                return $this->redirect("backofficeAdminPosts");
             }
         }
 
@@ -166,6 +166,6 @@ class PostsController extends BackofficeController
         }
         $this->postsManager->delete($post);
 
-        return $this->redirect("backofficePosts");
+        return $this->redirect("backofficeAdminPosts");
     }
 }

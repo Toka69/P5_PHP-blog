@@ -94,12 +94,11 @@ class Router
         {
             throw new Exception('Cet adresse n\'existe pas', 404);
         }
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST["csrfToken"]) || $_POST["csrfToken"] !== $_SESSION["csrfToken"])
-        {
-            unset($_SESSION["csrfToken"]);
-            throw new Exception('Mauvaise requête', 400);
-        }
         if (is_null($session) && strpos($route->getName(), "backoffice") !== false || $_SESSION["ip"] != $this->ip())
+        {
+            throw new Exception('Accès refusé. Nécessite une authentification', 401);
+        }
+        if ($session->getAdmin() == 0 && strpos($route->getName(), "backoffice") !== false && strpos($route->getName(), "Admin") !== false)
         {
             throw new Exception('Accès refusé. Nécessite une authentification', 401);
         }
@@ -117,6 +116,12 @@ class Router
                     throw new Exception('Exception', $codeHttp);
             }
         }
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST["csrfToken"]) || $_POST["csrfToken"] !== $_SESSION["csrfToken"])
+        {
+            unset($_SESSION["csrfToken"]);
+            throw new Exception('Mauvaise requête', 400);
+        }
+
         return null;
     }
 

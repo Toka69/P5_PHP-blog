@@ -22,7 +22,7 @@ class UsersController extends BackofficeController
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function backofficeUsers(): Response
+    public function backofficeAdminUsers(): Response
     {
         return $this->render("backofficeUsers.html.twig", [
             "usersList" => $this->usersManager->getList()
@@ -110,7 +110,7 @@ class UsersController extends BackofficeController
             $this->usersManager->update($user);
         }
 
-        return $this->redirect("backofficeUsers");
+        return $this->redirect("backofficeAdminUsers");
     }
 
     /**
@@ -128,6 +128,6 @@ class UsersController extends BackofficeController
             $this->usersManager->update($user);
         }
 
-        return $this->redirect("backofficeUsers");
+        return $this->redirect("backofficeAdminUsers");
     }
 }
