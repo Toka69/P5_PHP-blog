@@ -23,9 +23,13 @@ If you use a docker container, you can clone and build my container : https://gi
 
 A step by step series of examples that tell you how to get a development env running
 
-1) Clone the project in your workspace of your PHP environment. 
-2) Import the database located in the SQL_demo directory in your DBMS.
-3) Copy the .env file to .env.local and change the settings according to your needs. The parameters present in .env.local overwrite those found in .env
+1) Clone the project in your workspace of your PHP environment.
+2) Install the necessary libraries via composer
+   ```
+   php composer.phar install
+   ```
+3) Import the database located in the SQL_demo directory in your DBMS.
+4) Copy the .env file to .env.local and change the settings according to your needs. The parameters present in .env.local overwrite those found in .env
 
 ```
 
@@ -45,8 +49,8 @@ MAIL_PASSWORD=password
 MAIL_NOTIFICATION=admin@example.org     #the admin mail address that will be used to receive notifications
 
 ```
-4) Start the PHP server.
-5) Enjoy.
+5) Start the PHP server.
+6) Enjoy.
 
 ### Accounts existing in sql file 
 
