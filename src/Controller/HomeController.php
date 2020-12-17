@@ -49,6 +49,9 @@ class HomeController extends AbstractController
         ]);
     }
 
+    /**
+     * @return Response
+     */
     public function contact(): Response
     {
         if($_SERVER["REQUEST_METHOD"] === "POST")

@@ -125,6 +125,9 @@ class Router
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function ip(): string
     {
         $ip = $_SERVER["REMOTE_ADDR"];

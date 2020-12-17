@@ -193,6 +193,11 @@ class SecurityController extends AbstractController
         return $this->redirect("login");
     }
 
+    /**
+     * @return string
+     *
+     * @throws \Exception
+     */
     public function generatePwd(): string
     {
         $charList1 = '0123456789';
@@ -211,6 +216,9 @@ class SecurityController extends AbstractController
         return $password;
     }
 
+    /**
+     * @return Response
+     */
     public function validAccount(): Response
     {
         if (isset($this->superGlobalObject->get['email']) && $user = $this->usersManager->checkCredentials($this->superGlobalObject->get['email']))

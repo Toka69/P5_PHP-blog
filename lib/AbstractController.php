@@ -26,6 +26,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 abstract class AbstractController
 {
+    /**
+     * @var Router
+     */
     private Router $router;
     protected CommentsManager $commentsManager;
     protected UsersManager $usersManager;

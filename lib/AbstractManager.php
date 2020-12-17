@@ -12,6 +12,9 @@ use PDO;
  */
 class AbstractManager
 {
+    /**
+     * @var PDO
+     */
     protected PDO $db;
 
     public function __construct()

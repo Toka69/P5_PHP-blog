@@ -129,6 +129,12 @@ class PostsManager extends AbstractManager
         $request->execute();
     }
 
+    /**
+     * @param $first
+     * @param $perPage
+     *
+     * @return array
+     */
     public function getListPagination($first, $perPage): array
     {
         $getList = [];

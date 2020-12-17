@@ -6,6 +6,9 @@ namespace Lib;
 
 class SuperGlobalObject
 {
+    /**
+     * @var array
+     */
     public $session;
     public $env;
     public $post;
