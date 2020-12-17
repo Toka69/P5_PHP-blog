@@ -1,0 +1,58 @@
+{% extends 'baseBackoffice.html.twig' %}
+
+{% block content %}
+    <div class="container-fluid">
+
+        <h1 class="h3 mb-2 text-gray-800">Utilisateurs</h1>
+
+        <div class="card shadow mb-4">
+
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Liste des utilisateurs</h6>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Prénom</th>
+                            <th>Nom</th>
+                            <th>email</th>
+                            <th>Pseudo</th>
+                            <th>Administrateur</th>
+                            <th>Validé</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in usersList %}
+                            <tr>
+                                <td>{{ user.firstName }}</td>
+                                <td>{{ user.lastName }}</td>
+                                <td><a href="mailto:{{ user.email }}">{{ user.email }}</a></td>
+                                <td>{{ user.pseudo }}</td>
+                                <td>
+                                    {% if user.admin == true %}
+                                        <a class="btn btn-primary alert-danger" href="select-admin?id={{ user.id }}" role="button">Oui</a></td>
+                                    {% else %}
+                                        <a class="btn btn-primary alert-success" href="select-admin?id={{ user.id }}&setAdmin" role="button">Non</a></td>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.valid == 1 %}
+                                        <a class="btn btn-primary alert-success" href="valid-user?id={{ user.id }}" role="button">Oui</a></td>
+                                    {% else %}
+                                        <a class="btn btn-primary alert-danger" href="valid-user?id={{ user.id }}&valid" role="button">Non</a></td>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}

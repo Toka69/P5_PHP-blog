@@ -1,1 +1,36 @@
-Posts number : {{ posts_number }}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <section>
+        <div class="container col-md-8 pt-5">
+            <h1 class="text-center">Liste des articles</h1>
+        {% for post in postsList %}
+            <div class="card mt-5">
+                <h3 class="card-header">{{ post.title }}</h3>
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.leadParagraph }}</h5>
+                    <p class="card-text">{{ post.modifiedDate }}</p>
+                    <div class="text-right">
+                        <a href="/post?id={{ post.id }}" class="btn btn-primary">Voir l'article...</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <div class="container col-md-8 pt-5">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item {% if currentPage == 1 %}disabled{% endif %}">
+                        <a class="page-link" href="?page={{ currentPage - 1 }}" tabindex="-1" {% if currentPage == 1 %}aria-disabled="true"{% endif %}>Précèdent</a>
+                    </li>
+                    {% for i in 1..nbPages %}
+                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                    {% endfor %}
+                    <li class="page-item {% if currentPage == nbPages %}disabled{% endif %}">
+                        <a class="page-link" href="?page={{ currentPage + 1 }}" {% if currentPage == nbPages %}aria-disabled="true"{% endif %}>Suivant</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+{% endblock %}

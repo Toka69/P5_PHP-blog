@@ -1,5 +1,6 @@
 vendor/
-!*/vendor/
+!public/vendor/
+!public/admin/vendor/
 .vscode/
 .devcontainer/
 .env.local
