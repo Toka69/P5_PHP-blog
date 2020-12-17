@@ -1,5 +1,7 @@
 # P5 PHP_Blog
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7a292f1a3976449197ab8ef4dacd3644)](https://app.codacy.com/gh/Toka69/P5_PHP-blog?utm_source=github.com&utm_medium=referral&utm_content=Toka69/P5_PHP-blog&utm_campaign=Badge_Grade)
+
 As part of my diploma course as a PHP / Symfony developer via OpenClassrooms, this is my work for project n ° 5.
 It is about making a blog in PHP. Tool installation is possible from composer only.
 
