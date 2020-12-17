@@ -35,13 +35,13 @@ class HomeController extends AbstractController
     */
     public function notFound(): Response
     {
-        if (!isset($_SESSION["messageHttpResponseCode"]))
+        if (!isset($this->superGlobalObject->session["messageHttpResponseCode"]))
         {
             return $this->errorResponse(400);
         }
 
-        $messageHttpResponseCode = $_SESSION["messageHttpResponseCode"];
-        unset ($_SESSION["messageHttpResponseCode"]);
+        $messageHttpResponseCode = $this->superGlobalObject->session["messageHttpResponseCode"];
+        unset ($this->superGlobalObject->session["messageHttpResponseCode"]);
 
         return $this->render("notFound.html.twig", [
             "httpResponseCode" => http_response_code(),
@@ -49,17 +49,20 @@ class HomeController extends AbstractController
         ]);
     }
 
+    /**
+     * @return Response
+     */
     public function contact(): Response
     {
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
          $this->sendEmail($_ENV['MAIL_NOTIFICATION'], 'Nouvelle demande de contact depuis le site',
 
-'Demande de '.$_POST['name'].'
+'Demande de '.$this->superGlobalObject->post['name'].'
              
-'.$_POST['message'].'
+'.$this->superGlobalObject->post['message'].'
 
-'.$_POST['email'].'            
+'.$this->superGlobalObject->post['email'].'            
             
             ');
         }

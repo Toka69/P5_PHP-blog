@@ -23,9 +23,9 @@ class BlogController extends AbstractController
      */
     public function posts(): Response
     {
-        if (isset($_GET['page']) && !empty($_GET['page']))
+        if (isset($this->superGlobalObject->get['page']) && !empty($this->superGlobalObject->get['page']))
         {
-            $currentPage = (int) strip_tags($_GET['page']);
+            $currentPage = (int) strip_tags($this->superGlobalObject->get['page']);
         }
         else
         {
@@ -52,17 +52,17 @@ class BlogController extends AbstractController
      */
     public function post(): Response
     {
-        $post = $this->exist($_GET["id"], "post");
+        $post = $this->exist($this->superGlobalObject->get["id"], "post");
 
         if ($post == null)
         {
             return $this->errorResponse(400);
         }
 
-        $singlePost = $this->postsManager->getPost($_GET['id']);
-        $comments = $this->commentsManager->getCommentsPost($_GET['id'], 1);
+        $singlePost = $this->postsManager->getPost($this->superGlobalObject->get['id']);
+        $comments = $this->commentsManager->getCommentsPost($this->superGlobalObject->get['id'], 1);
         $disabled = "";
-        if (!isset($_SESSION["user"])){
+        if (!isset($this->superGlobalObject->session["user"])){
             $disabled = "disabled";
         }
 

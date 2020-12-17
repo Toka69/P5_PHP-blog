@@ -38,33 +38,33 @@ class UsersController extends BackofficeController
      */
     public function editProfile(): Response
     {
-        $id = $_SESSION["user"]->getId();
+        $id = $this->superGlobalObject->session["user"]->getId();
         $user = $this->usersManager->getUser($id);
         $errors = [];
 
         if($_SERVER ["REQUEST_METHOD"] == "POST")
         {
-            if (!isset($_POST["email"]) || $_POST["email"] == "")
+            if (!isset($this->superGlobalObject->post["email"]) || $this->superGlobalObject->post["email"] == "")
             {
                 $errors["email"]= "Veuillez saisir votre email";
             }
-            if (!isset($_POST["pseudo"]) || $_POST["pseudo"] == "")
+            if (!isset($this->superGlobalObject->post["pseudo"]) || $this->superGlobalObject->post["pseudo"] == "")
             {
                 $errors["pseudo"]= "Veuillez saisir votre pseudo";
             }
-            if ($_POST["password"] !== $_POST["repeatPassword"]) {
+            if ($this->superGlobalObject->post["password"] !== $this->superGlobalObject->post["repeatPassword"]) {
                 $errors["passwords"] = "Les mots de passe ne correspondent pas!";
             }
             if (count($errors) === 0)
             {
-                $user->setFirstName($_POST["firstName"]);
-                $user->setLastName($_POST["lastName"]);
-                $user->setEmail($_POST["email"]);
-                $user->setPseudo($_POST["pseudo"]);
-                $user->setGenderId($_POST["genderId"]);
-                if ($_POST["password"] != ""){$user->setPassword(password_hash($_POST['password'], PASSWORD_BCRYPT, ["cost" => 12]));}
+                $user->setFirstName($this->superGlobalObject->post["firstName"]);
+                $user->setLastName($this->superGlobalObject->post["lastName"]);
+                $user->setEmail($this->superGlobalObject->post["email"]);
+                $user->setPseudo($this->superGlobalObject->post["pseudo"]);
+                $user->setGenderId($this->superGlobalObject->post["genderId"]);
+                if ($this->superGlobalObject->post["password"] != ""){$user->setPassword(password_hash($this->superGlobalObject->post['password'], PASSWORD_BCRYPT, ["cost" => 12]));}
                 $this->usersManager->update($user);
-                $_SESSION['user'] = $this->usersManager->getUser($id);
+                $this->superGlobalObject->session['user'] = $this->usersManager->getUser($id);
 
                 return $this->redirect("backofficeProfile");
             }
@@ -88,7 +88,7 @@ class UsersController extends BackofficeController
     public function readProfile(): Response
     {
         return $this->render("profile.html.twig", [
-            "user" => $_SESSION["user"],
+            "user" => $this->superGlobalObject->session["user"],
             "genders" => $this->usersManager->getGenders(),
             "disabled" => "disabled"
         ]);
@@ -99,11 +99,11 @@ class UsersController extends BackofficeController
      */
     public function selectAdmin(): Response
     {
-        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
+        if (isset($this->superGlobalObject->get["id"]) && preg_match("#^[0-9]+$#", $this->superGlobalObject->get["id"]) && $this->usersManager->getUser($this->superGlobalObject->get["id"]))
         {
-            $user = $this->usersManager->getUser($_GET["id"]);
+            $user = $this->usersManager->getUser($this->superGlobalObject->get["id"]);
             $user->setAdmin(0);
-            if (isset($_GET["setAdmin"]))
+            if (isset($this->superGlobalObject->get["setAdmin"]))
             {
                 $user->setAdmin(1);
             }
@@ -118,11 +118,11 @@ class UsersController extends BackofficeController
      */
     public function validUser(): Response
     {
-        if (isset($_GET["id"]) && preg_match("#^[0-9]+$#", $_GET["id"]) && $this->usersManager->getUser($_GET["id"]))
+        if (isset($this->superGlobalObject->get["id"]) && preg_match("#^[0-9]+$#", $this->superGlobalObject->get["id"]) && $this->usersManager->getUser($this->superGlobalObject->get["id"]))
         {
-            $user = $this->usersManager->getUser($_GET["id"]);
+            $user = $this->usersManager->getUser($this->superGlobalObject->get["id"]);
             $user->setValid(0);
-            if (isset($_GET["valid"])) {
+            if (isset($this->superGlobalObject->get["valid"])) {
                 $user->setValid(1);
             }
             $this->usersManager->update($user);

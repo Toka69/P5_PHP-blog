@@ -28,25 +28,25 @@ class SecurityController extends AbstractController
      */
     public function login(): Response
     {
-        if(isset($_SESSION['user'])) {return $this->redirect('backoffice');}
+        if(isset($this->superGlobalObject->session['user'])) {return $this->redirect('backoffice');}
 
         $message = "";
         $alert = "";
-        if(isset($_SESSION["message"]))
+        if(isset($this->superGlobalObject->session["message"]))
         {
-            $message = $_SESSION["message"];
-            $alert = $_SESSION["alert"];
-            unset($_SESSION["message"]);
-            unset($_SESSION["alert"]);
+            $message = $this->superGlobalObject->session["message"];
+            $alert = $this->superGlobalObject->session["alert"];
+            unset($this->superGlobalObject->session["message"]);
+            unset($this->superGlobalObject->session["alert"]);
         }
 
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $errors = [];
             $user = null;
-            $request = $this->usersManager->checkCredentials($_POST['email']);
+            $request = $this->usersManager->checkCredentials($this->superGlobalObject->post['email']);
             if ($request){$user = $this->usersManager->getUser($request['id']);}
-            $authorize = $request && password_verify($_POST['password'], $request['password']);
+            $authorize = $request && password_verify($this->superGlobalObject->post['password'], $request['password']);
 
             if (!$authorize)
             {
@@ -61,9 +61,9 @@ class SecurityController extends AbstractController
 
             if (count($errors) === 0)
             {
-                    $_SESSION["user"] = $user;
+                    $this->superGlobalObject->session["user"] = $user;
                     $router = new Router();
-                    $_SESSION['ip'] = $router->ip();
+                    $this->superGlobalObject->session['ip'] = $router->ip();
 
                     return $this->redirect('backoffice');
             }
@@ -87,7 +87,7 @@ class SecurityController extends AbstractController
      */
     public function register(): Response
     {
-        if (isset($_SESSION['user'])) {return $this->redirect('backoffice');}
+        if (isset($this->superGlobalObject->session['user'])) {return $this->redirect('backoffice');}
 
         $errors =[];
         $message = "";
@@ -96,19 +96,19 @@ class SecurityController extends AbstractController
 
         if ($_SERVER["REQUEST_METHOD"] === "POST")
         {
-            $checkCredentials = $this->usersManager->checkCredentials($_POST['email']);
-            $checkPseudo = $this->usersManager->checkPseudo($_POST["pseudo"]);
+            $checkCredentials = $this->usersManager->checkCredentials($this->superGlobalObject->post['email']);
+            $checkPseudo = $this->usersManager->checkPseudo($this->superGlobalObject->post["pseudo"]);
 
-            if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+            if (!filter_var($this->superGlobalObject->post['email'], FILTER_VALIDATE_EMAIL)) {
                 $errors["email"] = "Le format de l'email est incorrect! Veuillez réessayer.";
             }
             if ($checkCredentials) {
                 $errors["accountExist"] = "Ce compte utilisateur existe déjà! Veuillez réessayer.";
             }
-            if (!preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $_POST['password'])) {
+            if (!preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $this->superGlobalObject->post['password'])) {
                 $errors["emailFormat"] = "Le mot de passe doit contenir entre 8 et 20 caractères, au moins 1 nombre, au moins une lettre, au moins une majuscule!";
             }
-            if ($_POST["password"] !== $_POST["repeatPassword"]) {
+            if ($this->superGlobalObject->post["password"] !== $this->superGlobalObject->post["repeatPassword"]) {
                 $errors["passwords"] = "Les mots de passe ne correspondent pas!";
             }
             if ($checkPseudo){
@@ -117,12 +117,12 @@ class SecurityController extends AbstractController
 
             if (count($errors) === 0) {
                 $user = new User([
-                    'firstName' => $_POST['firstName'],
-                    'lastName' => $_POST['lastName'],
-                    'pseudo' => $_POST['pseudo'],
-                    'email' => $_POST['email'],
-                    'password' => password_hash($_POST['password'], PASSWORD_BCRYPT, ["cost" => 12]),
-                    'genderId' => $_POST['genderId']
+                    'firstName' => $this->superGlobalObject->post['firstName'],
+                    'lastName' => $this->superGlobalObject->post['lastName'],
+                    'pseudo' => $this->superGlobalObject->post['pseudo'],
+                    'email' => $this->superGlobalObject->post['email'],
+                    'password' => password_hash($this->superGlobalObject->post['password'], PASSWORD_BCRYPT, ["cost" => 12]),
+                    'genderId' => $this->superGlobalObject->post['genderId']
                 ]);
                 $this->usersManager->add($user);
                 $this->sendEmail($user->getEmail(), "Validez votre compte",
@@ -133,13 +133,13 @@ class SecurityController extends AbstractController
                 $success = true;
             }
             $value = [
-                "firstName" => $_POST["firstName"],
-                "lastName" => $_POST["lastName"],
-                "pseudo" => $_POST["pseudo"],
-                "genderId" => $_POST["genderId"],
-                "email" => $_POST["email"],
-                "password" => $_POST["password"],
-                "repeatPassword" => $_POST["repeatPassword"]
+                "firstName" => $this->superGlobalObject->post["firstName"],
+                "lastName" => $this->superGlobalObject->post["lastName"],
+                "pseudo" => $this->superGlobalObject->post["pseudo"],
+                "genderId" => $this->superGlobalObject->post["genderId"],
+                "email" => $this->superGlobalObject->post["email"],
+                "password" => $this->superGlobalObject->post["password"],
+                "repeatPassword" => $this->superGlobalObject->post["repeatPassword"]
             ];
         }
 
@@ -161,15 +161,15 @@ class SecurityController extends AbstractController
      */
     public function forgotPassword(): Response
     {
-        if(isset($_SESSION['user'])) {return $this->redirect('backoffice');}
+        if(isset($this->superGlobalObject->session['user'])) {return $this->redirect('backoffice');}
 
         if($_SERVER["REQUEST_METHOD"] === "POST")
         {
             $manager = new UsersManager();
-            $request = $manager->checkCredentials($_POST['email']);
+            $request = $manager->checkCredentials($this->superGlobalObject->post['email']);
             if ($request) {
                 $password = $this->generatePwd();
-                $this->sendEmail($_POST['email'],'Nouveau mot de passe', 'Veuillez trouver ci-joint votre nouveau mot de passe '.$password.'');
+                $this->sendEmail($this->superGlobalObject->post['email'],'Nouveau mot de passe', 'Veuillez trouver ci-joint votre nouveau mot de passe '.$password.'');
                 $password = password_hash($password, PASSWORD_BCRYPT, ["cost" => 12]);
                 $user = $this->usersManager->getUser($request['id']);
                 $user->setPassword($password);
@@ -193,6 +193,11 @@ class SecurityController extends AbstractController
         return $this->redirect("login");
     }
 
+    /**
+     * @return string
+     *
+     * @throws \Exception
+     */
     public function generatePwd(): string
     {
         $charList1 = '0123456789';
@@ -211,9 +216,12 @@ class SecurityController extends AbstractController
         return $password;
     }
 
+    /**
+     * @return Response
+     */
     public function validAccount(): Response
     {
-        if (isset($_GET['email']) && $user = $this->usersManager->checkCredentials($_GET['email']))
+        if (isset($this->superGlobalObject->get['email']) && $user = $this->usersManager->checkCredentials($this->superGlobalObject->get['email']))
         {
             $user = $this->usersManager->getUser($user['id']);
             if ($user->getValidByMail() == 0)
@@ -221,12 +229,12 @@ class SecurityController extends AbstractController
                 $user->setValidByMail(1);
                 $user->setValid(1);
                 $this->usersManager->update($user);
-                $_SESSION['message'] = "Compte validé! Vous pouvez vous connecter.";
-                $_SESSION['alert'] = "success";
+                $this->superGlobalObject->session['message'] = "Compte validé! Vous pouvez vous connecter.";
+                $this->superGlobalObject->session['alert'] = "success";
             }
             else{
-                $_SESSION['message'] = "Ce lien n'est plus valable.";
-                $_SESSION['alert'] = "danger";
+                $this->superGlobalObject->session['message'] = "Ce lien n'est plus valable.";
+                $this->superGlobalObject->session['alert'] = "danger";
             }
 
             return $this->redirect("login");
