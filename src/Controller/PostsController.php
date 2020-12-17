@@ -41,7 +41,7 @@ class PostsController extends BackofficeController
     {
         $errors = [];
 
-        $post = $this->exist($_GET["id"], "post");
+        $post = $this->exist($this->superGlobalObject->get["id"], "post");
 
         if ($post == null)
         {
@@ -50,25 +50,25 @@ class PostsController extends BackofficeController
 
         if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
-            if (!isset($_POST["title"]) || $_POST["title"] == null)
+            if (!isset($this->superGlobalObject->post["title"]) || $this->superGlobalObject->post["title"] == null)
             {
                 $errors["title"]= "Veuillez saisir le titre";
             }
-            if (!isset($_POST["leadParagraph"]) || $_POST["leadParagraph"] == null)
+            if (!isset($this->superGlobalObject->post["leadParagraph"]) || $this->superGlobalObject->post["leadParagraph"] == null)
             {
                 $errors["leadParagraph"]= "Veuillez saisir le châpo";
             }
-            if (!isset($_POST["content"]) || $_POST["content"] == null)
+            if (!isset($this->superGlobalObject->post["content"]) || $this->superGlobalObject->post["content"] == null)
             {
                 $errors["content"]= "Veuillez saisir le contenu";
             }
 
             if (count($errors) === 0)
             {
-                $post->setTitle($_POST["title"]);
-                $post->setLeadParagraph($_POST["leadParagraph"]);
-                $post->setContent($_POST["content"]);
-                $post->setUserID($_POST["userId"]);
+                $post->setTitle($this->superGlobalObject->post["title"]);
+                $post->setLeadParagraph($this->superGlobalObject->post["leadParagraph"]);
+                $post->setContent($this->superGlobalObject->post["content"]);
+                $post->setUserID($this->superGlobalObject->post["userId"]);
                 $this->postsManager->update($post);
 
                 return $this->redirect("backofficeAdminPosts");
@@ -92,7 +92,7 @@ class PostsController extends BackofficeController
      */
     public function readPost(): Response
     {
-        $post = $this->exist($_GET["id"], "post");
+        $post = $this->exist($this->superGlobalObject->get["id"], "post");
 
         if ($post == null)
         {
@@ -100,7 +100,7 @@ class PostsController extends BackofficeController
         }
 
         return $this->render("backofficePost.html.twig", [
-            "post" => $this->postsManager->getPost($_GET["id"]),
+            "post" => $this->postsManager->getPost($this->superGlobalObject->get["id"]),
             "usersAdmin" => $this->usersManager->getList("admin"),
             "disabled" => "disabled"
         ]);
@@ -119,15 +119,15 @@ class PostsController extends BackofficeController
 
         if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
-            if (!isset($_POST["title"]) || $_POST["title"] == null)
+            if (!isset($this->superGlobalObject->post["title"]) || $this->superGlobalObject->post["title"] == null)
             {
                 $errors["title"]= "Veuillez saisir le titre";
             }
-            if (!isset($_POST["leadParagraph"]) || $_POST["leadParagraph"] == null)
+            if (!isset($this->superGlobalObject->post["leadParagraph"]) || $this->superGlobalObject->post["leadParagraph"] == null)
             {
                 $errors["leadParagraph"]= "Veuillez saisir le châpo";
             }
-            if (!isset($_POST["content"]) || $_POST["content"] == null)
+            if (!isset($this->superGlobalObject->post["content"]) || $this->superGlobalObject->post["content"] == null)
             {
                 $errors["content"]= "Veuillez saisir le contenu";
             }
@@ -135,10 +135,10 @@ class PostsController extends BackofficeController
             if (count($errors) === 0)
             {
                 $array = [
-                    'title' => $_POST['title'],
-                    'leadParagraph' => $_POST['leadParagraph'],
-                    'content' => $_POST['content'],
-                    'userId' => $_POST['userId']
+                    'title' => $this->superGlobalObject->post['title'],
+                    'leadParagraph' => $this->superGlobalObject->post['leadParagraph'],
+                    'content' => $this->superGlobalObject->post['content'],
+                    'userId' => $this->superGlobalObject->post['userId']
                 ];
                 $post = new Post($array);
                 $this->postsManager->add($post);
@@ -158,7 +158,7 @@ class PostsController extends BackofficeController
      */
     public function deletePost(): Response
     {
-        $post = $this->exist($_GET["id"], "post");
+        $post = $this->exist($this->superGlobalObject->get["id"], "post");
         $comments = $this->commentsManager->getCommentsPost($post->getId());
         foreach ($comments as $comment)
         {

@@ -23,8 +23,8 @@ class BackofficeController extends AbstractController
      */
     public function backoffice(): Response
     {
-        $id = $_SESSION['user']->getId();
-        $admin = $_SESSION['user']->getAdmin();
+        $id = $this->superGlobalObject->session['user']->getId();
+        $admin = $this->superGlobalObject->session['user']->getAdmin();
 
         return $this->render("backofficeDashboard.html.twig", [
             "postsCount" => $this->postsManager->count(),

@@ -30,6 +30,7 @@ abstract class AbstractController
     protected CommentsManager $commentsManager;
     protected UsersManager $usersManager;
     protected PostsManager $postsManager;
+    protected SuperGlobalObject $superGlobalObject;
     protected $csrfToken;
 
     /**
@@ -42,9 +43,10 @@ abstract class AbstractController
         $this->commentsManager = new CommentsManager();
         $this->usersManager = new UsersManager();
         $this->postsManager = new PostsManager();
+        $this->superGlobalObject = new SuperGlobalObject();
         $this->csrfToken = $this->generateCsrfToken();
-        $_GET = $this->secureRequestMethod($_GET);
-        $_POST = $this->secureRequestMethod($_POST);
+        $this->superGlobalObject->get = $this->secureRequestMethod($_GET);
+        $this->superGlobalObject->post = $this->secureRequestMethod($_POST);
     }
 
     /**
@@ -75,7 +77,7 @@ abstract class AbstractController
             'debug' => true
         ]);
         $twig->addExtension(new DebugExtension());
-        $twig->addGlobal('session', $_SESSION);
+        $twig->addGlobal('session', $this->superGlobalObject->session);
 
         return new Response($twig->render($view, $data));
     }
@@ -124,7 +126,7 @@ abstract class AbstractController
      */
     public function errorResponse($status): Response
     {
-        $_SESSION["codeHttp"] = $status;
+        $this->superGlobalObject->session["codeHttp"] = $status;
         return $this->redirect("notFound");
     }
 
@@ -135,13 +137,13 @@ abstract class AbstractController
      */
     public function sendEmail ($to, $subject, $body)
     {
-        $transport = (new Swift_SmtpTransport($_ENV['MAIL_SMTP'], $_ENV['MAIL_PORT'], $_ENV['MAIL_ENCRYPTION']))
-            ->setUsername($_ENV['MAIL_USER'])
-            ->setPassword($_ENV['MAIL_PASSWORD']);
+        $transport = (new Swift_SmtpTransport($this->superGlobalObject->env['MAIL_SMTP'], $this->superGlobalObject->env['MAIL_PORT'], $this->superGlobalObject->env['MAIL_ENCRYPTION']))
+            ->setUsername($this->superGlobalObject->env['MAIL_USER'])
+            ->setPassword($this->superGlobalObject->env['MAIL_PASSWORD']);
         $mailer = new Swift_Mailer($transport);
 
         $message = (new Swift_Message($subject))
-            ->setFrom([$_ENV['MAIL_USER'] => 'Matthias LEROUX'])
+            ->setFrom([$this->superGlobalObject->env['MAIL_USER'] => 'Matthias LEROUX'])
             ->setTo($to)
             ->setBody($body);
 
@@ -193,11 +195,11 @@ abstract class AbstractController
      */
     function generateCsrfToken(): string
     {
-        if(!isset($_SESSION["csrfToken"])) {
+        if(!isset($this->superGlobalObject->session["csrfToken"])) {
             $token = bin2hex(random_bytes(64));
-            $_SESSION["csrfToken"] = $token;
+            $this->superGlobalObject->session["csrfToken"] = $token;
         } else {
-            $token = $_SESSION["csrfToken"];
+            $token = $this->superGlobalObject->session["csrfToken"];
         }
         return $token;
     }

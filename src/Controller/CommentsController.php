@@ -25,8 +25,8 @@ class CommentsController extends BackofficeController
      */
     public function backofficeComments(): Response
     {
-        $id = $_SESSION['user']->getId();
-        $admin = $_SESSION['user']->getAdmin();
+        $id = $this->superGlobalObject->session['user']->getId();
+        $admin = $this->superGlobalObject->session['user']->getAdmin();
 
         return $this->render("backofficeComments.html.twig", [
             "commentsList" => $this->commentsManager->getList($id, $admin)
@@ -42,7 +42,7 @@ class CommentsController extends BackofficeController
      */
     public function readComment(): Response
     {
-        $comment = $this->exist($_GET["id"], "comment");
+        $comment = $this->exist($this->superGlobalObject->get["id"], "comment");
 
         if ($comment == null)
         {
@@ -65,7 +65,7 @@ class CommentsController extends BackofficeController
      */
     public function editComment(): Response
     {
-        $comment = $this->exist($_GET["id"], "comment");
+        $comment = $this->exist($this->superGlobalObject->get["id"], "comment");
 
         if ($comment == null)
         {
@@ -79,17 +79,17 @@ class CommentsController extends BackofficeController
             $owner = true;
             $message = "";
 
-            if (isset($_POST['message'])){$message = $_POST["message"];}
-            if ($_SESSION["user"]->getId() !== $comment->getUserID())
+            if (isset($this->superGlobalObject->post['message'])){$message = $this->superGlobalObject->post["message"];}
+            if ($this->superGlobalObject->session["user"]->getId() !== $comment->getUserID())
             {
                 $message = $comment->getMessage();
                 $owner = false;
             }
-            if ((!isset($_POST["message"]) || $_POST["message"] == "") && $owner == true)
+            if ((!isset($this->superGlobalObject->post["message"]) || $this->superGlobalObject->post["message"] == "") && $owner == true)
             {
                 $errors["message"]= "Veuillez écrire un message";
             }
-            if (!isset($_POST["valid"]) || $_POST["valid"] == null)
+            if (!isset($this->superGlobalObject->post["valid"]) || $this->superGlobalObject->post["valid"] == null)
             {
                 $errors["valid"]= "Veuillez sélectionner si le commentaire est valide";
             }
@@ -97,7 +97,7 @@ class CommentsController extends BackofficeController
             if (count($errors) === 0)
             {
                 $comment->setMessage($message);
-                $comment->setValid($_POST["valid"]);
+                $comment->setValid($this->superGlobalObject->post["valid"]);
                 $comment->setModifiedDate(date("Y-m-d H:i:s"));
                 $this->commentsManager->update($comment);
 
@@ -128,9 +128,9 @@ class CommentsController extends BackofficeController
             if (count($errors) === 0)
             {
                 $array = [
-                    'message' => $_POST['message'],
-                    'postsId' => $_GET['postId'],
-                    'userId' => $_SESSION['user']->getId()
+                    'message' => $this->superGlobalObject->post['message'],
+                    'postsId' => $this->superGlobalObject->get['postId'],
+                    'userId' => $this->superGlobalObject->session['user']->getId()
                 ];
                 $comment = new Comment($array);
                 $this->commentsManager->add($comment);
