@@ -29,7 +29,7 @@ class PostsManager extends AbstractManager
         $getList = [];
         $request = $this->db->query(
             'SELECT u.first_name as firstName, u.last_name as lastName, p.id, p.title, p.lead_paragraph as leadParagraph, p.content, p.created_date as createdDate, p.modified_date as modifiedDate, p.user_id as userId
-            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY id DESC'
+            FROM posts p INNER JOIN users u ON u.id = p.user_id ORDER BY p.created_date DESC'
         );
 
         while($data = $request->fetch(PDO::FETCH_ASSOC))
