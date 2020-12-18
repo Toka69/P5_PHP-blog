@@ -50,7 +50,7 @@ class CommentsManager extends AbstractManager
         $getList = [];
         $request =  $this->db->prepare(
             'SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id, c.created_date as createdDate, c.modified_date as modifiedDate
-            FROM comments c INNER JOIN users u ON u.id = c.user_id '.$order.' '
+            FROM comments c INNER JOIN users u ON u.id = c.user_id '.$order.' ORDER BY c.created_date DESC'
         );
         $request->execute(array($id));
 
@@ -129,7 +129,7 @@ class CommentsManager extends AbstractManager
         }
         $request = $this->db->prepare(
             "SELECT u.first_name as firstName, u.last_name as lastName, c.id, c.message, c.valid, c.user_id as userId, c.created_date as createdDate, c.modified_date as modifiedDate
-            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = ? AND c.valid= ? "
+            FROM comments c INNER JOIN users u ON u.id = c.user_id WHERE posts_id = ? AND c.valid= ? ORDER BY c.created_date"
         );
 
         $request->execute(array($id, $option));

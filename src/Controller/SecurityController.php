@@ -61,9 +61,9 @@ class SecurityController extends AbstractController
 
             if (count($errors) === 0)
             {
-                    $this->superGlobalObject->session["user"] = $user;
+                    $_SESSION["user"] = $user;
                     $router = new Router();
-                    $this->superGlobalObject->session['ip'] = $router->ip();
+                    $_SESSION['ip'] = $router->ip();
 
                     return $this->redirect('backoffice');
             }
