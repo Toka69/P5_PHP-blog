@@ -64,7 +64,7 @@ class UsersController extends BackofficeController
                 $user->setGenderId($this->superGlobalObject->post["genderId"]);
                 if ($this->superGlobalObject->post["password"] != ""){$user->setPassword(password_hash($this->superGlobalObject->post['password'], PASSWORD_BCRYPT, ["cost" => 12]));}
                 $this->usersManager->update($user);
-                $this->superGlobalObject->session['user'] = $this->usersManager->getUser($id);
+                $_SESSION['user'] = $this->usersManager->getUser($id);
 
                 return $this->redirect("backofficeProfile");
             }
