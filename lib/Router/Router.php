@@ -94,7 +94,7 @@ class Router
         {
             throw new Exception('Cet adresse n\'existe pas', 404);
         }
-        if (is_null($session) && strpos($route->getName(), "backoffice") !== false || $_SESSION["ip"] != $this->ip())
+        if (is_null($session) && strpos($route->getName(), "backoffice") !== false || !empty($_SESSION["ip"]) && $_SESSION["ip"]!= $this->ip())
         {
             throw new Exception('Accès refusé. Nécessite une authentification', 401);
         }
@@ -116,7 +116,7 @@ class Router
                     throw new Exception('Exception', $codeHttp);
             }
         }
-        if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST["csrfToken"]) || $_POST["csrfToken"] !== $_SESSION["csrfToken"])
+        if ($_SERVER["REQUEST_METHOD"] == "POST" && !isset($_POST["csrfToken"]) || !empty($_SESSION["csrfToken"]) && $_POST["csrfToken"] !== $_SESSION["csrfToken"])
         {
             unset($_SESSION["csrfToken"]);
             throw new Exception('Mauvaise requête', 400);

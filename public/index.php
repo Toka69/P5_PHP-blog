@@ -11,7 +11,7 @@ use Symfony\Component\ErrorHandler\DebugClassLoader;
 session_set_cookie_params([
     'lifetime' => 3600,
     'path' => '/',
-    'domain' => $_SERVER['HTTP_HOST'],
+//    'domain' => $_SERVER['HTTP_HOST'],
     'secure' => false,
     'httponly' => true,
     'samesite' => 'strict'
