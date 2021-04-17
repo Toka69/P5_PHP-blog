@@ -19,7 +19,7 @@ class PDOSingleton
 
     public function __construct(){
         $this->superGlobalObject = new SuperGlobalObject();
-        $this->pdo = new PDO('mysql:host='.$this->superGlobalObject->env['DATABASE_HOST'].';dbname='.$this->superGlobalObject->env['DATABASE_NAME'].'', $this->superGlobalObject->env['DATABASE_USER'],$this->superGlobalObject->env['DATABASE_PASSWORD']);
+        $this->pdo = new PDO('mysql:host='.$this->superGlobalObject->env['DATABASE_HOST'].';port='.$this->superGlobalObject->env['DATABASE_PORT'].';dbname='.$this->superGlobalObject->env['DATABASE_NAME'].'', $this->superGlobalObject->env['DATABASE_USER'],$this->superGlobalObject->env['DATABASE_PASSWORD']);
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
